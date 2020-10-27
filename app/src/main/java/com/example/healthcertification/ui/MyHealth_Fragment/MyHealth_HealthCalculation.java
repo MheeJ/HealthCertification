@@ -1,4 +1,4 @@
-package com.example.healthcertification.ui.Second_Fragment;
+package com.example.healthcertification.ui.MyHealth_Fragment;
 
 import android.os.Bundle;
 
@@ -15,14 +15,14 @@ import com.example.healthcertification.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Fragment2_3 extends Fragment {
+public class MyHealth_HealthCalculation extends Fragment {
 
     protected String[] List_body ={"10월 20일           48kg          21.76           정상","10월 20일            48kg           21.76           정상",
             "10월 20일           48kg          21.76          정상",
             "10월 20일           48kg          21.76          정상","10월 20일           48kg          21.76          정상",
             "10월 20일           48kg          21.76          정상","10월 20일           48kg          21.76          정상"};
 
-    public Fragment2_3() {
+    public MyHealth_HealthCalculation() {
         // Required empty public constructor
     }
 
@@ -31,7 +31,7 @@ public class Fragment2_3 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_2_3, container, false);
+        View view = inflater.inflate(R.layout.fragment_myheallth_healthcalculation, container, false);
         ListView listView = (ListView) view.findViewById(R.id.fragment3_listview);
         ArrayAdapter<String> listViewAdapter= new ArrayAdapter<String>(
                 getActivity(),

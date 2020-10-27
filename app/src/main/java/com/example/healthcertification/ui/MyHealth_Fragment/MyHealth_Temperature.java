@@ -1,4 +1,4 @@
-package com.example.healthcertification.ui.Second_Fragment;
+package com.example.healthcertification.ui.MyHealth_Fragment;
 
 import android.os.Bundle;
 
@@ -12,17 +12,15 @@ import android.widget.ListView;
 
 import com.example.healthcertification.R;
 
-import java.lang.reflect.Array;
-
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Fragment2_1 extends Fragment {
+public class MyHealth_Temperature extends Fragment {
 
     protected String[] List_menu ={"10월 20일      36.5°C ","10월 19일      36.2°C","10월 18일      36.7°C",
             "10월 17일      36.6°C","10월 16일      37.1°C","10월 15일      36.7°C","10월 14일       36.5°C"};
 
-    public Fragment2_1() {
+    public MyHealth_Temperature() {
         // Required empty public constructor
     }
 
@@ -31,7 +29,7 @@ public class Fragment2_1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_2_1, container, false);
+        View view = inflater.inflate(R.layout.fragment_myheallth_temperature, container, false);
         ListView listView = (ListView) view.findViewById(R.id.fragment2_listview);
         ArrayAdapter<String> listViewAdapter= new ArrayAdapter<String>(
                 getActivity(),

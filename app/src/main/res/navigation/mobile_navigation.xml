@@ -7,21 +7,21 @@
 
     <fragment
         android:id="@+id/navigation_first"
-        android:name="com.example.healthcertification.ui.First_Fragment.Fragment1"
-        tools:layout="@layout/fragment_1" />
+        android:name="com.example.healthcertification.ui.Home_Fragment.Home"
+        tools:layout="@layout/home_fragment" />
 
     <fragment
         android:id="@+id/navigation_second"
-        android:name="com.example.healthcertification.ui.Second_Fragment.Fragment2"
-        tools:layout="@layout/fragment_2" />
+        android:name="com.example.healthcertification.ui.MyHealth_Fragment.MyHealth"
+        tools:layout="@layout/fragment_myhealth" />
 
     <fragment
         android:id="@+id/navigation_third"
-        android:name="com.example.healthcertification.ui.Third_Fragment.Fragment3"
-        tools:layout="@layout/fragment_3" />
+        android:name="com.example.healthcertification.ui.MyActivity_Fragment.MyActivity"
+        tools:layout="@layout/fragment_myactivity" />
 
     <fragment
         android:id="@+id/navigation_fourth"
-        android:name="com.example.healthcertification.ui.Fourth_Fragment.Fragment4"
-        tools:layout="@layout/fragment_4" />
+        android:name="com.example.healthcertification.ui.MyInformation_Fragment.MyInformation"
+        tools:layout="@layout/fragment_myinformation" />
 </navigation>

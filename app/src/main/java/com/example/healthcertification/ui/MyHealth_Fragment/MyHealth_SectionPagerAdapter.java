@@ -1,4 +1,4 @@
-package com.example.healthcertification.ui.Second_Fragment;
+package com.example.healthcertification.ui.MyHealth_Fragment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,12 +9,12 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SectionPagerAdapter_2 extends FragmentPagerAdapter {
+public class MyHealth_SectionPagerAdapter extends FragmentPagerAdapter {
 
     private List<Fragment> fragmentList = new ArrayList<>();
     private List<String> titleList = new ArrayList<>();
 
-    public SectionPagerAdapter_2(@NonNull FragmentManager fm) {
+    public MyHealth_SectionPagerAdapter(@NonNull FragmentManager fm) {
         super(fm);
     }
 

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Second_Fragment.Fragment2_1">
+    tools:context=".ui.MyHealth_Fragment.MyHealth_HealthCalculation">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -19,15 +19,7 @@
             android:background="@drawable/background_2"
             android:orientation="horizontal">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_weight="1"
-                android:layout_marginLeft="10dp"
-                android:text="버튼"
-                >
-            </Button>
+
             <com.google.android.material.circularreveal.CircularRevealFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,6 +31,46 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/background_temp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="5dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="적정 몸무게"
+                        android:textSize="10dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/fragment2_bodytemp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="43.87 ~\n54.55kg"
+                        android:textSize="30dp"/>
+
+                </LinearLayout>
+            </com.google.android.material.circularreveal.CircularRevealFrameLayout>
+
+            <com.google.android.material.circularreveal.CircularRevealFrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/background_temp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
                     android:layout_marginBottom="10dp"/>
 
                 <LinearLayout
@@ -51,38 +83,30 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="측정 시간"
+                        android:text="BMI 지수"
                         android:textSize="10dp"
                         />
 
                     <TextView
-                        android:id="@+id/fragment2_yesterday_bodytemp"
+                        android:id="@+id/fragment3_bmi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="2020년 10월 20일 오후 7:50"
-                        android:textSize="10dp" />
+                        android:text="21.76"
+                        android:textSize="30dp"/>
 
                     <TextView
-                        android:id="@+id/fragment2_bodytemp"
+                        android:id="@+id/fragment3_bmi_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="__._°C"
-                        android:textSize="55dp"/>
+                        android:text="(정상)"
+                        android:textSize="15dp"/>
 
                 </LinearLayout>
             </com.google.android.material.circularreveal.CircularRevealFrameLayout>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_weight="1"
-                android:layout_marginRight="10dp"
-                android:text="버튼"
-                >
-            </Button>
+
 
         </LinearLayout>
 
@@ -94,23 +118,28 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/fgdfd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="5dp"
                 android:textColor="#000000"
-                android:text="체온기록" />
+                android:text="키/몸무게 기록" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="40dp"
+                android:text="날짜            몸무게            BMI지수            상태" />
 
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/fragment2_listview"/>
+                android:id="@+id/fragment3_listview"/>
         </LinearLayout>
 
     </LinearLayout>
-
-
 
 </FrameLayout>

@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Second_Fragment.Fragment2_2">
+    tools:context=".ui.MyHealth_Fragment.MyHealth_SelfDiagnosis">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="요기는 2-2" />
+        android:text="@string/hello_blank_fragment" />
 
 </FrameLayout>

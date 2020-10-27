@@ -1,4 +1,4 @@
-package com.example.healthcertification.ui.Third_Fragment;
+package com.example.healthcertification.ui.MyInformation_Fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,18 +14,16 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.healthcertification.R;
 
-public class Fragment3 extends Fragment {
-
-    private Fragment3_ViewModel fragment3_viewModel;
+public class MyInformation extends Fragment {
+    private MyInformation_ViewModel myInformation_viewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        fragment3_viewModel =
-                ViewModelProviders.of(this).get(Fragment3_ViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_3, container, false);
-        final TextView textView = root.findViewById(R.id.fragment3_address);
-
-        fragment3_viewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        myInformation_viewModel =
+                ViewModelProviders.of(this).get(MyInformation_ViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_myinformation, container, false);
+        final TextView textView = root.findViewById(R.id.text_fourth);
+        myInformation_viewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

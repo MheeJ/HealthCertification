@@ -1,14 +1,14 @@
-package com.example.healthcertification.ui.First_Fragment;
+package com.example.healthcertification.ui.Home_Fragment;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class Fragment1_ViewModel extends ViewModel {
+public class Home_ViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public Fragment1_ViewModel() {
+    public Home_ViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("36.5°C");
     }

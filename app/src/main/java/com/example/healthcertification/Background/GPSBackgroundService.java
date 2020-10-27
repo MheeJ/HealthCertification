@@ -8,13 +8,10 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
-
-import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 
@@ -60,7 +57,6 @@ public class GPSBackgroundService extends Service {
 
     public void CurrentPosition() {
         new Thread(new Runnable() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void run() {
                 Looper.prepare();
@@ -77,7 +73,7 @@ public class GPSBackgroundService extends Service {
                             100, // 통지사이의 최소 시간간격 (miliSecond)
                             1, // 통지사이의 최소 변경거리 (m)
                             mLocationListener);
-                        }
+                }
                 Looper.loop();
             }
             private final LocationListener mLocationListener = new LocationListener() {

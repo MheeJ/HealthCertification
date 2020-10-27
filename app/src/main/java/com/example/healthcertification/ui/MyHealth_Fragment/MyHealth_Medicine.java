@@ -1,4 +1,4 @@
-package com.example.healthcertification.ui.Second_Fragment;
+package com.example.healthcertification.ui.MyHealth_Fragment;
 
 import android.os.Bundle;
 
@@ -13,9 +13,9 @@ import com.example.healthcertification.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Fragment2_4 extends Fragment {
+public class MyHealth_Medicine extends Fragment {
 
-    public Fragment2_4() {
+    public MyHealth_Medicine() {
         // Required empty public constructor
     }
 
@@ -24,6 +24,6 @@ public class Fragment2_4 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_2_4, container, false);
+        return inflater.inflate(R.layout.fragment_myheallth_medicine, container, false);
     }
 }

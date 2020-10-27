@@ -1,22 +1,19 @@
-package com.example.healthcertification.ui.Second_Fragment;
+package com.example.healthcertification.ui.MyHealth_Fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.healthcertification.R;
 import com.google.android.material.tabs.TabLayout;
 
-public class Fragment2 extends Fragment {
+public class MyHealth extends Fragment {
 
 
     ViewPager viewPager;
@@ -24,7 +21,7 @@ public class Fragment2 extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View myFragment = inflater.inflate(R.layout.fragment_2, container, false);
+        View myFragment = inflater.inflate(R.layout.fragment_myhealth, container, false);
         viewPager = myFragment.findViewById(R.id.view_pager1);
         tabLayout = myFragment.findViewById(R.id.tabs1);
         return myFragment;
@@ -56,11 +53,11 @@ public class Fragment2 extends Fragment {
     }
 
     private void setUpViewpager(ViewPager viewPager) {
-        SectionPagerAdapter_2 adapter = new SectionPagerAdapter_2(getChildFragmentManager());
-        adapter.addFragment(new Fragment2_1(),"체온");
-        adapter.addFragment(new Fragment2_2(),"약");
-        adapter.addFragment(new Fragment2_3(),"키/몸무게");
-        adapter.addFragment(new Fragment2_4(),"자가진단");
+        MyHealth_SectionPagerAdapter adapter = new MyHealth_SectionPagerAdapter(getChildFragmentManager());
+        adapter.addFragment(new MyHealth_Temperature(),"체온");
+        adapter.addFragment(new MyHealth_HealthCalculation(),"키/몸무게");
+        adapter.addFragment(new MyHealth_Medicine(),"약");
+        adapter.addFragment(new MyHealth_SelfDiagnosis(),"자가진단");
         viewPager.setAdapter(adapter);
     }
 }

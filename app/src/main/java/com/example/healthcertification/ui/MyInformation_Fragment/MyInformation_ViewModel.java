@@ -1,21 +1,19 @@
-package com.example.healthcertification.ui.Third_Fragment;
+package com.example.healthcertification.ui.MyInformation_Fragment;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class Fragment3_ViewModel extends ViewModel {
+public class MyInformation_ViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public Fragment3_ViewModel() {
+    public MyInformation_ViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
+        mText.setValue("This is dashboard fragment");
     }
 
     public LiveData<String> getText() {
         return mText;
     }
-
-
 }
