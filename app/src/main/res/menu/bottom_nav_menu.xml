@@ -9,7 +9,7 @@
     <item
         android:id="@+id/navigation_second"
         android:icon="@drawable/heart_btn"
-        android:title="나의건강" />
+        android:title="건강관리" />
 
     <item
         android:id="@+id/navigation_third"

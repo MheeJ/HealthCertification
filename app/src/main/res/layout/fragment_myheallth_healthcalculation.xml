@@ -6,22 +6,22 @@
     tools:context=".ui.MyHealth_Fragment.MyHealth_HealthCalculation">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="#FFFFFF">
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="top"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:background="@drawable/background_2"
             android:orientation="horizontal">
 
 
             <com.google.android.material.circularreveal.CircularRevealFrameLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 >
@@ -60,7 +60,7 @@
             </com.google.android.material.circularreveal.CircularRevealFrameLayout>
 
             <com.google.android.material.circularreveal.CircularRevealFrameLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 >
@@ -74,8 +74,8 @@
                     android:layout_marginBottom="10dp"/>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_gravity="center">
 
@@ -111,10 +111,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="460dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="#FFFFFF"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:orientation="vertical">
 
             <TextView

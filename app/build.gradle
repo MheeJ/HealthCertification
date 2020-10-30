@@ -39,4 +39,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation files('libs/commons-lang3-3.9.jar')
     implementation files('libs/com.skt.Tmap_1.60.jar')
+    implementation 'devs.mulham.horizontalcalendar:horizontalcalendar:1.3.4'
 }

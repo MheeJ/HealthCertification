@@ -27,8 +27,13 @@ import com.skt.Tmap.TMapView;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import devs.mulham.horizontalcalendar.HorizontalCalendar;
+import devs.mulham.horizontalcalendar.HorizontalCalendarView;
+import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
 
 public class MyActivity extends Fragment implements View.OnClickListener{
@@ -36,7 +41,6 @@ public class MyActivity extends Fragment implements View.OnClickListener{
     private MyActivity_ViewModel myActivity_viewModel;
     private TextView Address;
     private ImageView Fragment3_Restart_Btn;
-    String mini;
     MyReceiver myReceiver;
     private String MyAddress_Longitude, MyAddress_Latitude, ServiceData_LongitudeList, ServiceData_LatitudeList;
     List<String> MyLocation_LongitudeList;
@@ -48,6 +52,7 @@ public class MyActivity extends Fragment implements View.OnClickListener{
     public double latitude;
     public double longitude;
     private LinearLayout linearLayout;
+    private HorizontalCalendar horizontalCalendar;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -59,6 +64,20 @@ public class MyActivity extends Fragment implements View.OnClickListener{
         Fragment3_Restart_Btn = (ImageView)view.findViewById(R.id.fragment3_restart);
         Fragment3_Restart_Btn.setOnClickListener((View.OnClickListener) this);
         progressBar = (ProgressBar)view.findViewById(R.id.progressbar);
+        //calendar : https://github.com/Mulham-Raee/Horizontal-Calendar
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.MONTH, -1);
+
+        Calendar endDate = Calendar.getInstance();
+        endDate.add(Calendar.MONTH, 1);
+
+        horizontalCalendar = new HorizontalCalendar.Builder(view, R.id.Myactivity_Calender)
+                .range(startDate, endDate)
+                .datesNumberOnScreen(5)
+                .build();
+
+        SetMyActivityCalender();
+
         linearLayout = (LinearLayout)view.findViewById(R.id.map_view);
         tmapview = new TMapView(getActivity());
         tmapview.setSKTMapApiKey("f14d574a-63eb-409b-8a59-8f895318bcdb");
@@ -68,6 +87,7 @@ public class MyActivity extends Fragment implements View.OnClickListener{
         tmapview.setTrackingMode(true);
         tmapview.setSightVisible(true);
         linearLayout.addView(tmapview);
+
 
 
         return view;
@@ -195,6 +215,26 @@ public class MyActivity extends Fragment implements View.OnClickListener{
             }
         }
 
+    }
+
+    private void SetMyActivityCalender(){
+        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
+            @Override
+            public void onDateSelected(Calendar date, int position) {
+
+            }
+
+            @Override
+            public void onCalendarScroll(HorizontalCalendarView calendarView,
+                                         int dx, int dy) {
+
+            }
+
+            @Override
+            public boolean onDateLongClicked(Calendar date, int position) {
+                return true;
+            }
+        });
     }
 
 }
