@@ -3,12 +3,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MyHealth_Fragment.MyHealth_Medicine">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.MyHealth_Fragment.MyHealth_Temperature">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="요기는 2-2" />
+        android:orientation="vertical"
+        android:background="#FFFFFF">
+        <devs.mulham.horizontalcalendar.HorizontalCalendarView
+            android:id="@+id/Myactivity_Calender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FAFAFA"
+            app:selectedDateBackground="@color/colorBackground"
+            app:selectorColor="#FAFAFA"
+            app:textColorNormal="#bababa"
+            app:textColorSelected="#000000"
+            app:sizeTopText="10dp"
+            app:sizeMiddleText="20dp"
+            app:sizeBottomText="10dp">
+        </devs.mulham.horizontalcalendar.HorizontalCalendarView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#FFFFFF"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/medicine_listview"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/background_1_3"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="효능"
+                        android:layout_marginTop="20dp"
+                        android:textSize="20dp" />
+                    <TextView
+                        android:id="@+id/fragment2_bodytemp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="형진이가 말을 잘 들음"
+                        android:textSize="30dp"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
 
 </FrameLayout>

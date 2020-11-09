@@ -10,8 +10,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/background_1_3">
+                android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -22,13 +21,23 @@
                     android:textColor="#000000"
                     android:textSize="30dp">
                 </TextView>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="October ▼"
-                    android:textSize="20dp">
-                </TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="October"
+                        android:textSize="20dp">
+                    </TextView>
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scrollbarSize="@dimen/cardview_compat_inset_shadow">
+                    </Spinner>
+                </LinearLayout>
+
                 <devs.mulham.horizontalcalendar.HorizontalCalendarView
                     android:id="@+id/calendarView"
                     android:layout_width="match_parent"
