@@ -37,7 +37,6 @@
                         android:scrollbarSize="@dimen/cardview_compat_inset_shadow">
                     </Spinner>
                 </LinearLayout>
-
                 <devs.mulham.horizontalcalendar.HorizontalCalendarView
                     android:id="@+id/calendarView"
                     android:layout_width="match_parent"
