@@ -12,7 +12,7 @@ import com.example.healthcertification.R;
 public class CustomDialog_Add extends Dialog implements View.OnClickListener{
     private CustomDialog_Add_Listener dialogListener;
 
-    private static final int LAYOUT = R.layout.customdialog_add;
+    private static final int LAYOUT = R.layout.customdialog_medicine_add;
 
     private Context context;
 

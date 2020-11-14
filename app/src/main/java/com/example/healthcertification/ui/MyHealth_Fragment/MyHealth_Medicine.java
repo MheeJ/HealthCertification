@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.healthcertification.CustomDialog.CustomDialog_Add;
 import com.example.healthcertification.CustomDialog.CustomDialog_Add_Listener;
@@ -86,8 +87,6 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener{
         fab_sub1.setOnClickListener(this);
         fab_sub2.setOnClickListener(this);
         fab_sub3.setOnClickListener(this);
-        BTN = (Button)view.findViewById(R.id.medicine_btn);
-        BTN.setOnClickListener(this);
 
         //calendar setting
         Calendar startDate = Calendar.getInstance();
@@ -115,17 +114,6 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener{
                 break;
             case R.id.fab_sub1:
                 toggleFab();
-                //Toast.makeText(this, "Camera Open-!", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.fab_sub2:
-                toggleFab();
-                //Toast.makeText(this, "Map Open-!", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.fab_cal:
-                toggleFab();
-                //Toast.makeText(this, "Map Open-!", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.medicine_btn:
                 CustomDialog_Add dialog = new CustomDialog_Add(getContext());
                 dialog.setDialogListener(new CustomDialog_Add_Listener() {  // MyDialogListener 를 구현
                     @Override
@@ -140,6 +128,16 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener{
                 });
                 dialog.show();
                 break;
+            case R.id.fab_sub2:
+                toggleFab();
+                deleteNotice();
+                //Toast.makeText(this, "Map Open-!", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.fab_cal:
+                toggleFab();
+                //Toast.makeText(this, "Map Open-!", Toast.LENGTH_SHORT).show();
+                break;
+
         }
     }
     private void toggleFab() {
@@ -151,7 +149,7 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener{
             fab_sub1.setClickable(false);
             fab_sub2.setClickable(false);
             fab_sub3.setClickable(false);
-            //isFabOpen = false;
+            isFabOpen = false;
 
         } else {
             fab_main.setImageResource(R.drawable.end_btn);
@@ -189,6 +187,15 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener{
         if (!name.isEmpty()) {                        // 입력된 text 문자열이 비어있지 않으면
             notice_list.add(name);                          // items 리스트에 입력된 문자열 추가
             notice_adapter.notifyDataSetChanged();// 리스트 목록 갱신
+        }
+    }
+
+    public void deleteNotice(){
+        int pos = listView1.getCheckedItemPosition(); // 현재 선택된 항목의 첨자(위치값) 얻기
+        if (pos != ListView.INVALID_POSITION) {      // 선택된 항목이 있으면
+            notice_list.remove(pos);                       // items 리스트에서 해당 위치의 요소 제거
+            listView1.clearChoices();                 // 선택 해제
+            notice_adapter.notifyDataSetChanged();
         }
     }
 
