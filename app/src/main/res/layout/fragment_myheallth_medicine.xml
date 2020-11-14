@@ -47,12 +47,13 @@
                    android:layout_height="0dp"
                    android:layout_weight="2"
                    android:id="@+id/medicine_listview"/>
+
                <LinearLayout
                    android:layout_width="match_parent"
                    android:layout_height="0dp"
                    android:layout_weight="1"
-                   android:gravity="center"
                    android:background="@drawable/background_1_3"
+                   android:gravity="center"
                    android:orientation="vertical">
 
                    <TextView
@@ -61,19 +62,14 @@
                        android:layout_gravity="center|top"
                        android:text="효능"
                        android:textSize="20dp" />
+
                    <TextView
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
                        android:layout_gravity="center"
-                       android:text="형진이가 말을 잘 듣는다."
                        android:layout_marginTop="20dp"
+                       android:text="설사를 안한다"
                        android:textSize="20dp" />
-                   <Button
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:id="@+id/medicine_btn"
-                       android:text="약 추가하기">
-                   </Button>
                </LinearLayout>
            </LinearLayout>
 
@@ -97,7 +93,7 @@
         android:id="@+id/fab_cal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/fab_sub1"
+        android:layout_above="@+id/fab_sub2"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="15dp"
         android:layout_marginRight="20dp"
@@ -110,10 +106,10 @@
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_sub1"
+                android:id="@+id/fab_sub2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/fab_sub2"
+                android:layout_above="@+id/fab_sub1"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="15dp"
                 android:layout_marginRight="20dp"
@@ -126,7 +122,7 @@
             </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_sub2"
+                android:id="@+id/fab_sub1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/fab_main"
