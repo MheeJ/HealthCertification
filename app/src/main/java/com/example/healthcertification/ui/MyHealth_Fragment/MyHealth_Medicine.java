@@ -12,12 +12,10 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.healthcertification.CustomDialog.CustomDialog_Add;
-import com.example.healthcertification.CustomDialog.CustomDialog_Add_Listener;
+import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
 import com.example.healthcertification.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -33,14 +31,11 @@ import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
  */
 public class MyHealth_Medicine extends Fragment implements View.OnClickListener{
 
-
-    protected String[] List_medicine = {"타이에놀","부루펜","바이젠","약2","약3","약4"};
     private Context mContext;
     private FloatingActionButton fab_main, fab_sub1, fab_sub2, fab_sub3;
     private Animation fab_open, fab_close;
     private boolean isFabOpen = false;
     private HorizontalCalendar horizontalCalendar;
-    private Button BTN;
     ListView listView1;
     ArrayList<String> notice_list;
     ArrayAdapter<String> notice_adapter;
@@ -101,6 +96,7 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener{
                 .build();
 
         SetCalender();
+
         return view;
     }
 
@@ -115,7 +111,7 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener{
             case R.id.fab_sub1:
                 toggleFab();
                 CustomDialog_Add dialog = new CustomDialog_Add(getContext());
-                dialog.setDialogListener(new CustomDialog_Add_Listener() {  // MyDialogListener 를 구현
+                dialog.setDialogListener(new CustomDialog_Listener() {  // MyDialogListener 를 구현
                     @Override
                     public void onPositiveClicked(String name) {
                         addNotice(name);
@@ -140,6 +136,9 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener{
 
         }
     }
+
+
+
     private void toggleFab() {
         if (isFabOpen) {
             fab_main.setImageResource(R.drawable.add_btn);
@@ -192,7 +191,7 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener{
 
     public void deleteNotice(){
         int pos = listView1.getCheckedItemPosition(); // 현재 선택된 항목의 첨자(위치값) 얻기
-        if (pos != ListView.INVALID_POSITION) {      // 선택된 항목이 있으면
+        if (pos != ListView.INVALID_POSITION) {// 선택된 항목이 있으면
             notice_list.remove(pos);                       // items 리스트에서 해당 위치의 요소 제거
             listView1.clearChoices();                 // 선택 해제
             notice_adapter.notifyDataSetChanged();

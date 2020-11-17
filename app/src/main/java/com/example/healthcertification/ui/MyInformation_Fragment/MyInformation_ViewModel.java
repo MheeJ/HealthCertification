@@ -10,7 +10,7 @@ public class MyInformation_ViewModel extends ViewModel {
 
     public MyInformation_ViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("36°C");
+        mText.setValue("Haeng gi");
     }
 
     public LiveData<String> getText() {

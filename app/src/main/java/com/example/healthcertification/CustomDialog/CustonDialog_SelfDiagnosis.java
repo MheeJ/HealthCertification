@@ -1,5 +1,4 @@
 package com.example.healthcertification.CustomDialog;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -8,16 +7,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.healthcertification.R;
-
-public class CustomDialog_Add extends Dialog implements View.OnClickListener{
+public class CustonDialog_SelfDiagnosis extends Dialog implements View.OnClickListener {
     private CustomDialog_Listener dialogListener;
 
-    private static final int LAYOUT = R.layout.customdialog_medicine_add;
+    private static final int LAYOUT = R.layout.costomdialog_selfdiagnosis_save;
 
     private Context context;
 
     private EditText nameEt;
-    private EditText emailEt;
 
     private TextView cancelTv;
     private TextView searchTv;
@@ -25,7 +22,7 @@ public class CustomDialog_Add extends Dialog implements View.OnClickListener{
     private String name;
 
 
-    public CustomDialog_Add(Context context){
+    public CustonDialog_SelfDiagnosis(Context context){
         super(context);
         this.context = context;
     }
@@ -55,16 +52,14 @@ public class CustomDialog_Add extends Dialog implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.findPwDialogCancelTv:
+            case R.id.selfdiagnosis_cancle:
                 cancel();
                 break;
-            case R.id.findPwDialogFindTv:
+            case R.id.selfdiagnosis_save:
                 String name = nameEt.getText().toString();
                 dialogListener.onPositiveClicked(name);
                 dismiss();
                 break;
         }
     }
-
-
 }

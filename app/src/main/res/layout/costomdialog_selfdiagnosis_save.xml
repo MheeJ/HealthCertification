@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:orientation="vertical"
+    >
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="start|center"
+        android:paddingTop="30dp"
+        android:paddingBottom="16dp"
+        android:paddingLeft="45dp"
+        android:text="자가진단 정보를 저장하시겠습니까?"
+        android:textColor="#000"
+        android:textSize="20sp"
+        />
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/selfdiagnosis_cancle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="취소"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"
+            />
+        <TextView
+            android:id="@+id/selfdiagnosis_save"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="저장하기"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"
+            />
+    </LinearLayout>
+</LinearLayout>
