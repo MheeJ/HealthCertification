@@ -207,6 +207,7 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
         if (!name.isEmpty()) {                        // 입력된 text 문자열이 비어있지 않으면
             notice_list.add(name);                          // items 리스트에 입력된 문자열 추가
             notice_adapter.notifyDataSetChanged();// 리스트 목록 갱신
+            //hello
         }
     }
 
