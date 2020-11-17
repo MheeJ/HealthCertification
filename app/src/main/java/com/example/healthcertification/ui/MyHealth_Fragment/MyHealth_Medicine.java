@@ -14,12 +14,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
-<<<<<<< HEAD
-=======
 import android.widget.TextView;
 import android.widget.Toast;
->>>>>>> dd18427d79d22c92e2b71468d80a7536982f8861
 
 import com.example.healthcertification.CustomDialog.CustomDialog_Add;
 import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
@@ -53,11 +51,8 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
     private Animation fab_open, fab_close;
     private boolean isFabOpen = false;
     private HorizontalCalendar horizontalCalendar;
-<<<<<<< HEAD
-=======
     private Button BTN;
     private TextView medicine_effect;
->>>>>>> dd18427d79d22c92e2b71468d80a7536982f8861
     ListView listView1;
     ArrayList<String> notice_list;
     ArrayAdapter<String> notice_adapter;
