@@ -11,12 +11,20 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import com.example.healthcertification.R;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Random;
+
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.HorizontalCalendarView;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
 public class Home extends Fragment {
+    private TextView health_Tip;
 
     private Home_ViewModel home_viewModel;
     private HorizontalCalendar horizontalCalendar;
@@ -34,6 +42,8 @@ public class Home extends Fragment {
             }
         });
 
+        health_Tip = (TextView) root.findViewById(R.id.health_Tip);
+
         //calendar : https://github.com/Mulham-Raee/Horizontal-Calendar
         Calendar startDate = Calendar.getInstance();
         startDate.add(Calendar.MONTH, -1);
@@ -47,7 +57,20 @@ public class Home extends Fragment {
                 .build();
 
         SetCalender();
+        RandomSetText();
+
         return root;
+    }
+
+    private void RandomSetText(){
+        String []arr = getResources().getStringArray(R.array.liver_Tip);
+        List<String> healthTipValues;
+        healthTipValues = new ArrayList<>(Arrays.asList(arr));
+
+        Random r = new Random();
+        String randomValue = healthTipValues.get(r.nextInt(healthTipValues.size()));
+
+        health_Tip.setText(randomValue);
     }
 
     public void SetCalender(){

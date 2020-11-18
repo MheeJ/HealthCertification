@@ -215,6 +215,7 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
         if (pos != ListView.INVALID_POSITION) {// 선택된 항목이 있으면
             notice_list.remove(pos);                       // items 리스트에서 해당 위치의 요소 제거
             listView1.clearChoices();                 // 선택 해제
+            medicine_effect.setText("");                //텍스트 클리어
             notice_adapter.notifyDataSetChanged();
         }
     }
@@ -226,8 +227,6 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
         final String medicine = object.toString();
         NaverSearchTask naverSearchTask = new NaverSearchTask();
         naverSearchTask.execute(medicine);
-
-
     }
 
     private class NaverSearchTask extends AsyncTask<String, String, String > {
@@ -236,6 +235,7 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
         String clientSecret = "QdYaVALP7l";
         StringBuffer sb = new StringBuffer();
 
+        //이부분에서 파싱관련 모든 작업을 함
         @Override
         protected String doInBackground(String... medicine) {
 
@@ -261,22 +261,13 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
                 while (eventType != XmlPullParser.END_DOCUMENT) {
                     switch (eventType) {
                         case XmlPullParser.START_TAG:
-                            tag = xpp.getName(); //태그 이름 얻어오기
+                            tag = xpp.getName();
 
                             if (tag.equals("item")) ; //첫번째 검색 결과
                             else if (tag.equals("title")) {
 
-                                //sb.append("제목 : ");
-                                //xpp.next();
-                                //sb.append(xpp.getText().replaceAll("<(/)?([a-zA-Z]*)(\\\\s[a-zA-Z]*=[^>]*)?(\\\\s)*(/)?>", ""));
-                                //sb.append("\n");
-
                             } else if (tag.equals("description")) {
-                                //sb.append("내용 : ");
-                                //xpp.next();
 
-                                //sb.append(xpp.getText().replaceAll("<(/)?([a-zA-Z]*)(\\\\s[a-zA-Z]*=[^>]*)?(\\\\s)*(/)?>", ""));
-                                //sb.append("\n");
                             }
                             else if (tag.equals("link")) {
                                 sb.append("link : ");
@@ -307,70 +298,11 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
 
             return result;
         }
+        //파싱결과에서 어떤걸 작업할지
         @Override
         protected void onPostExecute(String result){
             super.onPostExecute(result);
             medicine_effect.setText(result);
         }
     }
-/*
-    private String getNaverSearch(String keyword){
-        String clientId = "TC0_hmN6w_Pu16xgDMFs";
-        String clientSecret = "QdYaVALP7l";
-        StringBuffer sb = new StringBuffer();
-        int display = 100;
-        try{
-            String text = URLEncoder.encode(keyword, "UTF-8");
-            String apiURL = "https://openapi.naver.com/v1/search/encyc.xml?query="+text+"&display"+display+"&";
-
-            URL url = new URL(apiURL);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            con.setRequestProperty("X-Naver-Client-Id", clientId);
-            con.setRequestProperty("X-Naver-Client-Secret", clientSecret);
-
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            XmlPullParser xpp = factory.newPullParser();
-            String tag;
-            //inputStream으로부터 xml값 받기
-            xpp.setInput(new InputStreamReader(con.getInputStream(), "UTF-8"));
-
-            xpp.next();
-            int eventType = xpp.getEventType();
-            while (eventType != XmlPullParser.END_DOCUMENT) {
-                switch (eventType) {
-                    case XmlPullParser.START_TAG:
-                        tag = xpp.getName(); //태그 이름 얻어오기
-
-                        if (tag.equals("item")) ; //첫번째 검색 결과
-                        else if (tag.equals("title")) {
-
-                            //sb.append("제목 : ");
-                            //xpp.next();
-                            //sb.append(xpp.getText().replaceAll("<(/)?([a-zA-Z]*)(\\\\s[a-zA-Z]*=[^>]*)?(\\\\s)*(/)?>", ""));
-                            //sb.append("\n");
-
-                        } else if (tag.equals("description")) {
-                            //sb.append("내용 : ");
-                            //xpp.next();
-
-                            //sb.append(xpp.getText().replaceAll("<(/)?([a-zA-Z]*)(\\\\s[a-zA-Z]*=[^>]*)?(\\\\s)*(/)?>", ""));
-                            //sb.append("\n");
-                        }
-                        else if (tag.equals("link")) {
-                            sb.append("link : ");
-                            xpp.next();
-
-                            sb.append(xpp.getText().replaceAll("<(/)?([a-zA-Z]*)(\\\\s[a-zA-Z]*=[^>]*)?(\\\\s)*(/)?>", ""));
-                            sb.append("\n");
-                        }
-                        break;
-                }
-                eventType = xpp.next();
-            }
-        } catch (Exception e) {
-            return e.toString();
-        }
-        return sb.toString();
-    }*/
 }
