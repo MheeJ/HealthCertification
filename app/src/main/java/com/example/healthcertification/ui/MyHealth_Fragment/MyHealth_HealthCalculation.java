@@ -7,16 +7,21 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.healthcertification.CustomDialog.CustomDialog_HC_Add;
+import com.example.healthcertification.CustomDialog.CustomDialog_HC_Remove;
 import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
 import com.example.healthcertification.ListViewSetting.HC_ListViewAdapter;
+import com.example.healthcertification.ListViewSetting.HC_ListViewItem;
 import com.example.healthcertification.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -31,6 +36,7 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
 
 
 
+
     public MyHealth_HealthCalculation() {
         // Required empty public constructor
     }
@@ -42,6 +48,7 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_myheallth_healthcalculation, container, false);
 
+
         HC_ListView_Adapter = new HC_ListViewAdapter();
         HC_ListView = (ListView)view.findViewById(R.id.fragment3_listview);
         HC_ListView.setAdapter(HC_ListView_Adapter);
@@ -51,6 +58,26 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
         Bmi_View = (TextView)view.findViewById(R.id.hc_bmi_view);
         BmiState_View = (TextView)view.findViewById(R.id.hc_bmistate_view);
 
+        HC_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final int pos = position;
+                CustomDialog_HC_Remove dialog_hc_remove = new CustomDialog_HC_Remove(getContext());
+                dialog_hc_remove.HC_Remove_Dialog_Listener(new CustomDialog_Listener() {
+                    @Override
+                    public void onPositiveClicked(String name) {
+                        HC_ListView_Adapter.removeItem(pos);
+                        HC_ListView_Adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onSDClicked(String height, String weight) {
+
+                    }
+                });
+                dialog_hc_remove.show();
+            }
+        });
         return  view;
     }
 
@@ -104,11 +131,13 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
         String getTime = simpleDate.format(mDate);
 
         HC_ListView_Adapter.addItem(getTime,height, weight, BmiStr, my_state);
-        GoodWeight_View.setText(goodweight1_Str+" ~ "+goodweight2_Str+" kg");
+        GoodWeight_View.setText(goodweight1_Str+" ~ \n"+goodweight2_Str+" kg");
         Bmi_View.setText(BmiStr);
         BmiState_View.setText("( "+my_state+" )");
 
+
     }
+
 
 
 

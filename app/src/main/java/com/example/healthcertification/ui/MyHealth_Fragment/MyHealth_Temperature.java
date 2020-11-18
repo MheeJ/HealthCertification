@@ -15,6 +15,7 @@ import com.example.healthcertification.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -25,6 +26,7 @@ public class MyHealth_Temperature extends Fragment  {
     private ListView Temp_ListView;
     private Temp_ListVeiwAdapter temp_listVeiwAdapter;
     private FloatingActionButton Temp_ADD_Btn;
+
 
     public MyHealth_Temperature() {
         // Required empty public constructor

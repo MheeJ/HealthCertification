@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="키를 입력해주세요"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:textColorHint="#42000000"
             android:id="@+id/height_add"
             android:layout_marginRight="20dp"
@@ -54,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="몸무게를 입력해주세요"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:textColorHint="#42000000"
             android:id="@+id/weight_add"
             android:layout_marginRight="20dp"
@@ -74,13 +74,15 @@
         android:orientation="horizontal"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
-        android:weightSum="10">
+        android:weightSum="3">
+
+
 
         <TextView
             android:id="@+id/hc_close"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:gravity="center"
@@ -94,9 +96,9 @@
             android:clickable="true"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_weight="1"
             android:gravity="center"
-            android:text="약 추가하기"
+            android:text="저장"
             android:textColor="@color/colorAccent"
             android:textSize="16sp"
             />
