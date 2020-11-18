@@ -9,19 +9,23 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="16dp" />
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:gravity="start|center"
-        android:paddingTop="30dp"
-        android:paddingBottom="16dp"
-        android:paddingLeft="45dp"
-        android:text="자가진단 정보를 저장하시겠습니까?"
-        android:textColor="#000"
-        android:textSize="20sp"
-        />
-
+        android:orientation="horizontal"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:paddingTop="30dp"
+            android:paddingBottom="16dp"
+            android:text="자가진단 정보를 저장하시겠습니까?"
+            android:textColor="#000"
+            android:textSize="15dp" />
+    </LinearLayout>
 
 
     <View

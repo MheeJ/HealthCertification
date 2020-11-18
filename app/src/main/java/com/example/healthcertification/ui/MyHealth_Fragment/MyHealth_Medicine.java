@@ -133,18 +133,18 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
             case R.id.fab_sub1:
                 toggleFab();
                 CustomDialog_Add dialog = new CustomDialog_Add(getContext());
-                dialog.setDialogListener(new CustomDialog_Listener() {  // MyDialogListener 를 구현
-                    @Override
-                    public void onPositiveClicked(String name) {
-                        addNotice(name);
-                    }
+                dialog.setDialogListener(new CustomDialog_Listener() {
+                                             @Override
+                                             public void onPositiveClicked(String name) {
+                                                 addNotice(name);
+                                             }
 
-                    @Override
-                    public void onNegativeClicked() {
-                        Log.d("MyDialogListener","onNegativeClicked");
-                    }
-                });
-                dialog.show();
+                                             @Override
+                                             public void onSDClicked(String height, String weight) {
+
+                                             }
+                                         });
+                        dialog.show();
                 break;
             case R.id.fab_sub2:
                 toggleFab();
@@ -207,7 +207,6 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
         if (!name.isEmpty()) {                        // 입력된 text 문자열이 비어있지 않으면
             notice_list.add(name);                          // items 리스트에 입력된 문자열 추가
             notice_adapter.notifyDataSetChanged();// 리스트 목록 갱신
-            //hello
         }
     }
 

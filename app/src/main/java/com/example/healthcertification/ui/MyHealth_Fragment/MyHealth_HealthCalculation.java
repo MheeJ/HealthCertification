@@ -7,20 +7,29 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.example.healthcertification.CustomDialog.CustomDialog_HC_Add;
+import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
+import com.example.healthcertification.ListViewSetting.HC_ListViewAdapter;
 import com.example.healthcertification.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyHealth_HealthCalculation extends Fragment {
+public class MyHealth_HealthCalculation extends Fragment implements View.OnClickListener{
 
-    protected String[] List_body ={"10월 20일           48kg          21.76           정상","10월 20일            48kg           21.76           정상",
-            "10월 20일           48kg          21.76          정상",
-            "10월 20일           48kg          21.76          정상","10월 20일           48kg          21.76          정상",
-            "10월 20일           48kg          21.76          정상","10월 20일           48kg          21.76          정상"};
+    private FloatingActionButton HC_Add_Btn;
+    private ListView HC_ListView;
+    private TextView GoodWeight_View, Bmi_View, BmiState_View;
+    private HC_ListViewAdapter HC_ListView_Adapter;
+
+
 
     public MyHealth_HealthCalculation() {
         // Required empty public constructor
@@ -32,13 +41,75 @@ public class MyHealth_HealthCalculation extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_myheallth_healthcalculation, container, false);
-        ListView listView = (ListView) view.findViewById(R.id.fragment3_listview);
-        ArrayAdapter<String> listViewAdapter= new ArrayAdapter<String>(
-                getActivity(),
-                android.R.layout.simple_expandable_list_item_1,
-                List_body
-        );
-        listView.setAdapter(listViewAdapter);
+
+        HC_ListView_Adapter = new HC_ListViewAdapter();
+        HC_ListView = (ListView)view.findViewById(R.id.fragment3_listview);
+        HC_ListView.setAdapter(HC_ListView_Adapter);
+        HC_Add_Btn = (FloatingActionButton)view.findViewById(R.id.hc_add_btn);
+        HC_Add_Btn.setOnClickListener(this);
+        GoodWeight_View = (TextView)view.findViewById(R.id.hc_goodweight_view);
+        Bmi_View = (TextView)view.findViewById(R.id.hc_bmi_view);
+        BmiState_View = (TextView)view.findViewById(R.id.hc_bmistate_view);
+
         return  view;
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.hc_add_btn:
+                CustomDialog_HC_Add dialog = new CustomDialog_HC_Add(getContext());
+                dialog.HC_DialogListener(new CustomDialog_Listener() {
+                    @Override
+                    public void onPositiveClicked(String name) {
+
+                    }
+
+                    @Override
+                    public void onSDClicked(String height, String weight) {
+                        makeItem(height, weight);
+                    }
+                });
+                dialog.show();
+                break;
+        }
+    }
+
+    public void makeItem(String height, String weight){
+        // 첫 번째 아이템 추가.
+        float heightFLO = Float.parseFloat(height);
+        float weightFLO = Float.parseFloat(weight);
+        float Bmi = (weightFLO/(heightFLO*heightFLO))*10000;
+        String BmiStr = String.format("%.2f",Bmi);
+        String my_state;
+        if(Bmi > 25.0){
+            my_state = "비만";
+        }
+        else if(25.0 > Bmi && Bmi > 23.0){
+            my_state ="과체중";
+        }
+        else if(23.0 > Bmi && Bmi > 18.5){
+            my_state = "정상";
+        }
+        else {
+            my_state = "저체중";
+        }
+        double goodweight1 = (18.5*(heightFLO*heightFLO))/10000;
+        String goodweight1_Str = String.format("%.2f",goodweight1);
+        double goodweight2 = (23.0*(heightFLO*heightFLO))/10000;
+        String goodweight2_Str = String.format("%.2f",goodweight2);
+        long now = System.currentTimeMillis();
+        Date mDate = new Date(now);
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yy.MM.dd");
+        String getTime = simpleDate.format(mDate);
+
+        HC_ListView_Adapter.addItem(getTime,height, weight, BmiStr, my_state);
+        GoodWeight_View.setText(goodweight1_Str+" ~ "+goodweight2_Str+" kg");
+        Bmi_View.setText(BmiStr);
+        BmiState_View.setText("( "+my_state+" )");
+
+    }
+
+
+
 }
