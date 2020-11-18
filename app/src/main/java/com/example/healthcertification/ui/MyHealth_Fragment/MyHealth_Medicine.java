@@ -216,6 +216,7 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
         if (pos != ListView.INVALID_POSITION) {// 선택된 항목이 있으면
             notice_list.remove(pos);                       // items 리스트에서 해당 위치의 요소 제거
             listView1.clearChoices();                 // 선택 해제
+            medicine_effect.setText("");                //텍스트 클리어
             notice_adapter.notifyDataSetChanged();
         }
     }

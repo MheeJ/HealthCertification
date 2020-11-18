@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "844671027070",
+    "firebase_url": "https://healthcertification-8c0ab.firebaseio.com",
+    "project_id": "healthcertification-8c0ab",
+    "storage_bucket": "healthcertification-8c0ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:844671027070:android:cb1f96ea4c5b2e865a552f",
+        "android_client_info": {
+          "package_name": "com.example.healthcertification"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "844671027070-nepsj4lvf69pqdnmamh4n4nt9oba8upn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-ID2jYikEfLjcabSE40773n0rUmBPqXY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "844671027070-nepsj4lvf69pqdnmamh4n4nt9oba8upn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
