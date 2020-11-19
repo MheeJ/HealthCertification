@@ -1,16 +1,19 @@
 package com.example.healthcertification.ListViewSetting;
 
-public class SD_ListViewItem {
+import android.graphics.drawable.Drawable;
+
+public class Test_ListVeiwitem {
+
     private String dateStr ;
     private String stateStr;
+    private Drawable drawableIcon;
 
 
     public void setDate(String date) {
         dateStr = date ;
     }
-    public void setState(String state){
-        stateStr = state;
-    }
+    public void setState(String state){ stateStr = state; }
+    public void setIcon(Drawable icon){drawableIcon = icon;}
 
 
     public String getDate() {
@@ -19,4 +22,5 @@ public class SD_ListViewItem {
     public String getState(){
         return this.stateStr;
     }
+    public Drawable getIcon() {return this.drawableIcon;}
 }

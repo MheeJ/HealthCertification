@@ -8,14 +8,14 @@ import android.widget.TextView;
 
 import com.example.healthcertification.R;
 
-public class CustomDialog_HC_Remove extends Dialog implements View.OnClickListener{
+public class CustomDialog_Remove extends Dialog implements View.OnClickListener{
     private CustomDialog_Listener dialog_listener;
     private static final int layout = R.layout.customdialog_healthcalculation_remove;
     private Context context;
     private TextView RemoveBtn;
     private TextView closeBtn;
 
-    public CustomDialog_HC_Remove(Context context){
+    public CustomDialog_Remove(Context context){
         super(context);
         this.context = context;
     }

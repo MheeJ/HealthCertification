@@ -10,18 +10,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.healthcertification.CustomDialog.CustomDialog_HC_Add;
-import com.example.healthcertification.CustomDialog.CustomDialog_HC_Remove;
+import com.example.healthcertification.CustomDialog.CustomDialog_Remove;
 import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
 import com.example.healthcertification.ListViewSetting.HC_ListViewAdapter;
-import com.example.healthcertification.ListViewSetting.HC_ListViewItem;
 import com.example.healthcertification.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -64,7 +61,7 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final int pos = position;
-                CustomDialog_HC_Remove dialog_hc_remove = new CustomDialog_HC_Remove(getContext());
+                CustomDialog_Remove dialog_hc_remove = new CustomDialog_Remove(getContext());
                 dialog_hc_remove.HC_Remove_Dialog_Listener(new CustomDialog_Listener() {
                     @Override
                     public void onPositiveClicked(String name) {
