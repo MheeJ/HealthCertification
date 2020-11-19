@@ -140,6 +140,7 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
         String goodweight2_Str = String.format("%.2f",goodweight2);
         long now = System.currentTimeMillis();
         Date mDate = new Date(now);
+        //날짜 찍찍 말고 점점 해주셈
         SimpleDateFormat simpleDate = new SimpleDateFormat("yy-MM-dd");
         getTime = simpleDate.format(mDate);
 

@@ -38,10 +38,6 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
-        <service
-            android:name=".Background.GPSBackgroundService"
-            android:enabled="true"
-            android:exported="true" />
     </application>
 
 </manifest>
