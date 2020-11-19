@@ -6,18 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.healthcertification.R;
 
-import java.lang.reflect.Array;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
-public class CustomDialog_SD_Check extends Dialog implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class CustonDialog_Test extends Dialog implements View.OnClickListener , CompoundButton.OnCheckedChangeListener {
     private CustomDialog_Listener dialog_listener;
     private static final int layout = R.layout.customdialog_selfdiagnosis_check;
     private Context context;
@@ -33,15 +30,13 @@ public class CustomDialog_SD_Check extends Dialog implements View.OnClickListene
     private String Suspicion_State= "";
     ArrayList<String> items = new ArrayList<String>();
     public String SD_myState = "";
-    //private String getname;
 
-
-    public CustomDialog_SD_Check(Context context){
+    public CustonDialog_Test(Context context){
         super(context);
         this.context = context;
     }
 
-    public void SD_Check_Dialog_Listener(CustomDialog_Listener dialog_listener){
+    public void test_DialogListener(CustomDialog_Listener dialog_listener){
         this.dialog_listener = dialog_listener;
     }
 
@@ -50,10 +45,10 @@ public class CustomDialog_SD_Check extends Dialog implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(layout);
 
-        SD_SaveBtn = (TextView) findViewById(R.id.sd_save_btn);
-        SD_SaveBtn.setOnClickListener(this);
         SD_closeBtn = (TextView) findViewById(R.id.sd_cancle_btn);
         SD_closeBtn.setOnClickListener(this);
+        SD_SaveBtn = (TextView) findViewById(R.id.sd_save_btn);
+        SD_SaveBtn.setOnClickListener(this);
         Fever_Btn = (CheckBox)findViewById(R.id.fever_btn);
         Fever_Btn.setOnCheckedChangeListener(this);
         Cough_Btn = (CheckBox)findViewById(R.id.cough_btn);
@@ -77,9 +72,6 @@ public class CustomDialog_SD_Check extends Dialog implements View.OnClickListene
                 cancel();
                 break;
             case R.id.sd_save_btn:
-                dialog_listener.onPositiveClicked("mini");
-
-
                 for(int i=0; i< items.size()+1; i++){
                     if(1 <= i && i < 2){
                         SD_myState = "not bad";
@@ -102,10 +94,9 @@ public class CustomDialog_SD_Check extends Dialog implements View.OnClickListene
 
                     }
                 }
-                //dialog_listener.onPositiveClicked(SD_myState);
+                dialog_listener.onPositiveClicked(SD_myState);
                 dismiss();
                 break;
-
         }
     }
 
