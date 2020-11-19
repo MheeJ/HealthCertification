@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -17,12 +19,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.healthcertification.CustomDialog.CustomDialog_Add;
 import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
 import com.example.healthcertification.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -34,8 +41,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.HorizontalCalendarView;
@@ -45,7 +54,12 @@ import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
  * A simple {@link Fragment} subclass.
  */
 public class MyHealth_Medicine extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener{
-
+    private List<MyHealth_Medicine_DTO> myHealth_medicine_DTOS;
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mReference;
+    private ChildEventListener mchild;
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = firebaseDatabase.getReference("Medicine");
     private Context mContext;
     private FloatingActionButton fab_main, fab_sub1, fab_sub2, fab_sub3;
     private Animation fab_open, fab_close;
@@ -56,10 +70,9 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
     ListView listView1;
     ArrayList<String> notice_list;
     ArrayAdapter<String> notice_adapter;
+    String strDate, key;
+    //List<Object> Array = new ArrayList<Object>();
 
-    public MyHealth_Medicine() {
-        // Required empty public constructor
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,6 +103,9 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
         //텍스트뷰
         medicine_effect = (TextView) view.findViewById(R.id.medicine_effect);
 
+        myHealth_medicine_DTOS = new ArrayList<>();
+
+
         //actionbtn setting
         mContext = getActivity().getApplicationContext();
         fab_open = AnimationUtils.loadAnimation(mContext, R.anim.fab_open);
@@ -118,6 +134,8 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
                 .build();
 
         SetCalender();
+
+        initDatabase();
 
         return view;
     }
@@ -183,10 +201,38 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
         }
     }
 
-    public void SetCalender(){
+    public void SetCalender() {
+        notice_adapter.clear();
         horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
             @Override
             public void onDateSelected(Calendar date, int position) {
+                notice_adapter.clear();
+                myHealth_medicine_DTOS.clear();
+                medicine_effect.setText("");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                strDate = sdf.format(date.getTime());
+                mReference = mDatabase.getReference("Medicine").child("medicine_list").child(strDate);
+
+                mReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        notice_list.clear();
+                        myHealth_medicine_DTOS.clear();
+                        for (DataSnapshot namedata : snapshot.getChildren()) {
+                            myHealth_medicine_DTOS.add(namedata.getValue(MyHealth_Medicine_DTO.class));
+                        }
+                        for (int i=0;i<myHealth_medicine_DTOS.size();i++){
+                            notice_list.add(myHealth_medicine_DTOS.get(i).getMedicine());
+
+                        }
+                        notice_adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
             }
 
@@ -201,13 +247,20 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
                 return true;
             }
         });
+
     }
 
     public void addNotice(String name){
+        mReference = mDatabase.getReference("Medicine").child("medicine_list").child(strDate).push();
+
         if (!name.isEmpty()) {                        // 입력된 text 문자열이 비어있지 않으면
-            notice_list.add(name);                          // items 리스트에 입력된 문자열 추가
-            notice_adapter.notifyDataSetChanged();// 리스트 목록 갱신
-            //hello
+            //notice_list.add(name);                          // items 리스트에 입력된 문자열 추가
+            //notice_adapter.notifyDataSetChanged();// 리스트 목록 갱신
+
+            MyHealth_Medicine_DTO myHealth_medicine_dto = new MyHealth_Medicine_DTO();
+            myHealth_medicine_dto.setKey(mReference.getKey());
+            myHealth_medicine_dto.setMedicine(name);
+            mReference.setValue(myHealth_medicine_dto);
         }
     }
 
@@ -228,7 +281,54 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
         final String medicine = object.toString();
         NaverSearchTask naverSearchTask = new NaverSearchTask();
         naverSearchTask.execute(medicine);
+
+        key = myRef.child("medicine_list").getKey();
     }
+
+    private void initDatabase(){
+        myHealth_medicine_DTOS.clear();
+        notice_adapter.clear();
+        Calendar cal = Calendar.getInstance();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        strDate = sdf.format(cal.getTime());
+
+        mDatabase = FirebaseDatabase.getInstance();
+        mReference = mDatabase.getReference("Medicine").child("medicine_list").child(strDate);
+
+        mchild = new ChildEventListener() {
+
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                MyHealth_Medicine_DTO myHealth_medicine_dto = snapshot.getValue(MyHealth_Medicine_DTO.class);
+                myHealth_medicine_DTOS.add(myHealth_medicine_dto);
+                notice_list.add(myHealth_medicine_dto.getMedicine());
+                notice_adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        mReference.addChildEventListener(mchild);
+    }
+
 
     private class NaverSearchTask extends AsyncTask<String, String, String > {
         String result;
