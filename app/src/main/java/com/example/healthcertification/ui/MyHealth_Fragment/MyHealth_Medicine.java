@@ -5,10 +5,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.healthcertification.CustomDialog.CustomDialog_Add;
 import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
+import com.example.healthcertification.ListViewSetting.M_ListViewItem;
 import com.example.healthcertification.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
@@ -55,7 +54,7 @@ import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
  * A simple {@link Fragment} subclass.
  */
 public class MyHealth_Medicine extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener{
-    private List<MyHealth_Medicine_DTO> myHealth_medicine_DTOS;
+    private List<M_ListViewItem> myHealth_medicine_DTOS;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
     private ChildEventListener mchild;
@@ -73,7 +72,7 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
     ArrayAdapter<String> notice_adapter;
     String strDate, key;
     //List<Object> Array = new ArrayList<Object>();
-    MyHealth_Medicine_DTO myHealth_medicine_dto;
+    M_ListViewItem myHealth_medicine_dto;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -208,7 +207,7 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
                 notice_list.clear();
                 myHealth_medicine_DTOS.clear();
                 for (DataSnapshot namedata : snapshot.getChildren()) {
-                    myHealth_medicine_DTOS.add(namedata.getValue(MyHealth_Medicine_DTO.class));
+                    myHealth_medicine_DTOS.add(namedata.getValue(M_ListViewItem.class));
                 }
                 for (int i=0;i<myHealth_medicine_DTOS.size();i++){
                     notice_list.add(myHealth_medicine_DTOS.get(i).getMedicine());
@@ -259,7 +258,7 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
             //notice_list.add(name);                          // items 리스트에 입력된 문자열 추가
             //notice_adapter.notifyDataSetChanged();// 리스트 목록 갱신
 
-            MyHealth_Medicine_DTO myHealth_medicine_dto = new MyHealth_Medicine_DTO();
+            M_ListViewItem myHealth_medicine_dto = new M_ListViewItem();
             myHealth_medicine_dto.setKey(mReference.getKey());
             myHealth_medicine_dto.setMedicine(name);
             mReference.setValue(myHealth_medicine_dto);
@@ -267,13 +266,13 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
     }
 
     public void onDeleteItem(int position){
-        final MyHealth_Medicine_DTO myHealth_medicine_dto = myHealth_medicine_DTOS.get(position);
+        final M_ListViewItem myHealth_medicine_dto = myHealth_medicine_DTOS.get(position);
         mReference = mDatabase.getReference("Medicine").child("medicine_list").child(strDate);
         mReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    MyHealth_Medicine_DTO medicine_dto = snapshot.getValue(MyHealth_Medicine_DTO.class);
+                    M_ListViewItem medicine_dto = snapshot.getValue(M_ListViewItem.class);
                     if (myHealth_medicine_dto.getKey().equals(medicine_dto.getKey())){
                         mReference.child(snapshot.getKey().toString()).removeValue();
                         notice_adapter.notifyDataSetChanged();

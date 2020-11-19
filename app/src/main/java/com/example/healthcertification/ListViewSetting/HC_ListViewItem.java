@@ -7,6 +7,7 @@ public class HC_ListViewItem {
     private String weightStr ;
     private String bmiStr ;
     private String stateStr;
+    private String key;
 
 
     public void setDate(String date) {
@@ -22,7 +23,7 @@ public class HC_ListViewItem {
     public void setState(String state){
         stateStr = state;
     }
-
+    public void setKey(String key) {this.key = key;}
 
     public String getDate() {
         return this.dateStr ;
@@ -39,4 +40,6 @@ public class HC_ListViewItem {
     public String getState(){
         return this.stateStr;
     }
+    public String getKey() {return key;}
+
 }

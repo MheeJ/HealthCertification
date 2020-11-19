@@ -78,7 +78,8 @@ public class HC_ListViewAdapter extends BaseAdapter {
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(String date, String height, String weight, String bmi, String state) {
+    public void addItem(HC_ListViewItem Item){listViewItemHCList.add(Item);}
+/*    {
         HC_ListViewItem item = new HC_ListViewItem();
 
         //item.setIcon(icon);
@@ -89,12 +90,16 @@ public class HC_ListViewAdapter extends BaseAdapter {
         item.setState(state);
 
         listViewItemHCList.add(item);
-    }
+    }*/
 
     public void removeItem(int position){
         if(position != ListView.INVALID_POSITION){
             listViewItemHCList.remove(position);
         }
+    }
+
+    public void clear(){
+        listViewItemHCList.clear();
     }
 
 }

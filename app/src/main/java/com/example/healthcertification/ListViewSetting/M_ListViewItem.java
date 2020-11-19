@@ -1,6 +1,6 @@
-package com.example.healthcertification.ui.MyHealth_Fragment;
+package com.example.healthcertification.ListViewSetting;
 
-public class MyHealth_Medicine_DTO {
+public class M_ListViewItem {
     private String medicine;
     private String key;
 
