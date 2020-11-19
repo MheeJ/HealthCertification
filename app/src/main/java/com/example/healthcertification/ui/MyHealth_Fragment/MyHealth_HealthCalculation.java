@@ -16,6 +16,7 @@ import com.example.healthcertification.CustomDialog.CustomDialog_HC_Add;
 import com.example.healthcertification.CustomDialog.CustomDialog_Remove;
 import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
 import com.example.healthcertification.ListViewSetting.HC_ListViewAdapter;
+import com.example.healthcertification.ListViewSetting.HC_ListViewItem;
 import com.example.healthcertification.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
