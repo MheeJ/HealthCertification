@@ -22,7 +22,7 @@
             android:gravity="center"
             android:paddingTop="30dp"
             android:paddingBottom="16dp"
-            android:text="자가진단 정보를 저장하시겠습니까?"
+            android:text="해당 정보를 삭제하시겠습니까?"
             android:textColor="#000"
             android:textSize="15dp" />
     </LinearLayout>
@@ -42,7 +42,7 @@
         android:weightSum="2">
 
         <TextView
-            android:id="@+id/selfdiagnosis_cancle"
+            android:id="@+id/hc_costom_cancle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -50,19 +50,19 @@
             android:clickable="true"
             android:gravity="center"
             android:text="취소"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             />
         <TextView
-            android:id="@+id/selfdiagnosis_save"
+            android:id="@+id/hc_costom_remove"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="저장하기"
-            android:textColor="@color/colorAccent"
+            android:text="삭제하기"
+            android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             />
     </LinearLayout>

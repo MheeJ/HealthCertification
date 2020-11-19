@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.MyHealth_Fragment.MyHealth_HealthCalculation">
 
     <LinearLayout
@@ -49,12 +50,12 @@
                         />
 
                     <TextView
-                        android:id="@+id/fragment2_bodytemp"
+                        android:id="@+id/hc_goodweight_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="43.87 ~\n54.55kg"
-                        android:textSize="30dp"/>
+                        android:textSize="20dp"/>
 
                 </LinearLayout>
             </com.google.android.material.circularreveal.CircularRevealFrameLayout>
@@ -88,20 +89,20 @@
                         />
 
                     <TextView
-                        android:id="@+id/fragment3_bmi"
+                        android:id="@+id/hc_bmi_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="21.76"
-                        android:textSize="30dp"/>
+                        android:textSize="20dp"/>
 
                     <TextView
-                        android:id="@+id/fragment3_bmi_2"
+                        android:id="@+id/hc_bmistate_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="(정상)"
-                        android:textSize="15dp"/>
+                        android:text=""
+                        android:textSize="10dp"/>
 
                 </LinearLayout>
             </com.google.android.material.circularreveal.CircularRevealFrameLayout>
@@ -110,36 +111,100 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
-            android:layout_weight="4"
+            android:layout_weight="2"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="5dp"
-                android:textColor="#000000"
-                android:text="키/몸무게 기록" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="40dp"
-                android:text="날짜            몸무게            BMI지수            상태" />
-
-            <ListView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/fragment3_listview"/>
-        </LinearLayout>
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="날짜"
+                            android:textSize="16dp"
+                            android:layout_gravity="center"
+                            android:textColor="#666666"
+                            android:gravity="center"
+                            android:layout_weight="1" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="키"
+                            android:textSize="16dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textColor="#666666"
+                            android:layout_weight="1" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="몸무게"
+                            android:textSize="16dp"
+                            android:textColor="#666666"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="BMI지수"
+                            android:textSize="16dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textColor="#666666"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="상태"
+                            android:textSize="16dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textColor="#666666"
+                            android:layout_weight="1" />
+
+                    </LinearLayout>
+                </LinearLayout>
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="#FFFFFF"
+                    android:id="@+id/fragment3_listview"/>
+            </LinearLayout>
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/hc_add_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/add_btn"
+                app:borderWidth="0dp"
+                app:fabSize="normal">
+            </com.google.android.material.floatingactionbutton.FloatingActionButton>
+        </RelativeLayout>
 
     </LinearLayout>
-
 </FrameLayout>

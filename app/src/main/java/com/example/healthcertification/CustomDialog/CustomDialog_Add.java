@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.example.healthcertification.R;
 
+import org.w3c.dom.Text;
+
 public class CustomDialog_Add extends Dialog implements View.OnClickListener{
     private CustomDialog_Listener dialogListener;
 
@@ -17,7 +19,6 @@ public class CustomDialog_Add extends Dialog implements View.OnClickListener{
     private Context context;
 
     private EditText nameEt;
-    private EditText emailEt;
 
     private TextView cancelTv;
     private TextView searchTv;

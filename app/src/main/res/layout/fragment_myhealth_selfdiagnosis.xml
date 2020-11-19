@@ -40,13 +40,16 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:orientation="vertical">
-                    <Switch
+                    <CheckBox
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
                         android:layout_gravity="center_vertical"
+                        android:button="@null"
+                        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
                         android:textSize="20dp"
+                        android:id="@+id/fever_btn"
                         android:text="발열" />
                 </LinearLayout>
             </com.google.android.material.circularreveal.CircularRevealFrameLayout>
@@ -65,13 +68,16 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:orientation="vertical">
-                    <Switch
+                    <CheckBox
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
                         android:layout_gravity="center_vertical"
                         android:textSize="20dp"
+                        android:id="@+id/cough_btn"
+                        android:button="@null"
+                        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
                         android:text="기침" />
                 </LinearLayout>
             </com.google.android.material.circularreveal.CircularRevealFrameLayout>
@@ -90,14 +96,17 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:orientation="vertical">
-                    <Switch
+                    <CheckBox
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
                         android:layout_gravity="center_vertical"
                         android:textSize="20dp"
-                        android:text="목 쓰림, 아픔" />
+                        android:text="목 쓰림, 아픔"
+                        android:button="@null"
+                        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                        android:id="@+id/throat_btn"/>
                 </LinearLayout>
             </com.google.android.material.circularreveal.CircularRevealFrameLayout>
             <com.google.android.material.circularreveal.CircularRevealFrameLayout
@@ -115,14 +124,17 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:orientation="vertical">
-                    <Switch
+                    <CheckBox
+                        android:button="@null"
+                        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
                         android:layout_gravity="center_vertical"
                         android:textSize="20dp"
-                        android:text="콧물" />
+                        android:text="콧물"
+                        android:id="@+id/snot_btn"/>
                 </LinearLayout>
             </com.google.android.material.circularreveal.CircularRevealFrameLayout>
             <com.google.android.material.circularreveal.CircularRevealFrameLayout
@@ -140,14 +152,17 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:orientation="vertical">
-                    <Switch
+                    <CheckBox
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
                         android:layout_gravity="center_vertical"
                         android:textSize="20dp"
-                        android:text="가래" />
+                        android:button="@null"
+                        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                        android:text="가래"
+                        android:id="@+id/phlegm_btn"/>
                 </LinearLayout>
             </com.google.android.material.circularreveal.CircularRevealFrameLayout>
             <com.google.android.material.circularreveal.CircularRevealFrameLayout
@@ -165,14 +180,17 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:orientation="vertical">
-                    <Switch
+                    <CheckBox
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
                         android:layout_gravity="center_vertical"
                         android:textSize="20dp"
-                        android:text="호흡곤란" />
+                        android:text="호흡곤란"
+                        android:button="@null"
+                        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                        android:id="@+id/breath_btn"/>
                 </LinearLayout>
             </com.google.android.material.circularreveal.CircularRevealFrameLayout>
             <com.google.android.material.circularreveal.CircularRevealFrameLayout
@@ -190,14 +208,16 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:orientation="vertical">
-                    <Switch
+                    <CheckBox
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
-                        android:layout_gravity="center_vertical"
                         android:textSize="20dp"
-                        android:text="확진자 및 의심자 접촉 여부" />
+                        android:button="@null"
+                        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                        android:text="확진자 및 의심자 접촉 여부"
+                        android:id="@+id/suspicion_btn"/>
                 </LinearLayout>
             </com.google.android.material.circularreveal.CircularRevealFrameLayout>
             <com.google.android.material.circularreveal.CircularRevealFrameLayout

@@ -151,18 +151,18 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
             case R.id.fab_sub1:
                 toggleFab();
                 CustomDialog_Add dialog = new CustomDialog_Add(getContext());
-                dialog.setDialogListener(new CustomDialog_Listener() {  // MyDialogListener 를 구현
-                    @Override
-                    public void onPositiveClicked(String name) {
-                        addNotice(name);
-                    }
+                dialog.setDialogListener(new CustomDialog_Listener() {
+                                             @Override
+                                             public void onPositiveClicked(String name) {
+                                                 addNotice(name);
+                                             }
 
-                    @Override
-                    public void onNegativeClicked() {
-                        Log.d("MyDialogListener","onNegativeClicked");
-                    }
-                });
-                dialog.show();
+                                             @Override
+                                             public void onSDClicked(String height, String weight) {
+
+                                             }
+                                         });
+                        dialog.show();
                 break;
             case R.id.fab_sub2:
                 toggleFab();
