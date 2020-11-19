@@ -220,40 +220,51 @@
                             android:id="@+id/suspicion_btn"/>
                     </LinearLayout>
                 </com.google.android.material.circularreveal.CircularRevealFrameLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="bottom"
-                    android:paddingTop="30dp"
-                    android:paddingBottom="4dp"
-                    android:weightSum="2">
 
-                    <TextView
-                        android:id="@+id/sd_cancle_btn"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:text="취소"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="16sp"
-                        />
-                    <TextView
-                        android:id="@+id/sd_save_btn"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="저장하기"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="16sp"
-                        />
-                </LinearLayout>
+                <com.google.android.material.circularreveal.CircularRevealFrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginBottom="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        android:paddingBottom="4dp"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/sd_cancle_btn"
+                            android:layout_width="200dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:text="취소"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="20dp"
+                            />
+                        <TextView
+                            android:id="@+id/sd_save_btn"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:layout_width="200dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="저장하기"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="20dp"
+                            />
+                    </LinearLayout>
+                </com.google.android.material.circularreveal.CircularRevealFrameLayout>
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>

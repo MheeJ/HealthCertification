@@ -13,13 +13,18 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
 import com.example.healthcertification.CustomDialog.CustomDialog_SD_Check;
 import com.example.healthcertification.CustomDialog.CustomDialog_SD_Save;
+import com.example.healthcertification.ListViewSetting.SD_ListViewAdapter;
 import com.example.healthcertification.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +33,8 @@ public class MyHealth_SelfDiagnosis extends Fragment implements View.OnClickList
 
 
     private FloatingActionButton SD_ADD_Btn;
+    private ListView SD_ListView;
+    private SD_ListViewAdapter sd_listViewAdapter;
 
     public MyHealth_SelfDiagnosis() {
         // Required empty public constructor
@@ -39,9 +46,12 @@ public class MyHealth_SelfDiagnosis extends Fragment implements View.OnClickList
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_myhealth_selfdiagnosis, container, false);
+
+        sd_listViewAdapter = new SD_ListViewAdapter();
+        SD_ListView = (ListView)view.findViewById(R.id.sd_listview);
+        SD_ListView.setAdapter(sd_listViewAdapter);
         SD_ADD_Btn = (FloatingActionButton) view.findViewById(R.id.sd_add_btn);
         SD_ADD_Btn.setOnClickListener(this);
-
 
         return view;
     }
@@ -63,10 +73,10 @@ public class MyHealth_SelfDiagnosis extends Fragment implements View.OnClickList
 
                     }
                 });
-
                 customDialog_sd_check.show();
                 break;
         }
     }
+
 
 }

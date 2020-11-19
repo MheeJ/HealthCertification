@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import com.example.healthcertification.R;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class CustomDialog_SD_Check extends Dialog implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private CustomDialog_Listener dialog_listener;
     private static final int layout = R.layout.customdialog_selfdiagnosis_check;
@@ -19,7 +22,16 @@ public class CustomDialog_SD_Check extends Dialog implements View.OnClickListene
     private TextView SD_SaveBtn;
     private TextView SD_closeBtn;
     private CheckBox Fever_Btn, Cough_Btn, Throat_Btn, Snot_Btn, Phlegm_Btn, Breath_Btn, Suspicion_Btn;
-    private String Fever_State, Cough_State, Throat_State, Snot_State, Phlegm_State, Breath_State, Suspicion_State;
+    private String Fever_State = "";
+    private String Cough_State= "";
+    private String Throat_State= "";
+    private String Snot_State= "";
+    private String Phlegm_State= "";
+    private String Breath_State= "";
+    private String Suspicion_State= "";
+    ArrayList<String> items = new ArrayList<String>();
+    private String myState;
+
     private String SelfDiagnosis_State;
 
     public CustomDialog_SD_Check(Context context){
@@ -63,8 +75,33 @@ public class CustomDialog_SD_Check extends Dialog implements View.OnClickListene
                 cancel();
                 break;
             case R.id.sd_save_btn:
-                String name = "";
-                dialog_listener.onPositiveClicked(name);
+                for(int i=0; i< items.size()+1; i++){
+                    if(1 <= i && i < 2){
+                        myState = "not bad";
+                        dialog_listener.onPositiveClicked(myState);
+                        Toast.makeText(context.getApplicationContext(),"오늘은 컨디션 관리하기!",Toast.LENGTH_LONG).show();
+
+                    }
+                    else if(2 <= i && i < 3){
+                        myState = "tired";
+                        dialog_listener.onPositiveClicked(myState);
+                        Toast.makeText(context.getApplicationContext(),"오늘은 푹 쉬는게 좋겠어요.",Toast.LENGTH_LONG).show();
+
+                    }
+                    else if(3 <= i){
+                        myState = "sick";
+                        dialog_listener.onPositiveClicked(myState);
+                        Toast.makeText(context.getApplicationContext(),"질병관리본부 콜센터(1399)연락 또는 병원에 가보는건 어떨까요?",Toast.LENGTH_LONG).show();
+
+                    }
+                    else {
+                        myState = "good";
+                        dialog_listener.onPositiveClicked(myState);
+                        Toast.makeText(context.getApplicationContext(),"오늘 컨디션 최고!",Toast.LENGTH_LONG).show();
+
+                    }
+                }
+                //dialog_listener.onPositiveClicked(name);
                 dismiss();
                 break;
         }
@@ -72,14 +109,76 @@ public class CustomDialog_SD_Check extends Dialog implements View.OnClickListene
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-        if(Fever_Btn.isChecked()) SelfDiagnosis_State = Fever_Btn.getText().toString() + ",";
-        if(Cough_Btn.isChecked()) SelfDiagnosis_State = Cough_Btn.getText().toString() + ",";
-        if(Throat_Btn.isChecked()) SelfDiagnosis_State = Throat_Btn.getText().toString() + ",";
-        if(Snot_Btn.isChecked()) SelfDiagnosis_State = Snot_Btn.getText().toString() + ",";
-        if(Phlegm_Btn.isChecked()) SelfDiagnosis_State = Phlegm_Btn.getText().toString() + ",";
-        if(Breath_Btn.isChecked()) SelfDiagnosis_State = Breath_Btn.getText().toString() + ",";
-        if(Suspicion_Btn.isChecked()) SelfDiagnosis_State = Suspicion_Btn.getText().toString() + ",";
-        //if(Suspicion_Btn.isChecked()) SelfDiagnosis_State += Suspicion_Btn.getText().toString() + ",";
-        Toast.makeText(context.getApplicationContext(),SelfDiagnosis_State,Toast.LENGTH_LONG).show();
+
+        switch (buttonView.getId()){
+            case R.id.fever_btn:
+                if(isChecked){
+                    Fever_State = "열";
+                    items.add(Fever_State);
+                }
+                else
+                    items.remove("열");
+                break;
+
+            case R.id.cough_btn:
+                if(isChecked){
+                    Cough_State = "기침";
+                    items.add(Cough_State);
+                }
+                else{
+                    items.remove("기침");
+                }
+
+
+                break;
+
+            case R.id.throat_btn:
+                if(isChecked){
+                    Throat_State = "목통증";
+                    items.add(Throat_State);
+                }
+                else
+                    items.remove(Throat_State);
+                break;
+
+
+            case R.id.snot_btn:
+                if(isChecked){
+                    Snot_State = "콧물";
+                    items.add(Snot_State);
+                }
+                else
+                    items.remove(Snot_State);
+                break;
+
+            case R.id.phlegm_btn:
+                if(isChecked){
+                    Phlegm_State = "가래";
+                    items.add(Phlegm_State);
+                }
+                else
+                    items.remove(Phlegm_State);
+                break;
+
+            case R.id.breath_btn:
+                if(isChecked){
+                    Breath_State = "호흡곤란";
+                    items.add(Breath_State);
+                }
+                else
+                    items.remove(Breath_State);
+                break;
+
+            case R.id.suspicion_btn:
+                if(isChecked){
+                    Suspicion_State = "확진자접촉";
+                    items.add(Suspicion_State);
+                }
+                else
+                    items.remove(Suspicion_State);
+                break;
+        }
+
+        //Toast.makeText(context.getApplicationContext(),items.toString(),Toast.LENGTH_LONG).show();
     }
 }
