@@ -58,6 +58,8 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
         Bmi_View = (TextView)view.findViewById(R.id.hc_bmi_view);
         BmiState_View = (TextView)view.findViewById(R.id.hc_bmistate_view);
 
+
+        //listview 클릭시, 삭제 확인 팝업 및 삭제기능
         HC_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -10,7 +10,7 @@ import com.example.healthcertification.R;
 
 public class CustomDialog_SD_Save extends Dialog implements View.OnClickListener {
     private CustomDialog_Listener dialog_listener;
-    private static final int layout = R.layout.costomdialog_selfdiagnosis_save;
+    private static final int layout = R.layout.customdialog_selfdiagnosis_save;
     private Context context;
     private TextView SaveBtn;
     private TextView closeBtn;

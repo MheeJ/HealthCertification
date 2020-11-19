@@ -10,7 +10,7 @@ import com.example.healthcertification.R;
 
 public class CustomDialog_HC_Remove extends Dialog implements View.OnClickListener{
     private CustomDialog_Listener dialog_listener;
-    private static final int layout = R.layout.costomdialog_healthcalculation_remove;
+    private static final int layout = R.layout.customdialog_healthcalculation_remove;
     private Context context;
     private TextView RemoveBtn;
     private TextView closeBtn;
