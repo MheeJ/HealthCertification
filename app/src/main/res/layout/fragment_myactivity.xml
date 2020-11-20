@@ -1,211 +1,136 @@
-<LinearLayout android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:touchscreenBlocksFocus="true">
-
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <LinearLayout
-        android:id="@+id/layout_feedSearchBox"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:text="Activity"
-            android:textColor="#000000"
-            android:textSize="30dp">
-        </TextView>
-
-        <ProgressBar
-            android:id="@+id/progressbar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:max="100"
-            android:indeterminateTint="#FFDB7093"
-            android:visibility="gone"
-            android:layout_marginTop="-7dp"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="현재 위치"
-                android:layout_marginTop="10dp"
-                android:layout_weight="1"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="15dp"/>
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:scaleType="fitXY"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/restart_btn"
-                android:id="@+id/fragment3_restart" />
-        </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/fragment3_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="새로고침을 눌러주세요"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:text="Activity"
                 android:textColor="#000000"
-                android:textSize="28dp" />
-        </FrameLayout>
+                android:textSize="30dp">
+            </TextView>
+            <ProgressBar
+                android:id="@+id/progressbar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:max="100"
+                android:indeterminateTint="#FFDB7093"
+                android:visibility="gone"
+                android:layout_marginTop="-7dp"/>
 
-        <LinearLayout
-            android:id="@+id/map_view"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:orientation="horizontal">
+            <LinearLayout
+                android:id="@+id/map_view"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:orientation="horizontal">
+            </LinearLayout>
+
+            <devs.mulham.horizontalcalendar.HorizontalCalendarView
+                android:id="@+id/Myactivity_Calender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FAFAFA"
+                app:selectedDateBackground="@color/colorBackground"
+                app:selectorColor="#FAFAFA"
+                app:textColorNormal="#bababa"
+                app:textColorSelected="#000000"
+                app:sizeTopText="0dp"
+                app:sizeMiddleText="20dp"
+                app:sizeBottomText="10dp">
+            </devs.mulham.horizontalcalendar.HorizontalCalendarView>
+
         </LinearLayout>
 
-        <androidx.core.widget.NestedScrollView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-
-                <devs.mulham.horizontalcalendar.HorizontalCalendarView
-                    android:id="@+id/Myactivity_Calender"
+                <ListView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#FAFAFA"
-                    app:selectedDateBackground="@color/colorBackground"
-                    app:selectorColor="#FAFAFA"
-                    app:textColorNormal="#bababa"
-                    app:textColorSelected="#000000"
-                    app:sizeTopText="0dp"
-                    app:sizeMiddleText="20dp"
-                    app:sizeBottomText="10dp">
-                </devs.mulham.horizontalcalendar.HorizontalCalendarView>
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:id="@+id/medicine_listview"/>
 
-                <com.google.android.material.circularreveal.CircularRevealFrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="140dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="1dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/background_first" />
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="2020년 10월 21일"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="14:56"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:textColor="@color/colorPrimary"
-                            android:text="__._°C"
-                            android:textSize="55dp"/>
-                    </LinearLayout>
-                </com.google.android.material.circularreveal.CircularRevealFrameLayout>
-                <com.google.android.material.circularreveal.CircularRevealFrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="140dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="1dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/background_first" />
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="2020년 10월 21일"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="14:56"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:textColor="@color/colorPrimary"
-                            android:text="__._°C"
-                            android:textSize="55dp"/>
-                    </LinearLayout>
-                </com.google.android.material.circularreveal.CircularRevealFrameLayout>
-                <com.google.android.material.circularreveal.CircularRevealFrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="140dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="1dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/background_first" />
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="2020년 10월 21일"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="14:56"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:textColor="@color/colorPrimary"
-                            android:text="__._°C"
-                            android:textSize="55dp"/>
-                    </LinearLayout>
-                </com.google.android.material.circularreveal.CircularRevealFrameLayout>
+
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+        </RelativeLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/background_1_3"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/activity_pharmacy_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/activity_hospital_btn"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="20dp"
+        android:backgroundTint="#ffffff"
+        android:src="@drawable/medicine_trash_btn"
+        android:visibility="invisible"
+        android:layout_gravity="right"
+        app:borderWidth="0dp"
+        app:fabSize="normal">
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/activity_hospital_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/activity_main_btn"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="20dp"
+        android:backgroundTint="#ffffff"
+        android:layout_gravity="right"
+        android:src="@drawable/medicine_add_btn"
+        android:visibility="invisible"
+        android:text = "home"
+        app:borderWidth="0dp"
+        app:fabSize="normal" >
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/activity_main_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/add_btn"
+        app:borderWidth="0dp"
+        app:fabSize="normal">
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+
+
+
+
+</RelativeLayout>
