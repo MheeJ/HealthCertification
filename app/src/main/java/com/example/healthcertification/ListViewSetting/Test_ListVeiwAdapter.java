@@ -19,8 +19,8 @@ import java.util.ArrayList;
 
 public class Test_ListVeiwAdapter extends BaseAdapter {
     // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
-    private ArrayList<Test_ListVeiwitem> test_listVeiwitems = new ArrayList<Test_ListVeiwitem>() ;
-
+    private ArrayList<SD_ListViewItem> sd_listViewItems = new ArrayList<SD_ListViewItem>() ;
+    private Drawable drawable;
     int pos;
     Drawable mDrawable;
     // ListViewAdapter의 생성자
@@ -31,7 +31,7 @@ public class Test_ListVeiwAdapter extends BaseAdapter {
     // Adapter에 사용되는 데이터의 개수를 리턴. : 필수 구현
     @Override
     public int getCount() {
-        return test_listVeiwitems.size() ;
+        return sd_listViewItems.size() ;
     }
 
     // position에 위치한 데이터를 화면에 출력하는데 사용될 View를 리턴. : 필수 구현
@@ -53,12 +53,27 @@ public class Test_ListVeiwAdapter extends BaseAdapter {
         ImageView stateView = (ImageView) convertView.findViewById(R.id.test_item_state);
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
-        Test_ListVeiwitem test_listVeiwitem = test_listVeiwitems.get(position);
+        SD_ListViewItem sd_listViewItem = sd_listViewItems.get(position);
 
         // 아이템 내 각 위젯에 데이터 반영
         //iconImageView.setImageDrawable(listViewItem.getIcon());
-        dateView.setText(test_listVeiwitem.getDate());
-        stateView.setImageDrawable(test_listVeiwitem.getIcon());
+        dateView.setText(sd_listViewItem.getDate());
+        String state = sd_listViewItem.getState();
+
+        if (state.equals("good")){
+            drawable = ContextCompat.getDrawable(context,R.drawable.selfdiagnosis_good);
+        }
+        else if(state.equals("not bad")){
+            drawable = ContextCompat.getDrawable(context,R.drawable.selfdiagnosis_notbad);
+        }
+        else if(state.equals("tired")){
+            drawable = ContextCompat.getDrawable(context,R.drawable.selfdiagnosis_tired);
+        }
+        else{
+            drawable = ContextCompat.getDrawable(context,R.drawable.selfdiagnosis_sick);
+        }
+
+        stateView.setImageDrawable(drawable);
         return convertView;
 
 
@@ -73,23 +88,28 @@ public class Test_ListVeiwAdapter extends BaseAdapter {
     // 지정한 위치(position)에 있는 데이터 리턴 : 필수 구현
     @Override
     public Object getItem(int position) {
-        return test_listVeiwitems.get(position) ;
+        return sd_listViewItems.get(position) ;
 
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(String date, Drawable icon) {
+    public void addItem(SD_ListViewItem Item){sd_listViewItems.add(Item);}
+/*    {
         Test_ListVeiwitem item = new Test_ListVeiwitem();
 
         //item.setIcon(icon);
         item.setDate(date);
         item.setIcon(icon);
         test_listVeiwitems.add(item);
-    }
+    }*/
     public void removeItem(int position){
         if(position != ListView.INVALID_POSITION){
-            test_listVeiwitems.remove(position);
+            sd_listViewItems.remove(position);
         }
+    }
+
+    public void clear(){
+        sd_listViewItems.clear();
     }
 
 

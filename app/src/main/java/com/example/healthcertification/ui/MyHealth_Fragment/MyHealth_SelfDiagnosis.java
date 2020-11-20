@@ -3,6 +3,7 @@ package com.example.healthcertification.ui.MyHealth_Fragment;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -16,28 +17,40 @@ import android.widget.TextView;
 import com.example.healthcertification.CustomDialog.CustomDialog_Remove;
 import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
 import com.example.healthcertification.CustomDialog.CustonDialog_Test;
-import com.example.healthcertification.ListViewSetting.SD_ListViewAdapter;
+import com.example.healthcertification.ListViewSetting.HC_ListViewItem;
+
+import com.example.healthcertification.ListViewSetting.SD_ListViewItem;
 import com.example.healthcertification.ListViewSetting.Test_ListVeiwAdapter;
 import com.example.healthcertification.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MyHealth_SelfDiagnosis extends Fragment implements View.OnClickListener{
 
-
+    private List<SD_ListViewItem> sd_listViewItems;
     private FloatingActionButton SD_ADD_Btn;
     private ListView SD_ListView;
-    private SD_ListViewAdapter SD_ListView_Adapter;
     private ListView TestListView;
     private TextView GoodWeight_View, Bmi_View, BmiState_View;
     private Test_ListVeiwAdapter test_listVeiwAdapter;
     private Drawable drawable;
 
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = firebaseDatabase.getReference("SelfDiagnosis");
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mReference;
 
     public MyHealth_SelfDiagnosis() {
         // Required empty public constructor
@@ -55,7 +68,9 @@ public class MyHealth_SelfDiagnosis extends Fragment implements View.OnClickList
         TestListView.setAdapter(test_listVeiwAdapter);
         SD_ADD_Btn = (FloatingActionButton) view.findViewById(R.id.sd_add_btn);
         SD_ADD_Btn.setOnClickListener(this);
+        sd_listViewItems = new ArrayList<>();
 
+        onDataChange();
         TestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -64,8 +79,9 @@ public class MyHealth_SelfDiagnosis extends Fragment implements View.OnClickList
                 dialog_hc_remove.HC_Remove_Dialog_Listener(new CustomDialog_Listener() {
                     @Override
                     public void onPositiveClicked(String name) {
-                        test_listVeiwAdapter.removeItem(pos);
-                        test_listVeiwAdapter.notifyDataSetChanged();
+                        onDeleteItem(pos);
+                        //test_listVeiwAdapter.removeItem(pos);
+                        //test_listVeiwAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -104,13 +120,13 @@ public class MyHealth_SelfDiagnosis extends Fragment implements View.OnClickList
                 break;
         }
     }
-    public void makeItem(String name){
+    public void makeItem(String state){
         // 첫 번째 아이템 추가.
         long now = System.currentTimeMillis();
         Date mDate = new Date(now);
         SimpleDateFormat simpleDate = new SimpleDateFormat("yy.MM.dd");
         String getTime = simpleDate.format(mDate);
-        if(name == "good"){
+/*        if(name == "good"){
             drawable = ContextCompat.getDrawable(getContext(),R.drawable.selfdiagnosis_good);
         }
         else if(name == "not bad"){
@@ -121,12 +137,77 @@ public class MyHealth_SelfDiagnosis extends Fragment implements View.OnClickList
         }
         else{
             drawable = ContextCompat.getDrawable(getContext(),R.drawable.selfdiagnosis_sick);
-        }
+        }*/
 
         //drawable 안되면
         //test_listVeiwAdapter.addItem(getTime, name);
-        test_listVeiwAdapter.addItem(getTime, drawable);
-        test_listVeiwAdapter.notifyDataSetChanged();
+        //test_listVeiwAdapter.addItem(getTime, drawable);
+        //test_listVeiwAdapter.notifyDataSetChanged();
 
+        pushData(getTime, state);
+    }
+
+    private void onDeleteItem(int position){
+        final SD_ListViewItem sd_listViewItem = sd_listViewItems.get(position);
+        mDatabase = FirebaseDatabase.getInstance();
+        mReference = mDatabase.getReference("SelfDiagnosis");
+
+        mReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    SD_ListViewItem item = snapshot.getValue(SD_ListViewItem.class);
+                    if (sd_listViewItem.getKey().equals(item.getKey())){
+                        mReference.child(snapshot.getKey().toString()).removeValue();
+                        test_listVeiwAdapter.notifyDataSetInvalidated();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private void onDataChange(){
+        mDatabase = FirebaseDatabase.getInstance();
+        mReference = mDatabase.getReference("SelfDiagnosis");
+
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                sd_listViewItems.clear();
+                test_listVeiwAdapter.clear();
+                for (DataSnapshot namedata : snapshot.getChildren()){
+                    sd_listViewItems.add(namedata.getValue(SD_ListViewItem.class));
+                }
+                for (int i = 0; i<sd_listViewItems.size(); i++){
+                    SD_ListViewItem sd_listViewItem = (SD_ListViewItem)sd_listViewItems.get(i);
+                    test_listVeiwAdapter.addItem(sd_listViewItem);
+                }
+                test_listVeiwAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void pushData(String getTime, String state){
+        mDatabase = FirebaseDatabase.getInstance();
+        mReference = mDatabase.getReference("SelfDiagnosis").push();
+
+        SD_ListViewItem sd_listViewItem = new SD_ListViewItem();
+
+        sd_listViewItem.setKey(mReference.getKey());
+        sd_listViewItem.setDate(getTime);
+        sd_listViewItem.setState(state);
+        mReference.setValue(sd_listViewItem);
     }
 }
