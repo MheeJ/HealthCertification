@@ -30,7 +30,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/weight_background"
+                    android:src="@drawable/weight_background7"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="5dp"/>
@@ -46,6 +46,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="적정 몸무게"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginTop="10dp"
                         android:textSize="10dp"
                         />
 
@@ -54,7 +56,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="43.87 ~\n54.55kg"
+                        android:text="키와 몸무게를\n입력해주세요"
+                        android:layout_marginTop="5dp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
                         android:textSize="20dp"/>
 
                 </LinearLayout>
