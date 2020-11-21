@@ -52,8 +52,10 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.HorizontalCalendarView;
@@ -143,7 +145,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
             case R.id.activity_hospital_btn:
                 toggleFab();
                 HospitalAPI hospitalAPI = new HospitalAPI();
-                for(int i = 0; i<10;i++) {
+                for(int i = 1; i<3;i++) {
                     hospitalAPI.connect(currentLatLng.longitude, currentLatLng.latitude, i);
                 }
                 for(int i = 0; i<hospitalInfos.size();i++) {
@@ -155,7 +157,10 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                 break;
             case R.id.activity_pharmacy_btn:
                 toggleFab();
-                locationlog();
+                SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
+                Date test = new Date(System.currentTimeMillis());
+
+                locationlog(date.format(test));
                 break;
         }
     }
@@ -310,11 +315,11 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
         mapView.onDestroy();
     }
 
-    private void locationlog(){
+    private void locationlog(String input_day){
         polylineOptions = new PolylineOptions();
         polylineOptions.color(Color.BLUE);
         polylineOptions.width(10);
-        arraypoints = fileStore.Readfile();
+        arraypoints = fileStore.Readfile(input_day);
         polylineOptions.addAll(arraypoints);
         mMap.addPolyline(polylineOptions);
 
@@ -420,7 +425,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                     case XmlPullParser.TEXT: //xml의 <> 부분을 만나게 되면 실행되게 됩니다.
                         if(distance){
                             Double dis = Double.parseDouble(parser.getText());
-                            if(dis<0||dis>5)
+                            if(dis<0||dis>10)
                                 Endparse = false;
                             distance = false;
                         }
