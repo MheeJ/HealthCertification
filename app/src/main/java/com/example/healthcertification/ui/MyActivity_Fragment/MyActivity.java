@@ -66,7 +66,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
 
     private GoogleMap mMap;
     private LatLng currentLatLng;
-    private FileStore fileStore = new FileStore(getContext());
+    private FileStore fileStore = new FileStore();
     private Marker currentMarker = null;
     private final LatLng mDefaultLocation = new LatLng(37.56, 126.97);
     private MapView mapView = null;
@@ -157,10 +157,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                 break;
             case R.id.activity_pharmacy_btn:
                 toggleFab();
-                SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
-                Date test = new Date(System.currentTimeMillis());
-
-                locationlog(date.format(test));
+                mMap.clear();
                 break;
         }
     }
@@ -173,7 +170,9 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
         horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
             @Override
             public void onDateSelected(Calendar date, int position) {
-
+                mMap.clear();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                locationlog(sdf.format(date.getTime()));
             }
 
             @Override
@@ -208,10 +207,16 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
         }
     }
 
+    private String CurrentDate() {
+        Date today = new Date();
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+        return date.format(today);
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        currentLatLng = fileStore.Recentlocation();
+        currentLatLng = fileStore.Recentlocation(CurrentDate());
 
         setDefaultLocation();
         updateLocationUI();
