@@ -39,8 +39,6 @@ public class Temp_ListVeiwAdapter extends BaseAdapter {
         TextView timeView = (TextView) convertView.findViewById(R.id.temp_time);
         TextView tempView = (TextView)convertView.findViewById(R.id.temp_temperature);
         TextView stateView = (TextView) convertView.findViewById(R.id.temp_state) ;
-
-
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         Temp_ListViewItem TempListViewItem = listViewItemTempList.get(position);
 

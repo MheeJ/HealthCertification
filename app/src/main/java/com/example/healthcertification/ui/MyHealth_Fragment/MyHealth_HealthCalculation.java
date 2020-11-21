@@ -44,7 +44,7 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
     private DatabaseReference myRef = firebaseDatabase.getReference("HealthCalculation");
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
-    String getTime;
+    String getTime, goodweight1_Str ,goodweight2_Str, BmiStr;
 
     public MyHealth_HealthCalculation() {
         // Required empty public constructor
@@ -120,7 +120,7 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
         float heightFLO = Float.parseFloat(height);
         float weightFLO = Float.parseFloat(weight);
         float Bmi = (weightFLO/(heightFLO*heightFLO))*10000;
-        String BmiStr = String.format("%.2f",Bmi);
+        BmiStr = String.format("%.2f",Bmi);
         String my_state;
         if(Bmi > 25.0){
             my_state = "비만";
@@ -134,10 +134,10 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
         else {
             my_state = "저체중";
         }
-        double goodweight1 = (18.5*(heightFLO*heightFLO))/10000;
-        String goodweight1_Str = String.format("%.2f",goodweight1);
+/*        double goodweight1 = (18.5*(heightFLO*heightFLO))/10000;
+        goodweight1_Str = String.format("%.2f",goodweight1);
         double goodweight2 = (23.0*(heightFLO*heightFLO))/10000;
-        String goodweight2_Str = String.format("%.2f",goodweight2);
+        goodweight2_Str = String.format("%.2f",goodweight2);*/
         long now = System.currentTimeMillis();
         Date mDate = new Date(now);
         //SimpleDateFormat simpleDate = new SimpleDateFormat("yy-MM-dd");
@@ -145,8 +145,8 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
         getTime = simpleDate.format(mDate);
 
         //HC_ListView_Adapter.addItem(getTime,height, weight, BmiStr, my_state);
-        GoodWeight_View.setText(goodweight1_Str+" ~ \n"+goodweight2_Str+" kg");
-        Bmi_View.setText(BmiStr);
+        //GoodWeight_View.setText(goodweight1_Str+" ~ \n"+goodweight2_Str+" kg");
+        //Bmi_View.setText(BmiStr);
         BmiState_View.setText("( "+my_state+" )");
 
         pushData(getTime, height, weight, BmiStr, my_state);
@@ -182,7 +182,21 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
                 for (int i=0; i<hc_listViewItems.size(); i++){
                     HC_ListViewItem hc_listViewItem = (HC_ListViewItem)hc_listViewItems.get(i);
                     HC_ListView_Adapter.addItem(hc_listViewItem);
+                    float heightFLO = Float.parseFloat(hc_listViewItem.getHeight());
+                    float weightFLO = Float.parseFloat(hc_listViewItem.getWeight());
+                    double goodweight1 = (18.5*(heightFLO*heightFLO))/10000;
+                    double goodweight2 = (23.0*(heightFLO*heightFLO))/10000;
+                    float Bmi = (weightFLO/(heightFLO*heightFLO))*10000;
+
+                    goodweight1_Str = String.format("%.2f",goodweight1);
+                    BmiStr = String.format("%.2f",Bmi);
+
+                    goodweight2_Str = String.format("%.2f",goodweight2);
+                    GoodWeight_View.setText(goodweight1_Str+" ~ \n"+goodweight2_Str+" kg");
+                    Bmi_View.setText(BmiStr);
                 }
+
+
                 HC_ListView_Adapter.notifyDataSetChanged();
                 }
 

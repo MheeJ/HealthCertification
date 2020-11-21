@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
 import com.example.healthcertification.CustomDialog.CustomDialog_Remove;
@@ -23,6 +24,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,7 +46,8 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
     private DatabaseReference myRef = firebaseDatabase.getReference("Temperature");
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
-
+    String tempstr;
+    private TextView temptextview;
 
     public MyHealth_Temperature() {
         // Required empty public constructor
@@ -62,8 +66,10 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
         Temp_ADD_Btn = (FloatingActionButton)view.findViewById(R.id.temp_add_btn);
         Temp_ADD_Btn.setOnClickListener(this);
         temp_listViewItems = new ArrayList<>();
+        temptextview = view.findViewById(R.id.fragment2_bodytemp);
 
         onDataChange();
+
         Temp_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -86,6 +92,7 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
         return view;
     }
 
+
     public void temp_add(){
         long now = System.currentTimeMillis();
         Date mDate = new Date(now);
@@ -94,7 +101,7 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
         String getDate = simpleDate.format(mDate);
         String getTime = simpleTime.format(mDate);
         double Temp = 38;
-        String tempstr = Temp + "℃";
+        tempstr = Temp + "℃";
         String State = "정상";
 
         if (Temp > 36.1 && Temp < 36.8){
@@ -168,8 +175,13 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
                 for (int i =0; i<temp_listViewItems.size(); i++){
                     Temp_ListViewItem temp_listViewItem = (Temp_ListViewItem)temp_listViewItems.get(i);
                     temp_listVeiwAdapter.Temp_addItem(temp_listViewItem);
+                    tempstr = temp_listViewItem.getTemp();
+                    temptextview.setText(tempstr);
                 }
                 temp_listVeiwAdapter.notifyDataSetChanged();
+
+                //Temp_ListViewItem temp_listViewItem = (Temp_ListViewItem)temp_listViewItems.get(temp_listViewItems.size());
+
             }
 
             @Override
@@ -177,6 +189,7 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
 
             }
         });
+
     }
 
 
@@ -187,6 +200,5 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
                 temp_add();
         }
     }
-
 
 }
