@@ -33,6 +33,7 @@ public class LocationTracker{
         Location mLastLocation;
         boolean mValid = false;
         String mProvider;
+        int count = 0;
 
         public LocationListener(String provider){
             mProvider = provider;
@@ -57,10 +58,7 @@ public class LocationTracker{
                 Toast.makeText(mContext, "위도:"+ String.valueOf(newLocation.getLatitude()) +
                                 " 경도: " + String.valueOf(newLocation.getLongitude()),
                         Toast.LENGTH_SHORT).show();
-
-                fileStore.Writefile(String.valueOf(newLocation.getLatitude()) + "\n" + String.valueOf(newLocation.getLongitude()));
-//                ((MainActivity)getActivity()).changeText(location.getSpeed());
-
+                    fileStore.Writefile(String.valueOf(newLocation.getLatitude()) + "\n" + String.valueOf(newLocation.getLongitude()));
 
                 if(newLocation.getLatitude() != 0.0 && newLocation.getLongitude() != 0.0 ){
                     strNowLocationLatLngInfo = "GPS Lat:" +
@@ -108,7 +106,7 @@ public class LocationTracker{
 // 5-1. 지정된 provider, 시간, 거리마다 해당 listener에 request됨.(결국, 이 메소드로 위치정보얻기가 실행됨)
                 this.mLocationManager.requestLocationUpdates(
                         LocationManager.NETWORK_PROVIDER,
-                        1000,
+                        2000,
                         20,
                         this.mLocationListeners[1] );
             }catch (java.lang.SecurityException ex){

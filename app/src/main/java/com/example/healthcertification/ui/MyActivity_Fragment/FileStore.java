@@ -59,7 +59,7 @@ public class FileStore{
         }
     }
 
-    public ArrayList<LatLng> Readfile(){
+    public ArrayList<LatLng> Readfile(String input_day){
         int count = 0;
         ArrayList<LatLng> arrayPoints = new ArrayList<LatLng>();
         LatLng latLng = null;
@@ -71,44 +71,58 @@ public class FileStore{
         String delay_endTime = "null";
         double delay_latitude = 0;
         double delay_longitude = 0;
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
+        Date readDate;
+        Date inputDate;
+        long caldate = 0;
 
         try{
             InputStream is = new FileInputStream(filePath);
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line="";
             while((line=reader.readLine())!=null){
-                if(count%4 == 1){
-                    latitude = Double.parseDouble(line);
-                    delay_latitude = Double.parseDouble(String.format("%.3f",latitude));
-                }else if(count%4 == 2){
-                    longitude = Double.parseDouble(line);
-                    delay_longitude = Double.parseDouble(String.format("%.3f",longitude));
-                    latLng = new LatLng(latitude, longitude);
-                    delay_latLng = new LatLng(delay_latitude, delay_longitude);
-                }else if (count%4 ==3){
-                    if(delay_previous_latLng == null){
-                        delay_previous_latLng = delay_latLng;
-                    }else if((delay_previous_latLng.latitude == delay_latLng.latitude) && (delay_previous_latLng.longitude == delay_latLng.longitude) && (delay_startTime.equals("측정시작"))){
-                        delay_startTime = line;
-                        delay_endTime = "측정끝";
-                    }else if((delay_previous_latLng.latitude != delay_latLng.latitude) || (delay_previous_latLng.longitude != delay_latLng.longitude)){
-                        if(delay_endTime.equals("측정끝")) {
-                            delay_endTime = line;
-                            SimpleDateFormat transFormat = new SimpleDateFormat("a hh:mm:ss");
-                            Date delay_current_time = transFormat.parse(delay_endTime);
-                            Date delay_previous_time = transFormat.parse(delay_startTime);
-                            long duration = delay_current_time.getTime() - delay_previous_time.getTime(); // 글이 올라온시간,현재시간비교
-                            long min = duration/60000;
-                            if(min>=3) {
-                                mark_latlng.add(arrayPoints.get((count/4)-2));
-                                mark_time.add(transFormat.format(delay_previous_time) + " ~ " + transFormat.format(delay_current_time));
-                            }
-                        }
-                        delay_previous_latLng = null;
-                        delay_startTime = "측정시작";
-                        delay_endTime = "null";
+                if(count%4 ==0){
+                    readDate = date.parse(line);
+                    inputDate = date.parse(input_day);
+                    caldate = (inputDate.getTime() - readDate.getTime())/(24*60*60*1000);
+                    if(caldate<0){
+                        break;
                     }
-                    arrayPoints.add(latLng);
+                }
+                if(caldate == 0) {
+                    if (count % 4 == 1) {
+                        latitude = Double.parseDouble(line);
+                        delay_latitude = Double.parseDouble(String.format("%.3f", latitude));
+                    } else if (count % 4 == 2) {
+                        longitude = Double.parseDouble(line);
+                        delay_longitude = Double.parseDouble(String.format("%.3f", longitude));
+                        latLng = new LatLng(latitude, longitude);
+                        delay_latLng = new LatLng(delay_latitude, delay_longitude);
+                    } else if (count % 4 == 3) {
+                        if (delay_previous_latLng == null) {
+                            delay_previous_latLng = delay_latLng;
+                        } else if ((delay_previous_latLng.latitude == delay_latLng.latitude) && (delay_previous_latLng.longitude == delay_latLng.longitude) && (delay_startTime.equals("측정시작"))) {
+                            delay_startTime = line;
+                            delay_endTime = "측정끝";
+                        } else if ((delay_previous_latLng.latitude != delay_latLng.latitude) || (delay_previous_latLng.longitude != delay_latLng.longitude)) {
+                            if (delay_endTime.equals("측정끝")) {
+                                delay_endTime = line;
+                                SimpleDateFormat transFormat = new SimpleDateFormat("a hh:mm:ss");
+                                Date delay_current_time = transFormat.parse(delay_endTime);
+                                Date delay_previous_time = transFormat.parse(delay_startTime);
+                                long duration = delay_current_time.getTime() - delay_previous_time.getTime(); // 글이 올라온시간,현재시간비교
+                                long min = duration / 60000;
+                                if (min >= 3) {
+                                    mark_latlng.add(arrayPoints.get((count / 4) - 2));
+                                    mark_time.add(transFormat.format(delay_previous_time) + " ~ " + transFormat.format(delay_current_time));
+                                }
+                            }
+                            delay_previous_latLng = null;
+                            delay_startTime = "측정시작";
+                            delay_endTime = "null";
+                        }
+                        arrayPoints.add(latLng);
+                    }
                 }
                 count++;
             }
