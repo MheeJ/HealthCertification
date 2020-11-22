@@ -123,7 +123,7 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        //bleCommunication.unbind(getActivity());
+        bleCommunication.deleteBLE();
     }
 
     public void temp_add(){
