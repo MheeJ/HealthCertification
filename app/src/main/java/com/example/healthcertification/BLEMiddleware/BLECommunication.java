@@ -73,6 +73,9 @@ public class BLECommunication implements BeaconConsumer {
     public boolean bindService(Intent intent, ServiceConnection serviceConnection, int i) {
         return false;
     }
+    public void deleteBLE(){
+        beaconManager.unbind(this);
+    }
 
     public void createTopic(String topic){
         strTopic = topic;
