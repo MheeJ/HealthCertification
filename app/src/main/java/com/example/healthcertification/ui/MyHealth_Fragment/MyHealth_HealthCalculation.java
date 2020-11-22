@@ -1,8 +1,16 @@
 package com.example.healthcertification.ui.MyHealth_Fragment;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -17,6 +25,7 @@ import com.example.healthcertification.CustomDialog.CustomDialog_Remove;
 import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
 import com.example.healthcertification.ListViewSetting.HC_ListViewAdapter;
 import com.example.healthcertification.ListViewSetting.HC_ListViewItem;
+import com.example.healthcertification.MainActivity;
 import com.example.healthcertification.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -45,6 +54,8 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
     String getTime, goodweight1_Str ,goodweight2_Str, BmiStr;
+
+
 
     public MyHealth_HealthCalculation() {
         // Required empty public constructor
@@ -231,6 +242,7 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
             }
         });
     }
+
 
 
 }

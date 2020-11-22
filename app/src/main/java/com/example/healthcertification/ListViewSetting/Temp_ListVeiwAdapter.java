@@ -46,7 +46,9 @@ public class Temp_ListVeiwAdapter extends BaseAdapter {
         //iconImageView.setImageDrawable(listViewItem.getIcon());
         dateView.setText(TempListViewItem.getDate());
         timeView.setText(TempListViewItem.getTime());
-        tempView.setText(TempListViewItem.getTemp());
+        double temp = TempListViewItem.getTemp();
+        String tempstr = String.format("%.1f",temp);
+        tempView.setText(tempstr+"℃");
         stateView.setText(TempListViewItem.getState());
         return convertView;
     }
