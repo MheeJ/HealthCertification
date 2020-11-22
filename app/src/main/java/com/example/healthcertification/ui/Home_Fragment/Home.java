@@ -10,9 +10,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
+import com.example.healthcertification.ListViewSetting.M_ListViewItem;
+import com.example.healthcertification.ListViewSetting.Temp_ListViewItem;
 import com.example.healthcertification.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -26,23 +35,25 @@ import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 public class Home extends Fragment {
     private TextView health_Tip;
 
-    private Home_ViewModel home_viewModel;
+
     private HorizontalCalendar horizontalCalendar;
+    private TextView temptextView, TimetextView, DatetextView;
+
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mReference;
+    private List<Temp_ListViewItem> temp_listViewItems;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        home_viewModel =
-                ViewModelProviders.of(this).get(Home_ViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.fragment1_temperature);
-        home_viewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
+
+        temptextView = (TextView)root.findViewById(R.id.fragment1_temperature);
+        TimetextView = (TextView)root.findViewById(R.id.fragment1_Time);
+        DatetextView = (TextView)root.findViewById(R.id.fragment1_Date);
 
         health_Tip = (TextView) root.findViewById(R.id.health_Tip);
+        temp_listViewItems = new ArrayList<>();
 
         //calendar : https://github.com/Mulham-Raee/Horizontal-Calendar
         Calendar startDate = Calendar.getInstance();
@@ -55,7 +66,7 @@ public class Home extends Fragment {
                 .range(startDate, endDate)
                 .datesNumberOnScreen(5)
                 .build();
-
+        onDataChange();
         SetCalender();
         RandomSetText();
 
@@ -76,8 +87,42 @@ public class Home extends Fragment {
     public void SetCalender(){
         horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
             @Override
-            public void onDateSelected(Calendar date, int position) {
+            public void onDateSelected(final Calendar date, int position) {
+                mDatabase = FirebaseDatabase.getInstance();
+                mReference = mDatabase.getReference("Temperature");
 
+                mReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        for (DataSnapshot namedata : snapshot.getChildren()){
+                            temp_listViewItems.add(namedata.getValue(Temp_ListViewItem.class));
+                        }
+                        for (int i =0; i<temp_listViewItems.size(); i++){
+                            Temp_ListViewItem temp_listViewItem = (Temp_ListViewItem)temp_listViewItems.get(i);
+                            SimpleDateFormat sdf = new SimpleDateFormat("yy.MM.dd");
+                            String strDate1 = sdf.format(date.getTime());
+                            String strDate2 = temp_listViewItem.getDate();
+                            if (strDate1.equals(strDate2)){
+                                double temp = temp_listViewItem.getTemp();
+                                String Time = temp_listViewItem.getTime();
+                                String Date = temp_listViewItem.getDate();
+                                String year = Date.substring(0,2);
+                                String month = Date.substring(3,5);
+                                String date = Date.substring(6);
+                                String tempstr = String.format("%.1f",temp);
+                                temptextView.setText(tempstr+"℃");
+                                TimetextView.setText(Time);
+                                DatetextView.setText("20"+year+"년"+month+"월"+date+"일");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override
@@ -93,5 +138,42 @@ public class Home extends Fragment {
         });
     }
 
+    public void onDataChange(){
+        mDatabase = FirebaseDatabase.getInstance();
+        mReference = mDatabase.getReference("Temperature");
 
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                temp_listViewItems.clear();
+                for (DataSnapshot namedata : snapshot.getChildren()){
+                    temp_listViewItems.add(namedata.getValue(Temp_ListViewItem.class));
+                }
+                for (int i =0; i<temp_listViewItems.size(); i++){
+                    Temp_ListViewItem temp_listViewItem = (Temp_ListViewItem)temp_listViewItems.get(i);
+
+                    //tempstr = temp_listViewItem.getTemp();
+                    double temp = temp_listViewItem.getTemp();
+                    String tempstr = String.format("%.1f",temp);
+                    String Time = temp_listViewItem.getTime();
+                    String Date = temp_listViewItem.getDate();
+                    String year = Date.substring(0,2);
+                    String month = Date.substring(3,5);
+                    String date = Date.substring(6);
+                    temptextView.setText(tempstr+"℃");
+                    TimetextView.setText(Time);
+                    DatetextView.setText("20"+year+"년"+month+"월"+date+"일");
+                }
+
+
+                //Temp_ListViewItem temp_listViewItem = (Temp_ListViewItem)temp_listViewItems.get(temp_listViewItems.size());
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 }

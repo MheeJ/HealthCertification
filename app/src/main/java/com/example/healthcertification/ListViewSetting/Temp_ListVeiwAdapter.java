@@ -39,8 +39,6 @@ public class Temp_ListVeiwAdapter extends BaseAdapter {
         TextView timeView = (TextView) convertView.findViewById(R.id.temp_time);
         TextView tempView = (TextView)convertView.findViewById(R.id.temp_temperature);
         TextView stateView = (TextView) convertView.findViewById(R.id.temp_state) ;
-
-
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         Temp_ListViewItem TempListViewItem = listViewItemTempList.get(position);
 
@@ -48,7 +46,9 @@ public class Temp_ListVeiwAdapter extends BaseAdapter {
         //iconImageView.setImageDrawable(listViewItem.getIcon());
         dateView.setText(TempListViewItem.getDate());
         timeView.setText(TempListViewItem.getTime());
-        tempView.setText(TempListViewItem.getTemp());
+        double temp = TempListViewItem.getTemp();
+        String tempstr = String.format("%.1f",temp);
+        tempView.setText(tempstr+"℃");
         stateView.setText(TempListViewItem.getState());
         return convertView;
     }
@@ -66,18 +66,8 @@ public class Temp_ListVeiwAdapter extends BaseAdapter {
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void Temp_addItem(String date, String time, String temperature, String state) {
-        Temp_ListViewItem item = new Temp_ListViewItem();
+    public void Temp_addItem(Temp_ListViewItem Item) {listViewItemTempList.add(Item);}
 
-        //item.setIcon(icon);
-        item.setDate(date);
-        item.setTime(time);
-        item.setTemp(temperature);
-        item.setState(state);
-
-
-        listViewItemTempList.add(item);
-    }
-
+    public void clear(){listViewItemTempList.clear();}
 
 }

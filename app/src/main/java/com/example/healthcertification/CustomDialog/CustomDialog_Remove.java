@@ -24,6 +24,10 @@ public class CustomDialog_Remove extends Dialog implements View.OnClickListener{
         this.dialog_listener = dialog_listener;
     }
 
+    public void Temp_Remove_Dialog_Listener(CustomDialog_Listener dialog_listener){
+        this.dialog_listener = dialog_listener;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
