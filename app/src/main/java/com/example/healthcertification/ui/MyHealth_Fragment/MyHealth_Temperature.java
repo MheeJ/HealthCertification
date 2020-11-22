@@ -21,6 +21,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.healthcertification.BLEMiddleware.BLECommunication;
+import com.example.healthcertification.BLEMiddleware.BLEListener;
 import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
 import com.example.healthcertification.CustomDialog.CustomDialog_Remove;
 import com.example.healthcertification.ListViewSetting.Temp_ListVeiwAdapter;
@@ -34,6 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.altbeacon.beacon.Beacon;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
@@ -44,7 +47,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyHealth_Temperature extends Fragment implements View.OnClickListener {
+public class MyHealth_Temperature extends Fragment implements View.OnClickListener, BLEListener {
 
     private List<Temp_ListViewItem> temp_listViewItems;
     private ListView Temp_ListView;
@@ -57,6 +60,9 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
     private TextView temptextview;
 
     public static final String NOTIFICATION_CHANNEL_ID = "10001";
+
+    ///////////beacon/////////
+    private BLECommunication bleCommunication;
 
     public MyHealth_Temperature() {
         // Required empty public constructor
@@ -76,6 +82,13 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
         Temp_ADD_Btn.setOnClickListener(this);
         temp_listViewItems = new ArrayList<>();
         temptextview = view.findViewById(R.id.fragment2_bodytemp);
+
+        ////////////////beacon // (1) initialize -> (2)setListener -> (3) create_topic
+        bleCommunication = new BLECommunication();
+        bleCommunication.initialize(getContext());
+        bleCommunication.setBleListener(this);
+        bleCommunication.createTopic("tp");
+        ///////////////beacon
 
         onDataChange();
 
@@ -101,6 +114,17 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
         return view;
     }
 
+    ///////////////beacon
+    @Override
+    public void onBLEDataAvailable(Beacon beacon, String data) {
+        temptextview.setText(data);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        //bleCommunication.unbind(getActivity());
+    }
 
     public void temp_add(){
         long now = System.currentTimeMillis();
@@ -256,5 +280,7 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
         notificationManager.notify(1234, builder.build()); // 고유숫자로 노티피케이션 동작시킴
 
     }
+
+
 
 }
