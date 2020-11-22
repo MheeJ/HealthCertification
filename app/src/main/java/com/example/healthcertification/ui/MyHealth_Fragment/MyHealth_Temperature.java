@@ -57,6 +57,7 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
     String tempstr;
+    double Temp;
     private TextView temptextview;
 
     public static final String NOTIFICATION_CHANNEL_ID = "10001";
@@ -117,7 +118,11 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
     ///////////////beacon
     @Override
     public void onBLEDataAvailable(Beacon beacon, String data) {
-        temptextview.setText(data);
+        temptextview.setText(data+"℃");
+        Temp = Double.parseDouble(temptextview.getText().toString().substring(0,4));
+        if (Temp > 37){
+            NotificationSomethings();
+        }
     }
 
     @Override
@@ -133,7 +138,8 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
         SimpleDateFormat simpleTime = new SimpleDateFormat("HH:mm");
         String getDate = simpleDate.format(mDate);
         String getTime = simpleTime.format(mDate);
-        double Temp = 38;
+
+        //Temp = Double.parseDouble(temptextview.getText().toString().substring(0,4));
         //tempstr = Temp + "℃";
         String State = "정상";
 
@@ -200,23 +206,29 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
         mReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 temp_listViewItems.clear();
                 temp_listVeiwAdapter.clear();
                 for (DataSnapshot namedata : snapshot.getChildren()){
                     temp_listViewItems.add(namedata.getValue(Temp_ListViewItem.class));
                 }
                 for (int i =0; i<temp_listViewItems.size(); i++){
+                    double temp;
                     Temp_ListViewItem temp_listViewItem = (Temp_ListViewItem)temp_listViewItems.get(i);
                     temp_listVeiwAdapter.Temp_addItem(temp_listViewItem);
-                    //tempstr = temp_listViewItem.getTemp();
-                    double temp = temp_listViewItem.getTemp();
+
+                    temp = temp_listViewItem.getTemp();
                     String tempstr = String.format("%.1f",temp);
                     temptextview.setText(tempstr+"℃");
-                    if (temp > 37){
-                        NotificationSomethings();
-                    }
+
                 }
                 temp_listVeiwAdapter.notifyDataSetChanged();
+                //int Itemsize = temp_listViewItems.size();
+                                //Temp_ListViewItem temp_listViewItem = (Temp_ListViewItem)temp_listViewItems.get(Itemsize-1);
+                //temp = temp_listViewItem.getTemp();
+/*                if (temp > 37){
+                    NotificationSomethings();
+                }*/
 
                 //Temp_ListViewItem temp_listViewItem = (Temp_ListViewItem)temp_listViewItems.get(temp_listViewItems.size());
 
