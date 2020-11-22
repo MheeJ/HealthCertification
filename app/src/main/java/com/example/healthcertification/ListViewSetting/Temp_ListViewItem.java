@@ -3,7 +3,8 @@ package com.example.healthcertification.ListViewSetting;
 public class Temp_ListViewItem {
 
     private String dateStr ;
-    private String tempStr;
+    //private String tempStr;
+    private double temp;
     private String timeStr;
     private String stateStr ;
     private String Key;
@@ -13,7 +14,7 @@ public class Temp_ListViewItem {
         dateStr = date ;
     }
     public void setTime(String time){timeStr = time ; }
-    public void setTemp(String temp){ tempStr = temp; }
+    public void setTemp(double tempdouble){ temp = tempdouble; }
     public void setState(String state) {
         stateStr = state ;
     }
@@ -21,7 +22,7 @@ public class Temp_ListViewItem {
 
     public String getDate() {return this.dateStr ; }
     public String getTime(){return this.timeStr ; }
-    public String getTemp(){return this.tempStr ; }
+    public double getTemp(){return this.temp ; }
     public String getState() {return this.stateStr ; }
     public String getKey(){return  this.Key ; }
 

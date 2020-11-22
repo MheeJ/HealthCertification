@@ -1,5 +1,6 @@
 package com.example.healthcertification.ui.MyInformation_Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,21 +9,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.healthcertification.CustomDialog.CustomDialog_Info_Setting;
 import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
+import com.example.healthcertification.Login.Login;
 import com.example.healthcertification.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MyInformation extends Fragment implements View.OnClickListener {
     private MyInformation_ViewModel myInformation_viewModel;
-    private ImageView Information_Setting_btn;
+    private ImageView Information_Setting_btn,Info_Logout_btn;
     private String Info_Name;
     private String Info_Birth;
     private TextView TextView_Name, TextView_Birth, TextView_Gender;
+    private FirebaseAuth mAuth;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -34,6 +36,9 @@ public class MyInformation extends Fragment implements View.OnClickListener {
         TextView_Gender = root.findViewById(R.id.info_gender);
         Information_Setting_btn = (ImageView)root.findViewById(R.id.information_setting_btn);
         Information_Setting_btn.setOnClickListener(this);
+        Info_Logout_btn = (ImageView)root.findViewById(R.id.info_logout_btn);
+        Info_Logout_btn.setOnClickListener(this);
+        mAuth = FirebaseAuth.getInstance();
         return root;
     }
 
@@ -55,6 +60,9 @@ public class MyInformation extends Fragment implements View.OnClickListener {
                 });
                 dialog.show();
                 break;
+            case R.id.info_logout_btn:
+                signOut();
+                break;
         }
     }
     public void InfoMakeItem(String data, String gender){
@@ -66,4 +74,12 @@ public class MyInformation extends Fragment implements View.OnClickListener {
         TextView_Gender.setText(gender);
 
     }
+
+    private void signOut() {
+        // Firebase sign out
+        mAuth.getInstance().signOut();
+        Intent intent1 = new Intent(getActivity(), Login.class);
+        startActivity(intent1);
+    }
+
 }

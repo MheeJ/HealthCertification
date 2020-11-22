@@ -58,8 +58,6 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
     private ChildEventListener mchild;
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference myRef = firebaseDatabase.getReference("Medicine");
     private Context mContext;
     private FloatingActionButton fab_main, fab_sub1, fab_sub2, fab_sub3;
     private Animation fab_open, fab_close;
@@ -307,10 +305,6 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
         final String medicine = object.toString();
         NaverSearchTask naverSearchTask = new NaverSearchTask();
         naverSearchTask.execute(medicine);
-
-
-
-        key = myRef.child("medicine_list").getKey();
     }
 /*
     private void initDatabase(){
