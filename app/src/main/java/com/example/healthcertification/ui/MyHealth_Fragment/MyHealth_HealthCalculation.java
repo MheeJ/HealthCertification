@@ -49,8 +49,6 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
     private TextView GoodWeight_View, Bmi_View, BmiState_View;
     private HC_ListViewAdapter HC_ListView_Adapter;
 
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference myRef = firebaseDatabase.getReference("HealthCalculation");
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
     String getTime, goodweight1_Str ,goodweight2_Str, BmiStr;

@@ -51,8 +51,6 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
     private Temp_ListVeiwAdapter temp_listVeiwAdapter;
     private FloatingActionButton Temp_ADD_Btn;
 
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference myRef = firebaseDatabase.getReference("Temperature");
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
     String tempstr;
@@ -108,7 +106,7 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
         long now = System.currentTimeMillis();
         Date mDate = new Date(now);
         SimpleDateFormat simpleDate = new SimpleDateFormat("yy.MM.dd");
-        SimpleDateFormat simpleTime = new SimpleDateFormat("hh:mm");
+        SimpleDateFormat simpleTime = new SimpleDateFormat("HH:mm");
         String getDate = simpleDate.format(mDate);
         String getTime = simpleTime.format(mDate);
         double Temp = 38;
@@ -228,7 +226,7 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
         PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, notificationIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), NOTIFICATION_CHANNEL_ID)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground)) //BitMap 이미지 요구
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.logo_11)) //BitMap 이미지 요구
                 .setContentTitle("체온 경고")
                 .setContentText("체온이 높습니다 가까운 병원에서 검진받으세요")
                 // 더 많은 내용이라서 일부만 보여줘야 하는 경우 아래 주석을 제거하면 setContentText에 있는 문자열 대신 아래 문자열을 보여줌
@@ -240,7 +238,7 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
         //OREO API 26 이상에서는 채널 필요
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            builder.setSmallIcon(R.drawable.ic_launcher_foreground); //mipmap 사용시 Oreo 이상에서 시스템 UI 에러남
+            builder.setSmallIcon(R.drawable.logo_11); //mipmap 사용시 Oreo 이상에서 시스템 UI 에러남
             CharSequence channelName  = "노티페케이션 채널";
             String description = "오레오 이상을 위한 것임";
             int importance = NotificationManager.IMPORTANCE_HIGH;
@@ -252,7 +250,7 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
             assert notificationManager != null;
             notificationManager.createNotificationChannel(channel);
 
-        }else builder.setSmallIcon(R.mipmap.ic_launcher); // Oreo 이하에서 mipmap 사용하지 않으면 Couldn't create icon: StatusBarIcon 에러남
+        }else builder.setSmallIcon(R.drawable.logo_11); // Oreo 이하에서 mipmap 사용하지 않으면 Couldn't create icon: StatusBarIcon 에러남
 
         assert notificationManager != null;
         notificationManager.notify(1234, builder.build()); // 고유숫자로 노티피케이션 동작시킴
