@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -145,7 +146,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
             case R.id.activity_hospital_btn:
                 toggleFab();
                 HospitalAPI hospitalAPI = new HospitalAPI();
-                for(int i = 1; i<3;i++) {
+                for(int i = 1; i<11;i++) {
                     hospitalAPI.connect(currentLatLng.longitude, currentLatLng.latitude, i);
                 }
                 for(int i = 0; i<hospitalInfos.size();i++) {
@@ -343,6 +344,36 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
         markerOptions.title(markerTitle);
         markerOptions.snippet(markerSnippet);
         markerOptions.draggable(true);
+
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                LinearLayout info = new LinearLayout(mContext);
+                info.setOrientation(LinearLayout.VERTICAL);
+
+                TextView title = new TextView(mContext);
+                title.setTextColor(Color.BLACK);
+                title.setGravity(Gravity.CENTER);
+                title.setText(marker.getTitle());
+
+                TextView snippet = new TextView(mContext);
+                snippet.setTextColor(Color.GRAY);
+                snippet.setGravity(Gravity.CENTER);
+                snippet.setText(marker.getSnippet());
+
+                info.addView(title);
+                info.addView(snippet);
+
+                return info;
+            }
+        });
+
 
         currentMarker = mMap.addMarker(markerOptions);
     }

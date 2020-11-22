@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         getLocationPermission();
 
         LocationTracker thread = new LocationTracker(this);
-        thread.startLocationReceiving();
+        thread.start();
     }
 
 

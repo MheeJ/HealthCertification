@@ -24,8 +24,6 @@ import java.util.Date;
 public class FileStore{
 
     private final static String foldername = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android/data/com.example.healthcertification";
-    private final static String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android/data/com.example.healthcertification/LocationLog.txt";
-    private static final String ENCRYPT_FILE_NAME = "EncryptLog.txt";
     ArrayList<LatLng> mark_latlng = new ArrayList<LatLng>();
     ArrayList<String> mark_time = new ArrayList<String>();
 
@@ -167,6 +165,38 @@ public class FileStore{
         return result;
     }
 
+    public void Delete(String filename){
+        File file = new File(foldername + "/" + filename + ".txt");
+        if(file.exists()){
+            file.delete();
+        }
+    }
+
+    public void EncryptionfileCreate(String input_data, String date) throws NoSuchAlgorithmException {
+        StringBuffer strBuffer = new StringBuffer();
+        String encryptString;
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        md.update(input_data.getBytes());
+        byte byteData[] = md.digest();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < byteData.length; i++)
+            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+        encryptString = sb.toString();
+        try {
+            //파일 output stream 생성
+            FileOutputStream fos = new FileOutputStream(foldername + "/EncrytionLog" + date+".txt", true);
+            //파일쓰기
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
+            writer.write(encryptString);
+            writer.flush();
+
+            writer.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public ArrayList<LatLng> makerLocation(){
         return mark_latlng;
     }
@@ -179,52 +209,5 @@ public class FileStore{
         Date today = new Date();
         SimpleDateFormat time = new SimpleDateFormat("a hh:mm:ss");
         return time.format(today);
-    }
-
-    public void Delete(String filename){
-        File file = new File(foldername + "/" + filename + ".txt");
-        if(file.exists()){
-            file.delete();
-        }
-    }
-
-    public void Encryptfile() throws NoSuchAlgorithmException {
-        StringBuffer strBuffer = new StringBuffer();
-        String encryptString;
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        try{
-            InputStream is = new FileInputStream(filePath);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String line="";
-            while((line=reader.readLine())!=null){
-                md.update(line.getBytes());
-                byte byteData[] = md.digest();
-                StringBuffer sb = new StringBuffer();
-                for(int i = 0; i<byteData.length;i++)
-                    sb.append(Integer.toString((byteData[i]&0xff) + 0x100, 16).substring(1));
-                encryptString = sb.toString();
-
-                strBuffer.append(encryptString+"\n");
-            }
-
-            reader.close();
-            is.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        Delete(foldername+"/"+ ENCRYPT_FILE_NAME);
-        try{
-            //파일 output stream 생성
-            FileOutputStream fos = new FileOutputStream(foldername+"/"+ ENCRYPT_FILE_NAME, true);
-            //파일쓰기
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
-            writer.write(strBuffer.toString());
-            writer.flush();
-
-            writer.close();
-            fos.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
     }
 }
