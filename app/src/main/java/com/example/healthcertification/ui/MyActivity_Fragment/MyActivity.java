@@ -151,6 +151,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                 break;
             case R.id.activity_hospital_btn:
                 toggleFab();
+                mMap.clear();
                 HospitalAPI hospitalAPI = new HospitalAPI();
                 for(int i = 1; i<11;i++) {
                     hospitalAPI.connect(currentLatLng.longitude, currentLatLng.latitude, i);
@@ -160,16 +161,16 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
             case R.id.activity_pharmacy_btn:
                 toggleFab();
                 mDatabase = FirebaseDatabase.getInstance();
-                mReference = mDatabase.getReference("Encrypted Log").push();
+                mReference = mDatabase.getReference("EncryptedLog").push();
                 EncryptedItem encryptedItem = new EncryptedItem();
                 fileStore.ReadEncryptionfile(CurrentDate());
                 encryptedItem.setDate(CurrentDate());
                 encryptedItem.setLog(fileStore.getEncryptline());
                 mReference.setValue(encryptedItem);
 
-                
-                int i = fileStore.ComapareLocation(CurrentDate());
-                Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(i/6) + "시간 " + String.valueOf((i%6)*10) + "분", Toast.LENGTH_SHORT).show();
+
+//                int i = fileStore.ComapareLocation(CurrentDate());
+//                Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(i/6) + "시간 " + String.valueOf((i%6)*10) + "분", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

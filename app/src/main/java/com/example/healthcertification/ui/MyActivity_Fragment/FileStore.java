@@ -226,31 +226,31 @@ public class FileStore{
         return encryptline;
     }
 
-    public int ComapareLocation(String date){
-        int count = 0;
-        int comparetime = 0;
-        ArrayList<String> otherencryptline = new ArrayList<String>();
-        ReadEncryptionfile(date);
-        try{
-            InputStream is = new FileInputStream(foldername + "/OtherEncrytionLog" + date+".txt");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String line="";
-            while((line=reader.readLine())!=null){
-                otherencryptline.add(line);
-            }
-            reader.close();
-            is.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        count = (encryptline.size()<otherencryptline.size())?encryptline.size():otherencryptline.size();
-        for(int i = 0; i < count ; i++){
-            if(encryptline.get(i).equals(otherencryptline.get(i))){
-                comparetime++;
-            }
-        }
-        return comparetime;
-    }
+//    public int ComapareLocation(String date){
+//        int count = 0;
+//        int comparetime = 0;
+//        ArrayList<String> otherencryptline = new ArrayList<String>();
+//        ReadEncryptionfile(date);
+//        try{
+//            InputStream is = new FileInputStream(foldername + "/OtherEncrytionLog" + date+".txt");
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+//            String line="";
+//            while((line=reader.readLine())!=null){
+//                otherencryptline.add(line);
+//            }
+//            reader.close();
+//            is.close();
+//        }catch (IOException e){
+//            e.printStackTrace();
+//        }
+//        count = (encryptline.size()<otherencryptline.size())?encryptline.size():otherencryptline.size();
+//        for(int i = 0; i < count ; i++){
+//            if(encryptline.get(i).equals(otherencryptline.get(i))){
+//                comparetime++;
+//            }
+//        }
+//        return comparetime;
+//    }
 
 
 
