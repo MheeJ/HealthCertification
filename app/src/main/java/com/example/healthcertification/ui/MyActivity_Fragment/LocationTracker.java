@@ -27,6 +27,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,14 +38,16 @@ import static androidx.core.content.ContextCompat.getSystemService;
 public class LocationTracker{
 
     private static final String TAG = "googlemap_example";
-    private static final int UPDATE_INTERVAL_MS = 10000;  // 1초
-    private static final int FASTEST_UPDATE_INTERVAL_MS = 10000; // 0.5초
+    private static final int UPDATE_INTERVAL_MS = 15000;  // 1초
+    private static final int FASTEST_UPDATE_INTERVAL_MS = 15000; // 0.5초
     private Context mContext = null;
 
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationRequest locationRequest;
     private Location location;
     private CaloryCalculate caloryCalculate = new CaloryCalculate();
+    private SimpleDateFormat time = new SimpleDateFormat("a hh:mm:ss");
+    private SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
 
 
     public LocationTracker(Context context) {
@@ -54,7 +57,7 @@ public class LocationTracker{
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(UPDATE_INTERVAL_MS)
                 .setFastestInterval(FASTEST_UPDATE_INTERVAL_MS)
-                .setSmallestDisplacement(20);
+                .setSmallestDisplacement(30);
 
         LocationSettingsRequest.Builder builder =
                 new LocationSettingsRequest.Builder();
@@ -78,6 +81,8 @@ public class LocationTracker{
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
             FileStore fileStore = new FileStore();
+            long countfortoday = 0;
+            long countforencryptfile = 0;
 
             List<Location> locationList = locationResult.getLocations();
 
@@ -98,22 +103,35 @@ public class LocationTracker{
                     fileStore.Writefile(CurrentDate() + "\n" +"0","calory",false);
                 }
 
-//                if(CurrentTime())
-
-
+                fileStore.ReadEncryptionfile(CurrentDate());
+                countforencryptfile = fileStore.getLinenumber();
+                try {
+                    countfortoday = (time.parse(CurrentTime()).getTime()+32400000)/600000;
+                    if (countforencryptfile == 0) {
+                        fileStore.CreateEncryptionfile(String.format("%.4f", location.getLatitude()) + "\n" + String.format("%.4f", location.getLongitude()), CurrentDate(), true);
+                    } else {
+                        if ((countfortoday - countforencryptfile) >= 1) {
+                            if ((countfortoday - countforencryptfile) != 1) {
+                                for (int i = 0; i < (countfortoday - countforencryptfile); i++)
+                                    fileStore.CreateEncryptionfile(fileStore.getLastString(), CurrentDate(), false);
+                            }
+                            fileStore.CreateEncryptionfile(String.format("%.4f", location.getLatitude()) + "\n" + String.format("%.4f", location.getLongitude()), CurrentDate(), true);
+                        }
+                    }
+                } catch (NoSuchAlgorithmException | ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
     };
 
     private String CurrentTime() {
         Date today = new Date();
-        SimpleDateFormat time = new SimpleDateFormat("a hh:mm:ss");
         return time.format(today);
     }
 
     private String CurrentDate() {
         Date today = new Date();
-        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
         return date.format(today);
     }
 }

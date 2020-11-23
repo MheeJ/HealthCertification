@@ -24,8 +24,11 @@ import java.util.Date;
 public class FileStore{
 
     private final static String foldername = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android/data/com.example.healthcertification";
-    ArrayList<LatLng> mark_latlng = new ArrayList<LatLng>();
-    ArrayList<String> mark_time = new ArrayList<String>();
+    private ArrayList<LatLng> mark_latlng = new ArrayList<LatLng>();
+    private ArrayList<String> mark_time = new ArrayList<String>();
+    private long linenumber;
+    private String lastString;
+    private ArrayList<String> encryptline = new ArrayList<String>();
 
     public void Writefile(String input_text, String filename, boolean save) {
         if (input_text == null || input_text.equals("")) {
@@ -42,7 +45,7 @@ public class FileStore{
             //파일쓰기
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
             if(save)
-                writer.write(input_text + "\n" + CurrentDTime() + "\n");
+                writer.write(input_text + "\n" + CurrentTime() + "\n");
             else
                 writer.write(input_text);
             writer.flush();
@@ -172,7 +175,7 @@ public class FileStore{
         }
     }
 
-    public void EncryptionfileCreate(String input_data, String date) throws NoSuchAlgorithmException {
+    public void CreateEncryptionfile(String input_data, String date, boolean encrypt) throws NoSuchAlgorithmException {
         StringBuffer strBuffer = new StringBuffer();
         String encryptString;
         MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -187,7 +190,10 @@ public class FileStore{
             FileOutputStream fos = new FileOutputStream(foldername + "/EncrytionLog" + date+".txt", true);
             //파일쓰기
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
-            writer.write(encryptString);
+            if(encrypt)
+                writer.write(encryptString+"\n");
+            else
+                writer.write(input_data+"\n");
             writer.flush();
 
             writer.close();
@@ -195,6 +201,62 @@ public class FileStore{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void ReadEncryptionfile(String date){
+        try{
+            encryptline = new ArrayList<String>();
+            linenumber = 0;
+            lastString = null;
+            InputStream is = new FileInputStream(foldername + "/EncrytionLog" + date+".txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line="";
+            while((line=reader.readLine())!=null){
+                linenumber++;
+                lastString = line;
+                encryptline.add(line);
+            }
+            reader.close();
+            is.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public int ComapareLocation(String date){
+        int count = 0;
+        int comparetime = 0;
+        ArrayList<String> otherencryptline = new ArrayList<String>();
+        ReadEncryptionfile(date);
+        try{
+            InputStream is = new FileInputStream(foldername + "/OtherEncrytionLog" + date+".txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line="";
+            while((line=reader.readLine())!=null){
+                otherencryptline.add(line);
+            }
+            reader.close();
+            is.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        count = (encryptline.size()<otherencryptline.size())?encryptline.size():otherencryptline.size();
+        for(int i = 0; i < count ; i++){
+            if(encryptline.get(i).equals(otherencryptline.get(i))){
+                comparetime++;
+            }
+        }
+        return comparetime;
+    }
+
+
+
+    public long getLinenumber() {
+        return linenumber;
+    }
+
+    public String getLastString(){
+        return lastString;
     }
 
     public ArrayList<LatLng> makerLocation(){
@@ -205,7 +267,7 @@ public class FileStore{
         return mark_time;
     }
 
-    private String CurrentDTime() {
+    private String CurrentTime() {
         Date today = new Date();
         SimpleDateFormat time = new SimpleDateFormat("a hh:mm:ss");
         return time.format(today);

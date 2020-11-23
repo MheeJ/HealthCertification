@@ -18,6 +18,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,6 +44,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.maps.android.clustering.ClusterManager;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -76,6 +78,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
     private PolylineOptions polylineOptions;
     private ArrayList<LatLng> arraypoints;
     private ArrayList<HospitalInfo> hospitalInfos = new ArrayList<HospitalInfo>();
+    private ClusterManager<HospitalInfo> clusterManager;
 
 
     private MyActivity_ViewModel myActivity_viewModel;
@@ -134,9 +137,6 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
 
     @Override
     public void onClick(View view) {
-        String title;
-        String info;
-        LatLng latLng;
         switch (view.getId()) {
             case R.id.activity_main_btn:
                 //프로그레스바 사용법
@@ -150,15 +150,18 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                     hospitalAPI.connect(currentLatLng.longitude, currentLatLng.latitude, i);
                 }
                 for(int i = 0; i<hospitalInfos.size();i++) {
-                    title = hospitalInfos.get(i).getName();
-                    info = "전화번호 : " + hospitalInfos.get(i).getTel() + "\n진료시간 : " + hospitalInfos.get(i).getStartTime() + " ~ " + hospitalInfos.get(i).getEndTime();
-                    latLng = new LatLng(hospitalInfos.get(i).getLatitude(), hospitalInfos.get(i).getLongitude());
-                    setCurrentLocation(latLng, title, info);
+                    setCurrentLocation(hospitalInfos.get(i).getPosition(), hospitalInfos.get(i).getTitle(), hospitalInfos.get(i).getSnippet());
                 }
+                clusterManager = new ClusterManager<HospitalInfo>(getContext(), mMap);
+
+                mMap.setOnCameraIdleListener(clusterManager);
+                mMap.setOnMarkerClickListener(clusterManager);
                 break;
             case R.id.activity_pharmacy_btn:
                 toggleFab();
                 mMap.clear();
+                int i = fileStore.ComapareLocation(CurrentDate());
+                Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(i/6) + "시간 " + String.valueOf((i%6)*10) + "분", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -174,6 +177,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                 mMap.clear();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 locationlog(sdf.format(date.getTime()));
+
             }
 
             @Override
@@ -423,8 +427,13 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
 
         private void parseHospital(XmlPullParser parser) throws XmlPullParserException, IOException {
             String tag; //tag를 받기위한 임시 변수입니다.
-            HospitalInfo hi = null;
             int parserEvent = parser.getEventType();
+            String Name = null;
+            String Tel = null;
+            String StartTime = null;
+            String EndTime = null;
+            Double Latitude = 0.0;
+            Double Longitude = 0.0;
             boolean Endparse = true;
             boolean distance = false;
             boolean dutyname = false;
@@ -439,9 +448,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                         break;
                     case XmlPullParser.START_TAG: //xml의 <> 부분을 만나게 되면 실행되게 됩니다.
                         tag = parser.getName();
-                        if(tag.equals("item")) {
-                            hi = new HospitalInfo();
-                        }else if(tag.equals("distance")) {
+                        if(tag.equals("distance")) {
                             distance = true;
                         }else if(tag.equals("dutyName")) {
                             dutyname = true;
@@ -466,29 +473,29 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                             distance = false;
                         }
                         if(dutyname){
-                            hi.setName(parser.getText());
+                            Name = parser.getText();
                             dutyname = false;
                         }else if(dutyTel1){
-                            hi.setTel(parser.getText());
+                            Tel = parser.getText();
                             dutyTel1 = false;
                         }else if(startTime){
-                            hi.setStartTime(parser.getText());
+                            StartTime = parser.getText();
                             startTime = false;
                         }else if(endTime){
-                            hi.setEndTime(parser.getText());
+                            EndTime = parser.getText();
                             endTime = false;
                         }else if(latitude){
-                            hi.setLatitude(Double.parseDouble(parser.getText()));
+                            Latitude = Double.parseDouble(parser.getText());
                             latitude = false;
                         }else if(longitude){
-                            hi.setLongitude(Double.parseDouble(parser.getText()));
+                            Longitude = Double.parseDouble(parser.getText());
                             longitude = false;
                         }
                         break;
                     case XmlPullParser.END_TAG:
                         String endTag = parser.getName();
                         if(endTag.equals("item")) {
-                            setHospitalInfos(hi);
+                            setHospitalInfos(new HospitalInfo(Name, Tel, StartTime, EndTime, Latitude, Longitude));
                         }
                         break;
                 }
