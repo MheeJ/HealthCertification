@@ -105,11 +105,14 @@ public class BLECommunication implements BeaconConsumer {
                 topic = hexToAscii(topic);
                 if (strTopic.equals(topic))
                 {
-                    String temp = Integer.toHexString(minor);
-                    StringBuffer buf = new StringBuffer(temp);
-                    buf.insert(2, ".");
-                    temp = buf.toString();
-                    bleListener.onBLEDataAvailable(beacon, temp);
+                    if (beacon.getDistance() < 2)
+                    {
+                        String temp = Integer.toHexString(minor);
+                        StringBuffer buf = new StringBuffer(temp);
+                        buf.insert(2, ".");
+                        temp = buf.toString();
+                        bleListener.onBLEDataAvailable(beacon, temp);
+                    }
                 }
             }
             handler.sendEmptyMessageDelayed(0, 1000);
