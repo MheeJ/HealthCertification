@@ -24,18 +24,13 @@ import java.util.Date;
 public class FileStore{
 
     private final static String foldername = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android/data/com.example.healthcertification";
-    private final static String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android/data/com.example.healthcertification/LocationLog.txt";
-    private static final String LOCATION_LOG_FILE_NAME = "LocationLog.txt";
-    private static final String ENCRYPT_FILE_NAME = "EncryptLog.txt";
-    private Context mContext = null;
-    ArrayList<LatLng> mark_latlng = new ArrayList<LatLng>();
-    ArrayList<String> mark_time = new ArrayList<String>();
+    private ArrayList<LatLng> mark_latlng = new ArrayList<LatLng>();
+    private ArrayList<String> mark_time = new ArrayList<String>();
+    private long linenumber;
+    private String lastString;
+    private ArrayList<String> encryptline = new ArrayList<String>();
 
-    public FileStore(Context context){
-        mContext = context;
-    }
-
-    public void Writefile(String input_text) {
+    public void Writefile(String input_text, String filename, boolean save) {
         if (input_text == null || input_text.equals("")) {
             return;
         }
@@ -46,10 +41,13 @@ public class FileStore{
                 dir.mkdir();
             }
             //파일 output stream 생성
-            FileOutputStream fos = new FileOutputStream(foldername+"/"+ LOCATION_LOG_FILE_NAME, true);
+            FileOutputStream fos = new FileOutputStream(foldername+"/"+ filename + ".txt", save);
             //파일쓰기
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
-            writer.write(CurrentDate() + "\n" + input_text + "\n" + CurrentDTime() + "\n");
+            if(save)
+                writer.write(input_text + "\n" + CurrentTime() + "\n");
+            else
+                writer.write(input_text);
             writer.flush();
 
             writer.close();
@@ -71,59 +69,48 @@ public class FileStore{
         String delay_endTime = "null";
         double delay_latitude = 0;
         double delay_longitude = 0;
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
-        Date readDate;
-        Date inputDate;
-        long caldate = 0;
+        mark_latlng = new ArrayList<LatLng>();
+        mark_time = new ArrayList<String>();
 
         try{
-            InputStream is = new FileInputStream(filePath);
+            InputStream is = new FileInputStream(foldername + "/" + input_day + ".txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line="";
-            while((line=reader.readLine())!=null){
-                if(count%4 ==0){
-                    readDate = date.parse(line);
-                    inputDate = date.parse(input_day);
-                    caldate = (inputDate.getTime() - readDate.getTime())/(24*60*60*1000);
-                    if(caldate<0){
-                        break;
-                    }
-                }
-                if(caldate == 0) {
-                    if (count % 4 == 1) {
-                        latitude = Double.parseDouble(line);
-                        delay_latitude = Double.parseDouble(String.format("%.3f", latitude));
-                    } else if (count % 4 == 2) {
-                        longitude = Double.parseDouble(line);
-                        delay_longitude = Double.parseDouble(String.format("%.3f", longitude));
-                        latLng = new LatLng(latitude, longitude);
-                        delay_latLng = new LatLng(delay_latitude, delay_longitude);
-                    } else if (count % 4 == 3) {
-                        if (delay_previous_latLng == null) {
-                            delay_previous_latLng = delay_latLng;
-                        } else if ((delay_previous_latLng.latitude == delay_latLng.latitude) && (delay_previous_latLng.longitude == delay_latLng.longitude) && (delay_startTime.equals("측정시작"))) {
-                            delay_startTime = line;
-                            delay_endTime = "측정끝";
-                        } else if ((delay_previous_latLng.latitude != delay_latLng.latitude) || (delay_previous_latLng.longitude != delay_latLng.longitude)) {
-                            if (delay_endTime.equals("측정끝")) {
-                                delay_endTime = line;
-                                SimpleDateFormat transFormat = new SimpleDateFormat("a hh:mm:ss");
-                                Date delay_current_time = transFormat.parse(delay_endTime);
-                                Date delay_previous_time = transFormat.parse(delay_startTime);
-                                long duration = delay_current_time.getTime() - delay_previous_time.getTime(); // 글이 올라온시간,현재시간비교
-                                long min = duration / 60000;
-                                if (min >= 3) {
-                                    mark_latlng.add(arrayPoints.get((count / 4) - 2));
-                                    mark_time.add(transFormat.format(delay_previous_time) + " ~ " + transFormat.format(delay_current_time));
-                                }
+            while((line=reader.readLine())!=null) {
+                if (count % 3 == 0) {
+                    latitude = Double.parseDouble(line);
+                    delay_latitude = Double.parseDouble(String.format("%.4f", latitude));
+                } else if (count % 3 == 1) {
+                    longitude = Double.parseDouble(line);
+                    delay_longitude = Double.parseDouble(String.format("%.4f", longitude));
+                    latLng = new LatLng(latitude, longitude);
+                    delay_latLng = new LatLng(delay_latitude, delay_longitude);
+                } else if (count % 3 == 2) {
+                    if (delay_previous_latLng == null) {
+                        delay_previous_latLng = delay_latLng;
+                    } else if ((delay_previous_latLng.latitude == delay_latLng.latitude) && (delay_previous_latLng.longitude == delay_latLng.longitude) && (delay_startTime.equals("측정시작"))) {
+                        delay_startTime = line;
+                        delay_endTime = "측정끝";
+                    } else if ((delay_previous_latLng.latitude != delay_latLng.latitude) || (delay_previous_latLng.longitude != delay_latLng.longitude)) {
+                        if (delay_endTime.equals("측정끝")) {
+                            delay_endTime = line;
+                            SimpleDateFormat transFormat = new SimpleDateFormat("a hh:mm:ss");
+                            Date delay_current_time = transFormat.parse(delay_endTime);
+                            Date delay_previous_time = transFormat.parse(delay_startTime);
+                            long duration = delay_current_time.getTime() - delay_previous_time.getTime(); // 글이 올라온시간,현재시간비교
+                            long min = duration / 60000;
+                            if (min >= 3) {
+                                mark_latlng.add(arrayPoints.get((count / 3)-2));
+                                mark_time.add(transFormat.format(delay_previous_time) + " ~ " + transFormat.format(delay_current_time));
                             }
-                            delay_previous_latLng = null;
-                            delay_startTime = "측정시작";
-                            delay_endTime = "null";
                         }
-                        arrayPoints.add(latLng);
+                        delay_previous_latLng = null;
+                        delay_startTime = "측정시작";
+                        delay_endTime = "null";
                     }
+                    arrayPoints.add(latLng);
                 }
+
                 count++;
             }
             reader.close();
@@ -134,22 +121,22 @@ public class FileStore{
         return arrayPoints;
     }
 
-    public LatLng Recentlocation(){
+    public LatLng Recentlocation(String filename){
         int count = 0;
         LatLng recentlocation = null;
         double latitude = 0;
         double longitude = 0;
 
         try{
-            InputStream is = new FileInputStream(filePath);
+            InputStream is = new FileInputStream(foldername + "/" + filename + ".txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line="";
             while((line=reader.readLine())!=null){
-                if(count%4 == 1){
+                if(count%3 == 0){
                     latitude = Double.parseDouble(line);
-                }else if(count%4 == 2){
+                }else if(count%3 == 1){
                     longitude = Double.parseDouble(line);
-                }else if (count%4 ==3){
+                }else if (count%3 ==2){
                     recentlocation = new LatLng(latitude, longitude);
                 }
                 count++;
@@ -162,6 +149,116 @@ public class FileStore{
         return recentlocation;
     }
 
+    public String ReadCalory(String filename, boolean day){
+        String result = null;
+        try{
+            InputStream is = new FileInputStream(foldername + "/" + filename + ".txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line="";
+            while((line=reader.readLine())!=null){
+                if(day)
+                    return line;
+                result = line;
+            }
+            reader.close();
+            is.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public void Delete(String filename){
+        File file = new File(foldername + "/" + filename + ".txt");
+        if(file.exists()){
+            file.delete();
+        }
+    }
+
+    public void CreateEncryptionfile(String input_data, String date, boolean encrypt) throws NoSuchAlgorithmException {
+        StringBuffer strBuffer = new StringBuffer();
+        String encryptString;
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        md.update(input_data.getBytes());
+        byte byteData[] = md.digest();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < byteData.length; i++)
+            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+        encryptString = sb.toString();
+        try {
+            //파일 output stream 생성
+            FileOutputStream fos = new FileOutputStream(foldername + "/EncrytionLog" + date+".txt", true);
+            //파일쓰기
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
+            if(encrypt)
+                writer.write(encryptString+"\n");
+            else
+                writer.write(input_data+"\n");
+            writer.flush();
+
+            writer.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void ReadEncryptionfile(String date){
+        try{
+            encryptline = new ArrayList<String>();
+            linenumber = 0;
+            lastString = null;
+            InputStream is = new FileInputStream(foldername + "/EncrytionLog" + date+".txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line="";
+            while((line=reader.readLine())!=null){
+                linenumber++;
+                lastString = line;
+                encryptline.add(line);
+            }
+            reader.close();
+            is.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public int ComapareLocation(String date){
+        int count = 0;
+        int comparetime = 0;
+        ArrayList<String> otherencryptline = new ArrayList<String>();
+        ReadEncryptionfile(date);
+        try{
+            InputStream is = new FileInputStream(foldername + "/OtherEncrytionLog" + date+".txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line="";
+            while((line=reader.readLine())!=null){
+                otherencryptline.add(line);
+            }
+            reader.close();
+            is.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        count = (encryptline.size()<otherencryptline.size())?encryptline.size():otherencryptline.size();
+        for(int i = 0; i < count ; i++){
+            if(encryptline.get(i).equals(otherencryptline.get(i))){
+                comparetime++;
+            }
+        }
+        return comparetime;
+    }
+
+
+
+    public long getLinenumber() {
+        return linenumber;
+    }
+
+    public String getLastString(){
+        return lastString;
+    }
+
     public ArrayList<LatLng> makerLocation(){
         return mark_latlng;
     }
@@ -170,62 +267,9 @@ public class FileStore{
         return mark_time;
     }
 
-    private String CurrentDate() {
-        Date today = new Date();
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
-        return date.format(today);
-    }
-
-    private String CurrentDTime() {
+    private String CurrentTime() {
         Date today = new Date();
         SimpleDateFormat time = new SimpleDateFormat("a hh:mm:ss");
         return time.format(today);
-    }
-
-    public void Delete(String filePath){
-        File file = new File(filePath);
-        if(file.exists()){
-            file.delete();
-        }
-    }
-
-    public void Encryptfile() throws NoSuchAlgorithmException {
-        StringBuffer strBuffer = new StringBuffer();
-        String encryptString;
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        try{
-            InputStream is = new FileInputStream(filePath);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String line="";
-            while((line=reader.readLine())!=null){
-                md.update(line.getBytes());
-                byte byteData[] = md.digest();
-                StringBuffer sb = new StringBuffer();
-                for(int i = 0; i<byteData.length;i++)
-                    sb.append(Integer.toString((byteData[i]&0xff) + 0x100, 16).substring(1));
-                encryptString = sb.toString();
-
-                strBuffer.append(encryptString+"\n");
-            }
-
-            reader.close();
-            is.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        Delete(foldername+"/"+ ENCRYPT_FILE_NAME);
-        try{
-            //파일 output stream 생성
-            FileOutputStream fos = new FileOutputStream(foldername+"/"+ ENCRYPT_FILE_NAME, true);
-            //파일쓰기
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
-            writer.write(strBuffer.toString());
-            writer.flush();
-
-            writer.close();
-            fos.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
     }
 }

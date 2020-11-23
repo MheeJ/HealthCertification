@@ -1,6 +1,12 @@
 package com.example.healthcertification.ui.MyActivity_Fragment;
 
-public class HospitalInfo {
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
+
+public class HospitalInfo implements ClusterItem {
     private String Name;
     private String Tel;
     private String StartTime;
@@ -8,51 +14,30 @@ public class HospitalInfo {
     private Double Latitude;
     private Double Longitude;
 
-    public String getName() {
+    public HospitalInfo(String name, String tel, String startTime, String endTime, Double latitude, Double longitude){
+        Name = name;
+        Tel = tel;
+        StartTime = startTime;
+        EndTime = endTime;
+        Latitude = latitude;
+        Longitude = longitude;
+    }
+
+    @NonNull
+    @Override
+    public LatLng getPosition() {
+        return new LatLng(Latitude, Longitude);
+    }
+
+    @Nullable
+    @Override
+    public String getTitle() {
         return Name;
     }
 
-    public void setName(String name) {
-        Name = name;
-    }
-
-    public String getTel() {
-        return Tel;
-    }
-
-    public void setTel(String tel) {
-        Tel = tel;
-    }
-
-    public String getStartTime() {
-        return StartTime;
-    }
-
-    public void setStartTime(String startTime) {
-        StartTime = startTime;
-    }
-
-    public String getEndTime() {
-        return EndTime;
-    }
-
-    public void setEndTime(String endTime) {
-        EndTime = endTime;
-    }
-
-    public Double getLatitude() {
-        return Latitude;
-    }
-
-    public void setLatitude(Double latitude) {
-        Latitude = latitude;
-    }
-
-    public Double getLongitude() {
-        return Longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        Longitude = longitude;
+    @Nullable
+    @Override
+    public String getSnippet() {
+        return "전화번호 : " + Tel + "\n진료시간 : " + StartTime + " ~ " + EndTime;
     }
 }

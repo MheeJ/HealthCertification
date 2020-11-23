@@ -21,6 +21,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.healthcertification.BLEMiddleware.BLECommunication;
+import com.example.healthcertification.BLEMiddleware.BLEListener;
 import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
 import com.example.healthcertification.CustomDialog.CustomDialog_Remove;
 import com.example.healthcertification.ListViewSetting.Temp_ListVeiwAdapter;
@@ -34,6 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.altbeacon.beacon.Beacon;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
@@ -44,7 +47,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyHealth_Temperature extends Fragment implements View.OnClickListener {
+public class MyHealth_Temperature extends Fragment implements View.OnClickListener, BLEListener {
 
     private List<Temp_ListViewItem> temp_listViewItems;
     private ListView Temp_ListView;
@@ -54,9 +57,13 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
     String tempstr;
+    double Temp;
     private TextView temptextview;
 
     public static final String NOTIFICATION_CHANNEL_ID = "10001";
+
+    ///////////beacon/////////
+    private BLECommunication bleCommunication;
 
     public MyHealth_Temperature() {
         // Required empty public constructor
@@ -76,6 +83,13 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
         Temp_ADD_Btn.setOnClickListener(this);
         temp_listViewItems = new ArrayList<>();
         temptextview = view.findViewById(R.id.fragment2_bodytemp);
+
+        ////////////////beacon // (1) initialize -> (2)setListener -> (3) create_topic
+        bleCommunication = new BLECommunication();
+        bleCommunication.initialize(getContext());
+        bleCommunication.setBleListener(this);
+        bleCommunication.createTopic("tp");
+        ///////////////beacon
 
         onDataChange();
 
@@ -101,6 +115,21 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
         return view;
     }
 
+    ///////////////beacon
+    @Override
+    public void onBLEDataAvailable(Beacon beacon, String data) {
+        temptextview.setText(data+"℃");
+        Temp = Double.parseDouble(temptextview.getText().toString().substring(0,4));
+        if (Temp > 37){
+            NotificationSomethings();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        bleCommunication.deleteBLE();
+    }
 
     public void temp_add(){
         long now = System.currentTimeMillis();
@@ -109,7 +138,8 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
         SimpleDateFormat simpleTime = new SimpleDateFormat("HH:mm");
         String getDate = simpleDate.format(mDate);
         String getTime = simpleTime.format(mDate);
-        double Temp = 38;
+
+        //Temp = Double.parseDouble(temptextview.getText().toString().substring(0,4));
         //tempstr = Temp + "℃";
         String State = "정상";
 
@@ -176,23 +206,29 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
         mReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 temp_listViewItems.clear();
                 temp_listVeiwAdapter.clear();
                 for (DataSnapshot namedata : snapshot.getChildren()){
                     temp_listViewItems.add(namedata.getValue(Temp_ListViewItem.class));
                 }
                 for (int i =0; i<temp_listViewItems.size(); i++){
+                    double temp;
                     Temp_ListViewItem temp_listViewItem = (Temp_ListViewItem)temp_listViewItems.get(i);
                     temp_listVeiwAdapter.Temp_addItem(temp_listViewItem);
-                    //tempstr = temp_listViewItem.getTemp();
-                    double temp = temp_listViewItem.getTemp();
+
+                    temp = temp_listViewItem.getTemp();
                     String tempstr = String.format("%.1f",temp);
                     temptextview.setText(tempstr+"℃");
-                    if (temp > 37){
-                        NotificationSomethings();
-                    }
+
                 }
                 temp_listVeiwAdapter.notifyDataSetChanged();
+                //int Itemsize = temp_listViewItems.size();
+                                //Temp_ListViewItem temp_listViewItem = (Temp_ListViewItem)temp_listViewItems.get(Itemsize-1);
+                //temp = temp_listViewItem.getTemp();
+/*                if (temp > 37){
+                    NotificationSomethings();
+                }*/
 
                 //Temp_ListViewItem temp_listViewItem = (Temp_ListViewItem)temp_listViewItems.get(temp_listViewItems.size());
 
@@ -256,5 +292,7 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
         notificationManager.notify(1234, builder.build()); // 고유숫자로 노티피케이션 동작시킴
 
     }
+
+
 
 }

@@ -152,7 +152,6 @@ public class Home extends Fragment {
                 for (int i =0; i<temp_listViewItems.size(); i++){
                     Temp_ListViewItem temp_listViewItem = (Temp_ListViewItem)temp_listViewItems.get(i);
 
-                    //tempstr = temp_listViewItem.getTemp();
                     double temp = temp_listViewItem.getTemp();
                     String tempstr = String.format("%.1f",temp);
                     String Time = temp_listViewItem.getTime();
@@ -164,10 +163,6 @@ public class Home extends Fragment {
                     //TimetextView.setText(Time);
                     //DatetextView.setText("20"+year+"년"+month+"월"+date+"일");
                 }
-
-
-                //Temp_ListViewItem temp_listViewItem = (Temp_ListViewItem)temp_listViewItems.get(temp_listViewItems.size());
-
             }
 
             @Override
