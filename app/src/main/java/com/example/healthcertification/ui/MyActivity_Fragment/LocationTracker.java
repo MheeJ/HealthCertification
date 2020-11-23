@@ -99,7 +99,7 @@ public class LocationTracker{
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                if(!fileStore.ReadCalory("calory", true).equals(CurrentDate())){
+                if(!CurrentDate().equals(fileStore.ReadCalory("calory", true))){
                     fileStore.Writefile(CurrentDate() + "\n" +"0","calory",false);
                 }
 
