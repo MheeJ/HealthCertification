@@ -45,6 +45,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
@@ -81,6 +83,8 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
     private PolylineOptions polylineOptions;
     private ArrayList<LatLng> arraypoints;
     private ClusterManager<HospitalInfo> clusterManager;
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mReference;
 
 
     private MyActivity_ViewModel myActivity_viewModel;
@@ -155,7 +159,15 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                 break;
             case R.id.activity_pharmacy_btn:
                 toggleFab();
-                mMap.clear();
+                mDatabase = FirebaseDatabase.getInstance();
+                mReference = mDatabase.getReference("Encrypted Log").push();
+                EncryptedItem encryptedItem = new EncryptedItem();
+                fileStore.ReadEncryptionfile(CurrentDate());
+                encryptedItem.setDate(CurrentDate());
+                encryptedItem.setLog(fileStore.getEncryptline());
+                mReference.setValue(encryptedItem);
+
+                
                 int i = fileStore.ComapareLocation(CurrentDate());
                 Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(i/6) + "시간 " + String.valueOf((i%6)*10) + "분", Toast.LENGTH_SHORT).show();
                 break;

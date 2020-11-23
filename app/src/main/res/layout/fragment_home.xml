@@ -122,7 +122,8 @@
                             android:layout_marginTop="20dp"
                             android:textColor="@color/colorPrimary"
                             android:text="52.3kcal"
-                            android:textSize="30dp"/>
+                            android:textSize="30dp"
+                            android:id="@+id/calory"/>
                     </LinearLayout>
                 </com.google.android.material.circularreveal.CircularRevealFrameLayout>
                 <com.google.android.material.circularreveal.CircularRevealFrameLayout

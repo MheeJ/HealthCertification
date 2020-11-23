@@ -176,7 +176,6 @@ public class FileStore{
     }
 
     public void CreateEncryptionfile(String input_data, String date, boolean encrypt) throws NoSuchAlgorithmException {
-        StringBuffer strBuffer = new StringBuffer();
         String encryptString;
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         md.update(input_data.getBytes());
@@ -221,6 +220,10 @@ public class FileStore{
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<String> getEncryptline(){
+        return encryptline;
     }
 
     public int ComapareLocation(String date){

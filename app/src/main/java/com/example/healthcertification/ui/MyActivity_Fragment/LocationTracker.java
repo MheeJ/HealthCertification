@@ -19,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.healthcertification.ListViewSetting.HC_ListViewItem;
+import com.example.healthcertification.ListViewSetting.M_ListViewItem;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -26,6 +28,11 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -48,6 +55,8 @@ public class LocationTracker{
     private CaloryCalculate caloryCalculate = new CaloryCalculate();
     private SimpleDateFormat time = new SimpleDateFormat("a hh:mm:ss");
     private SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mReference;
 
 
     public LocationTracker(Context context) {
@@ -100,6 +109,13 @@ public class LocationTracker{
                     e.printStackTrace();
                 }
                 if(!CurrentDate().equals(fileStore.ReadCalory("calory", true))){
+                    mDatabase = FirebaseDatabase.getInstance();
+                    mReference = mDatabase.getReference("Calory").push();
+                    CaloryItem caloryItem = new CaloryItem();
+                    caloryItem.setDate(fileStore.ReadCalory("calory", true));
+                    caloryItem.setCalory(fileStore.ReadCalory("calory", false));
+                    caloryItem.setKey(mReference.getKey());
+                    mReference.setValue(caloryItem);
                     fileStore.Writefile(CurrentDate() + "\n" +"0","calory",false);
                 }
 
