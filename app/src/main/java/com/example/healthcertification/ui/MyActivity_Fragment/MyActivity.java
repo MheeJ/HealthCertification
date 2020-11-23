@@ -40,10 +40,13 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -77,7 +80,6 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
     private static final String TAG = MyActivity.class.getSimpleName();
     private PolylineOptions polylineOptions;
     private ArrayList<LatLng> arraypoints;
-    private ArrayList<HospitalInfo> hospitalInfos = new ArrayList<HospitalInfo>();
     private ClusterManager<HospitalInfo> clusterManager;
 
 
@@ -149,13 +151,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                 for(int i = 1; i<11;i++) {
                     hospitalAPI.connect(currentLatLng.longitude, currentLatLng.latitude, i);
                 }
-                for(int i = 0; i<hospitalInfos.size();i++) {
-                    setCurrentLocation(hospitalInfos.get(i).getPosition(), hospitalInfos.get(i).getTitle(), hospitalInfos.get(i).getSnippet());
-                }
-                clusterManager = new ClusterManager<HospitalInfo>(getContext(), mMap);
-
-                mMap.setOnCameraIdleListener(clusterManager);
-                mMap.setOnMarkerClickListener(clusterManager);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12));
                 break;
             case R.id.activity_pharmacy_btn:
                 toggleFab();
@@ -167,7 +163,35 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
     }
 
     public void setHospitalInfos(HospitalInfo hospitalInfo){
-        hospitalInfos.add(hospitalInfo);
+        clusterManager.addItem(hospitalInfo);
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                LinearLayout info = new LinearLayout(mContext);
+                info.setOrientation(LinearLayout.VERTICAL);
+
+                TextView title = new TextView(mContext);
+                title.setTextColor(Color.BLACK);
+                title.setGravity(Gravity.CENTER);
+                title.setText(marker.getTitle());
+
+                TextView snippet = new TextView(mContext);
+                snippet.setTextColor(Color.GRAY);
+                snippet.setGravity(Gravity.CENTER);
+                snippet.setText(marker.getSnippet());
+
+                info.addView(title);
+                info.addView(snippet);
+
+                return info;
+            }
+        });
     }
 
     private void SetMyActivityCalender() {
@@ -222,6 +246,23 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         currentLatLng = fileStore.Recentlocation(CurrentDate());
+        clusterManager = new ClusterManager<HospitalInfo>(getContext(), mMap);
+        clusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<HospitalInfo>() {
+            @Override
+            public boolean onClusterClick(Cluster<HospitalInfo> cluster) {
+                LatLngBounds.Builder builder_c = LatLngBounds.builder();
+                for (ClusterItem item : cluster.getItems()) {
+                    builder_c.include(item.getPosition());
+                }
+                LatLngBounds bounds_c = builder_c.build();
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds_c, 12));
+                float zoom = mMap.getCameraPosition().zoom - 1f;
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom));
+                return true;
+            }
+        });
+        mMap.setOnCameraIdleListener(clusterManager);
+        mMap.setOnMarkerClickListener(clusterManager);
 
         setDefaultLocation();
         updateLocationUI();
@@ -295,7 +336,6 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                     ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-//            mFusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
             if (mMap != null)
                 mMap.setMyLocationEnabled(true);
         }
@@ -339,8 +379,6 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
     }
 
     private void setCurrentLocation(LatLng location, String markerTitle, String markerSnippet) {
-        //if (currentMarker != null) currentMarker.remove();
-
         LatLng currentLatLng = location;
 
         MarkerOptions markerOptions = new MarkerOptions();
@@ -348,37 +386,6 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
         markerOptions.title(markerTitle);
         markerOptions.snippet(markerSnippet);
         markerOptions.draggable(true);
-
-        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
-            @Override
-            public View getInfoWindow(Marker marker) {
-                return null;
-            }
-
-            @Override
-            public View getInfoContents(Marker marker) {
-                LinearLayout info = new LinearLayout(mContext);
-                info.setOrientation(LinearLayout.VERTICAL);
-
-                TextView title = new TextView(mContext);
-                title.setTextColor(Color.BLACK);
-                title.setGravity(Gravity.CENTER);
-                title.setText(marker.getTitle());
-
-                TextView snippet = new TextView(mContext);
-                snippet.setTextColor(Color.GRAY);
-                snippet.setGravity(Gravity.CENTER);
-                snippet.setText(marker.getSnippet());
-
-                info.addView(title);
-                info.addView(snippet);
-
-                return info;
-            }
-        });
-
-
         currentMarker = mMap.addMarker(markerOptions);
     }
 

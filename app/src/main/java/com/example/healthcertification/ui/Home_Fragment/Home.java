@@ -114,6 +114,7 @@ public class Home extends Fragment {
                                 temptextView.setText(tempstr+"℃");
                                 TimetextView.setText(Time);
                                 DatetextView.setText("20"+year+"년"+month+"월"+date+"일");
+
                             }
                         }
                     }
