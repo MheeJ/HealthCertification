@@ -49,8 +49,8 @@ public class Home extends Fragment {
 
 
         temptextView = (TextView)root.findViewById(R.id.fragment1_temperature);
-        TimetextView = (TextView)root.findViewById(R.id.fragment1_Time);
-        DatetextView = (TextView)root.findViewById(R.id.fragment1_Date);
+        //TimetextView = (TextView)root.findViewById(R.id.fragment1_Time);
+        //DatetextView = (TextView)root.findViewById(R.id.fragment1_Date);
 
         health_Tip = (TextView) root.findViewById(R.id.health_Tip);
         temp_listViewItems = new ArrayList<>();
@@ -112,8 +112,8 @@ public class Home extends Fragment {
                                 String date = Date.substring(6);
                                 String tempstr = String.format("%.1f",temp);
                                 temptextView.setText(tempstr+"℃");
-                                TimetextView.setText(Time);
-                                DatetextView.setText("20"+year+"년"+month+"월"+date+"일");
+                                //TimetextView.setText(Time);
+                                //DatetextView.setText("20"+year+"년"+month+"월"+date+"일");
                             }
                         }
                     }
@@ -161,8 +161,8 @@ public class Home extends Fragment {
                     String month = Date.substring(3,5);
                     String date = Date.substring(6);
                     temptextView.setText(tempstr+"℃");
-                    TimetextView.setText(Time);
-                    DatetextView.setText("20"+year+"년"+month+"월"+date+"일");
+                    //TimetextView.setText(Time);
+                    //DatetextView.setText("20"+year+"년"+month+"월"+date+"일");
                 }
 
 

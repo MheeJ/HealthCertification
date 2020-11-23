@@ -59,32 +59,19 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/background_first" />
+                        android:src="@drawable/home_temp3" />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:orientation="vertical">
                         <TextView
-                            android:id="@+id/fragment1_Date"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="2020년 10월 21일"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:id="@+id/fragment1_Time"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="14:56"
-                            android:textSize="10dp"/>
-                        <TextView
                             android:id="@+id/fragment1_temperature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:textColor="@color/colorPrimary"
+                            android:layout_marginTop="20dp"
                             android:text="__._°C"
                             android:textSize="30dp"/>
                     </LinearLayout>
@@ -98,24 +85,18 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/background_first" />
+                        android:src="@drawable/home_weight" />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="오늘의 추천 운동 : "
-                            android:textSize="30dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:textColor="@color/colorPrimary"
-                            android:text="요가"
+                            android:layout_marginTop="20dp"
+                            android:text="오늘의 체중은?"
                             android:textSize="30dp"/>
                     </LinearLayout>
                 </com.google.android.material.circularreveal.CircularRevealFrameLayout>
@@ -128,7 +109,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/background_first" />
+                        android:src="@drawable/home_activity" />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -138,18 +119,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="2020년 10월 21일"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="14:56"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
+                            android:layout_marginTop="20dp"
                             android:textColor="@color/colorPrimary"
                             android:text="52.3kcal"
                             android:textSize="30dp"/>
@@ -164,100 +134,18 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/background_first" />
+                        android:src="@drawable/home_medicine" />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="2020년 10월 21일"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="14:56"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="오늘의 체중은?"
-                            android:textSize="30dp"/>
-                    </LinearLayout>
-                </com.google.android.material.circularreveal.CircularRevealFrameLayout>
-                <com.google.android.material.circularreveal.CircularRevealFrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="140dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="1dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/background_first" />
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="2020년 10월 21일"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="14:56"
-                            android:textSize="10dp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:textColor="@color/colorPrimary"
-                            android:text="4560걸음"
-                            android:textSize="30dp"/>
-                    </LinearLayout>
-                </com.google.android.material.circularreveal.CircularRevealFrameLayout>
-                <com.google.android.material.circularreveal.CircularRevealFrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="140dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="1dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/background_first" />
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="2020년 10월 21일"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="14:56"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:textColor="@color/colorPrimary"
+                            android:layout_marginTop="20dp"
                             android:text="오늘 약 먹음"
                             android:textSize="30dp"/>
                     </LinearLayout>
@@ -271,68 +159,50 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/background_first" />
+                        android:src="@drawable/home_excercise" />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="2020년 10월 21일"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="14:56"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:id="@+id/health_Tip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:textColor="@color/colorPrimary"
-                            android:text="김형진 바보똥개"
+                            android:text="요가"
+                            android:layout_marginTop="20dp"
                             android:textSize="30dp"/>
                     </LinearLayout>
                 </com.google.android.material.circularreveal.CircularRevealFrameLayout>
+
                 <com.google.android.material.circularreveal.CircularRevealFrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="140dp"
+                    android:layout_height="350dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="1dp">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/background_first" />
+                        android:src="@drawable/home_tip2" />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:orientation="vertical">
+
                         <TextView
+                            android:id="@+id/health_Tip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="2020년 10월 21일"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="14:56"
-                            android:textSize="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:textColor="@color/colorPrimary"
-                            android:text="이종우 메롱"
-                            android:textSize="30dp"/>
+                            android:textColor="#000000"
+                            android:text="오늘의 건강 팁은?"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="20dp"
+                            android:textSize="15dp"/>
                     </LinearLayout>
                 </com.google.android.material.circularreveal.CircularRevealFrameLayout>
             </LinearLayout>
