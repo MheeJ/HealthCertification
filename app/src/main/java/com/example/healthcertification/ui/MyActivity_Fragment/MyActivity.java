@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.healthcertification.ListViewSetting.HC_ListViewItem;
 import com.example.healthcertification.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -130,12 +131,6 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
         Activity_permacy_btn = (FloatingActionButton) view.findViewById(R.id.activity_pharmacy_btn);
         Activity_permacy_btn.setOnClickListener(this);
 
-
-
-        activity_status.setText("나쁨");
-        activity_statusinfo.setText(fileStore.ReadCalory("calory", false));
-
-
         mDatabase = FirebaseDatabase.getInstance();
         mReference = mDatabase.getReference("EncryptedLog");
 
@@ -151,7 +146,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                     fileStore.ReadEncryptionfile(encryption_listViewItem.getDate());
                     int count =(encryption_listViewItem.getLog().size()<fileStore.getEncryptline().size())?encryption_listViewItem.getLog().size():fileStore.getEncryptline().size();
                     int compareTime = 0;
-                    for(int j = 0; i<count; i++){
+                    for(int j = 0; j<count; j++){
                         if(encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j)))
                             compareTime++;
                     }
@@ -164,7 +159,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
 
             }
         });
-
+        calorystatus();
 
 
 
@@ -219,8 +214,6 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                 mReference.setValue(encryptedItem);
 
 
-//                int i = fileStore.ComapareLocation(CurrentDate());
-//                Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(i/6) + "시간 " + String.valueOf((i%6)*10) + "분", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -450,6 +443,41 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
         markerOptions.snippet(markerSnippet);
         markerOptions.draggable(true);
         currentMarker = mMap.addMarker(markerOptions);
+    }
+
+    private void calorystatus(){
+        mDatabase = FirebaseDatabase.getInstance();
+        mReference = mDatabase.getReference("HealthCalculation");
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                HC_ListViewItem hc_listViewItem = new HC_ListViewItem();
+                for (DataSnapshot namedata : snapshot.getChildren()) {
+                    hc_listViewItem = namedata.getValue(HC_ListViewItem.class);
+                }
+                double height = Double.valueOf(hc_listViewItem.getHeight());
+                double weight = Double.valueOf(hc_listViewItem.getWeight());
+                double standardCalory = ((height-100)*0.9*35) - (24*weight);
+                double nowCalory = Double.valueOf(fileStore.ReadCalory("calory", false));
+                double percent = ((standardCalory-nowCalory)/standardCalory)*100;
+                if((percent>0)&&(percent<50)){
+                    activity_status.setText("나쁨");
+                    activity_statusinfo.setText("오늘 소모해야하는 칼로리는 많다!!");
+                }else if((percent>=50)&&(percent<100)){
+                    activity_status.setText("보통");
+                    activity_statusinfo.setText("오늘 소모해야하는 칼로리는 보통이다!!");
+                }else{
+                    activity_status.setText("좋음");
+                    activity_statusinfo.setText("많이 설쳤네 ㅎㅎ");
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
 
