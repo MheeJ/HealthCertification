@@ -155,8 +155,8 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                         if(encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j)))
                             compareTime++;
                     }
-                    pandemic_status.
-                    Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(compareTime/6) + "시간 " + String.valueOf((compareTime%6)*10) + "분", Toast.LENGTH_SHORT).show();
+  /*                  pandemic_status.
+                    Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(compareTime/6) + "시간 " + String.valueOf((compareTime%6)*10) + "분", Toast.LENGTH_SHORT).show();*/
                 }
             }
             @Override
