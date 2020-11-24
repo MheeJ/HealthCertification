@@ -19,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.healthcertification.ListViewSetting.HC_ListViewItem;
+import com.example.healthcertification.ListViewSetting.M_ListViewItem;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -26,10 +28,16 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -48,6 +56,9 @@ public class LocationTracker{
     private CaloryCalculate caloryCalculate = new CaloryCalculate();
     private SimpleDateFormat time = new SimpleDateFormat("a hh:mm:ss");
     private SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mReference;
+    private List<EncryptedItem> encryption_listViewItems = new ArrayList<>();
 
 
     public LocationTracker(Context context) {
@@ -80,7 +91,7 @@ public class LocationTracker{
         @Override
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
-            FileStore fileStore = new FileStore();
+            final FileStore fileStore = new FileStore();
             long countfortoday = 0;
             long countforencryptfile = 0;
 
@@ -99,14 +110,21 @@ public class LocationTracker{
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                if(!CurrentDate().equals(fileStore.ReadCalory("calory", true))){
-                    fileStore.Writefile(CurrentDate() + "\n" +"0","calory",false);
+                if (!CurrentDate().equals(fileStore.ReadCalory("calory", true))) {
+                    mDatabase = FirebaseDatabase.getInstance();
+                    mReference = mDatabase.getReference("Calory").push();
+                    CaloryItem caloryItem = new CaloryItem();
+                    caloryItem.setDate(fileStore.ReadCalory("calory", true));
+                    caloryItem.setCalory(fileStore.ReadCalory("calory", false));
+                    caloryItem.setKey(mReference.getKey());
+                    mReference.setValue(caloryItem);
+                    fileStore.Writefile(CurrentDate() + "\n" + "0", "calory", false);
                 }
 
                 fileStore.ReadEncryptionfile(CurrentDate());
                 countforencryptfile = fileStore.getLinenumber();
                 try {
-                    countfortoday = (time.parse(CurrentTime()).getTime()+32400000)/600000;
+                    countfortoday = (time.parse(CurrentTime()).getTime() + 32400000) / 600000;
                     if (countforencryptfile == 0) {
                         fileStore.CreateEncryptionfile(String.format("%.4f", location.getLatitude()) + "\n" + String.format("%.4f", location.getLongitude()), CurrentDate(), true);
                     } else {
@@ -121,8 +139,39 @@ public class LocationTracker{
                 } catch (NoSuchAlgorithmException | ParseException e) {
                     e.printStackTrace();
                 }
+
+
+                mDatabase = FirebaseDatabase.getInstance();
+                mReference = mDatabase.getReference("EncryptedLog");
+
+                mReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        for (DataSnapshot namedata : snapshot.getChildren()) {
+                            encryption_listViewItems.add(namedata.getValue(EncryptedItem.class));
+                        }
+                        for (int i = 0; i < encryption_listViewItems.size(); i++) {
+                            EncryptedItem encryption_listViewItem = (EncryptedItem) encryption_listViewItems.get(i);
+                            fileStore.ReadEncryptionfile(encryption_listViewItem.getDate());
+                            int count =(encryption_listViewItem.getLog().size()<fileStore.getEncryptline().size())?encryption_listViewItem.getLog().size():fileStore.getEncryptline().size();
+                            int compareTime = 0;
+                            for(int j = 0; i<count; i++){
+                                if(encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j)))
+                                    compareTime++;
+                            }
+                            Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(compareTime/6) + "시간 " + String.valueOf((compareTime%6)*10) + "분", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         }
+
+
     };
 
     private String CurrentTime() {

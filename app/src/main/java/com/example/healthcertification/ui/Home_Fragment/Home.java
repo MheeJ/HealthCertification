@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.healthcertification.ListViewSetting.M_ListViewItem;
 import com.example.healthcertification.ListViewSetting.Temp_ListViewItem;
 import com.example.healthcertification.R;
+import com.example.healthcertification.ui.MyActivity_Fragment.CaloryItem;
+import com.example.healthcertification.ui.MyActivity_Fragment.FileStore;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -37,11 +40,13 @@ public class Home extends Fragment {
 
 
     private HorizontalCalendar horizontalCalendar;
-    private TextView temptextView, TimetextView, DatetextView;
+    private TextView temptextView, TimetextView, DatetextView, CaloryView;
+    private FileStore fileStore = new FileStore();
 
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
     private List<Temp_ListViewItem> temp_listViewItems;
+    private List<CaloryItem> calory_listViewItems;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -49,11 +54,13 @@ public class Home extends Fragment {
 
 
         temptextView = (TextView)root.findViewById(R.id.fragment1_temperature);
+        CaloryView = (TextView)root.findViewById(R.id.calory);
         //TimetextView = (TextView)root.findViewById(R.id.fragment1_Time);
         //DatetextView = (TextView)root.findViewById(R.id.fragment1_Date);
 
         health_Tip = (TextView) root.findViewById(R.id.health_Tip);
         temp_listViewItems = new ArrayList<>();
+        calory_listViewItems = new ArrayList<>();
 
         //calendar : https://github.com/Mulham-Raee/Horizontal-Calendar
         Calendar startDate = Calendar.getInstance();
@@ -61,6 +68,7 @@ public class Home extends Fragment {
 
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.MONTH, 1);
+        CaloryView.setText(fileStore.ReadCalory("calory", false));
 
         horizontalCalendar = new HorizontalCalendar.Builder(root, R.id.calendarView)
                 .range(startDate, endDate)
@@ -112,8 +120,36 @@ public class Home extends Fragment {
                                 String date = Date.substring(6);
                                 String tempstr = String.format("%.1f",temp);
                                 temptextView.setText(tempstr+"℃");
+
                                 //TimetextView.setText(Time);
                                 //DatetextView.setText("20"+year+"년"+month+"월"+date+"일");
+
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+                mReference = mDatabase.getReference("Calory");
+
+                mReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        for (DataSnapshot namedata : snapshot.getChildren()){
+                            calory_listViewItems.add(namedata.getValue(CaloryItem.class));
+                        }
+                        for (int i =0; i<calory_listViewItems.size(); i++){
+                            CaloryItem calory_listViewItem = (CaloryItem)calory_listViewItems.get(i);
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            String strDate1 = sdf.format(date.getTime());
+                            String strDate2 = calory_listViewItem.getDate();
+                            if (strDate1.equals(strDate2)){
+                                CaloryView.setText(calory_listViewItem.getCalory());
                             }
                         }
                     }
@@ -123,6 +159,10 @@ public class Home extends Fragment {
 
                     }
                 });
+                SimpleDateFormat cal_format = new SimpleDateFormat("yyyy-MM-dd");
+                String Date1 = cal_format.format(date.getTime());
+                if(Date1.equals(fileStore.ReadCalory("calory", true)))
+                    CaloryView.setText(fileStore.ReadCalory("calory", false));
             }
 
             @Override
@@ -171,4 +211,5 @@ public class Home extends Fragment {
             }
         });
     }
+
 }
