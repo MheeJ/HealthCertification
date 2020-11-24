@@ -40,7 +40,7 @@ public class Activity_ListViewAdapter extends BaseAdapter {
 
         CompareItem compareItem = compareItems.get(position);
 
-        dateView.setText(compareItem.getDate());
+        dateView.setText("확진자"+compareItem.getConfirmed());
         stateView.setText(compareItem.getCompare());
         return convertView;
     }

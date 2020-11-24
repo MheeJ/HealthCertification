@@ -135,47 +135,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
         pandemiclistView = (ListView)view.findViewById(R.id.pandemic_info);
         pandemiclistView.setAdapter(activity_listViewAdapter);
 
-        mDatabase = FirebaseDatabase.getInstance();
-        mReference = mDatabase.getReference("EncryptedLog");
 
-        mReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                activity_listViewAdapter.clear();
-                compareItems.clear();
-                for (DataSnapshot namedata : snapshot.getChildren()) {
-                    encryption_listViewItems.add(namedata.getValue(EncryptedItem.class));
-                }
-                for (int i = 0; i < encryption_listViewItems.size(); i++) {
-                    EncryptedItem encryption_listViewItem = (EncryptedItem) encryption_listViewItems.get(i);
-                    fileStore.ReadEncryptionfile(encryption_listViewItem.getDate());
-                    int count =(encryption_listViewItem.getLog().size()<fileStore.getEncryptline().size())?encryption_listViewItem.getLog().size():fileStore.getEncryptline().size();
-                    int compareTime = 0;
-                    for(int j = 0; j<count; j++){
-                        if(encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j)))
-                            compareTime++;
-                    }
-                    CompareItem compareItem = new CompareItem();
-                    String comparehour = String.valueOf(compareTime/6);
-                    String comparemin = String.valueOf((compareTime%6)*10);
-                    compareItem.setCompare(comparehour+"시간"+comparemin+"분");
-                    compareItem.setDate(encryption_listViewItem.getDate());
-                    compareItems.add(i,compareItem);
-  /*                  pandemic_status.
-                    Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(compareTime/6) + "시간 " + String.valueOf((compareTime%6)*10) + "분", Toast.LENGTH_SHORT).show();*/
-                } for (int i =0; i<compareItems.size();i++){
-                    CompareItem compareItem = (CompareItem)compareItems.get(i);
-                    activity_listViewAdapter.addItem(compareItem);
-
-                }
-                activity_listViewAdapter.notifyDataSetChanged();
-
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
         calorystatus(fileStore.ReadCalory("calory", false));
 
 
@@ -300,6 +260,50 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
 
                     }
                 });
+
+                mDatabase = FirebaseDatabase.getInstance();
+                mReference = mDatabase.getReference("EncryptedLog");
+
+                mReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        activity_listViewAdapter.clear();
+                        compareItems.clear();
+                        for (DataSnapshot namedata : snapshot.getChildren()) {
+                            encryption_listViewItems.add(namedata.getValue(EncryptedItem.class));
+                        }
+                        for (int i = 0; i < encryption_listViewItems.size(); i++) {
+                            EncryptedItem encryption_listViewItem = (EncryptedItem) encryption_listViewItems.get(i);
+                            fileStore.ReadEncryptionfile(encryption_listViewItem.getDate());
+                            int count =(encryption_listViewItem.getLog().size()<fileStore.getEncryptline().size())?encryption_listViewItem.getLog().size():fileStore.getEncryptline().size();
+                            int compareTime = 0;
+                            for(int j = 0; j<count; j++){
+                                if(encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j)))
+                                    compareTime++;
+                            }
+                            CompareItem compareItem = new CompareItem();
+                            String comparehour = String.valueOf(compareTime/6);
+                            String comparemin = String.valueOf((compareTime%6)*10);
+                            compareItem.setCompare(comparehour+"시간"+comparemin+"분");
+                            compareItem.setConfirmed(i+1);
+                            compareItems.add(i,compareItem);
+  /*                  pandemic_status.
+                    Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(compareTime/6) + "시간 " + String.valueOf((compareTime%6)*10) + "분", Toast.LENGTH_SHORT).show();*/
+                        } for (int i =0; i<compareItems.size();i++){
+                            CompareItem compareItem = (CompareItem)compareItems.get(i);
+                            activity_listViewAdapter.addItem(compareItem);
+
+                        }
+                        activity_listViewAdapter.notifyDataSetChanged();
+
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
             }
 
             @Override

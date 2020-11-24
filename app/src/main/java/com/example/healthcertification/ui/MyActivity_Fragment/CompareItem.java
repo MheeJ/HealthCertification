@@ -1,14 +1,15 @@
 package com.example.healthcertification.ui.MyActivity_Fragment;
 
 public class CompareItem {
-    String Date, compare;
+    int confirmed;
+    String  compare;
 
-    public String getDate() {
-        return Date;
+    public int getConfirmed() {
+        return confirmed;
     }
 
-    public void setDate(String date) {
-        Date = date;
+    public void setConfirmed(int confirm) {
+        confirmed = confirm;
     }
 
     public String getCompare() {
