@@ -29,6 +29,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.healthcertification.ListViewSetting.Activity_ListViewAdapter;
+import com.example.healthcertification.ListViewSetting.HC_ListViewItem;
 import com.example.healthcertification.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -175,7 +176,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
 
             }
         });
-        calorystatus();
+        calorystatus(fileStore.ReadCalory("calory", false));
 
 
 
@@ -269,11 +270,36 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
     private void SetMyActivityCalender() {
         horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
             @Override
-            public void onDateSelected(Calendar date, int position) {
+            public void onDateSelected(final Calendar date, int position) {
                 mMap.clear();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 locationlog(sdf.format(date.getTime()));
+                mReference = mDatabase.getReference("Calory");
 
+                mReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ArrayList<CaloryItem> calory_listViewItems = new ArrayList<CaloryItem>();
+
+                        for (DataSnapshot namedata : snapshot.getChildren()){
+                            calory_listViewItems.add(namedata.getValue(CaloryItem.class));
+                        }
+                        for (int i =0; i<calory_listViewItems.size(); i++){
+                            CaloryItem calory_listViewItem = (CaloryItem)calory_listViewItems.get(i);
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            String strDate1 = sdf.format(date.getTime());
+                            String strDate2 = calory_listViewItem.getDate();
+                            if (strDate1.equals(strDate2)){
+                                calorystatus(calory_listViewItem.getCalory());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override
@@ -461,7 +487,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
         currentMarker = mMap.addMarker(markerOptions);
     }
 
-    private void calorystatus(){
+    private void calorystatus(final String calory){
         mDatabase = FirebaseDatabase.getInstance();
         mReference = mDatabase.getReference("HealthCalculation");
         mReference.addValueEventListener(new ValueEventListener() {
@@ -474,9 +500,9 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                 double height = Double.valueOf(hc_listViewItem.getHeight());
                 double weight = Double.valueOf(hc_listViewItem.getWeight());
                 double standardCalory = ((height-100)*0.9*35) - (24*weight);
-                double nowCalory = Double.valueOf(fileStore.ReadCalory("calory", false));
-                double percent = ((standardCalory-nowCalory)/standardCalory)*100;
-                if((percent>0)&&(percent<50)){
+                double nowCalory = Double.valueOf(calory);
+                double percent = (nowCalory/standardCalory)*100;
+                if((percent>=0)&&(percent<50)){
                     activity_status.setText("나쁨");
                     activity_statusinfo.setText("오늘 소모해야하는 칼로리는 많다!!");
                 }else if((percent>=50)&&(percent<100)){
