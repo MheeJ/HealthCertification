@@ -60,11 +60,95 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+<!--                <ListView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:layout_weight="2"-->
+<!--                    android:id="@+id/medicine_listview"/>-->
+
+
+
+                <com.google.android.material.circularreveal.CircularRevealFrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="170dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="1dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/activity_status" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="20dp"
+                            android:text="52.3kcal"
+                            android:textColor="@color/design_default_color_error"
+                            android:textSize="30dp"
+                            android:id="@+id/activity_status"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="20dp"
+                            android:text="52.3kcal"
+                            android:textColor="@color/cardview_dark_background"
+                            android:textSize="30dp"
+                            android:id="@+id/activity_statusinfo" />
+                    </LinearLayout>
+                </com.google.android.material.circularreveal.CircularRevealFrameLayout>
+                <com.google.android.material.circularreveal.CircularRevealFrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="1dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/activity_pandemic" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_marginTop="20dp"-->
+<!--                            android:textColor="@color/colorPrimary"-->
+<!--                            android:text="52.3kcal"-->
+<!--                            android:textSize="30dp"-->
+<!--                            android:id="@+id/pandemic_date"/>-->
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_marginTop="20dp"-->
+<!--                            android:textColor="@color/colorPrimary"-->
+<!--                            android:text="52.3kcal"-->
+<!--                            android:textSize="30dp"-->
+<!--                            android:id="@+id/pandemic_compare"/>-->
+
+                    </LinearLayout>
+                </com.google.android.material.circularreveal.CircularRevealFrameLayout>
                 <ListView
+                    android:id="@+id/pandemic_info"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="2"
-                    android:id="@+id/medicine_listview"/>
+                    android:layout_height="match_parent"
+                    android:divider="#FFFFFF" />
+
+
+
 
 
             </LinearLayout>

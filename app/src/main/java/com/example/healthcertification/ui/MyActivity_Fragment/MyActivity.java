@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,8 +46,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
@@ -64,6 +68,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.HorizontalCalendarView;
@@ -85,6 +90,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
     private ClusterManager<HospitalInfo> clusterManager;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
+    private List<EncryptedItem> encryption_listViewItems = new ArrayList<>();
 
 
     private MyActivity_ViewModel myActivity_viewModel;
@@ -100,6 +106,9 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
     private Animation btn_open, btn_close;
     private Context mContext;
     private boolean isFabOpen = false;
+    private TextView activity_status;
+    private TextView activity_statusinfo;
+    private ListView pandemic_status;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -111,12 +120,53 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
         mContext = getActivity().getApplicationContext();
         btn_open = AnimationUtils.loadAnimation(mContext, R.anim.fab_open);
         btn_close = AnimationUtils.loadAnimation(mContext, R.anim.fab_close);
+        activity_status = (TextView)view.findViewById(R.id.activity_status);
+        pandemic_status = (ListView) view.findViewById(R.id.medicine_listview);
+        activity_statusinfo = (TextView)view.findViewById(R.id.activity_statusinfo);
         Activity_main_btn = (FloatingActionButton) view.findViewById(R.id.activity_main_btn);
         Activity_main_btn.setOnClickListener(this);
         Activity_hospital_btn = (FloatingActionButton) view.findViewById(R.id.activity_hospital_btn);
         Activity_hospital_btn.setOnClickListener(this);
         Activity_permacy_btn = (FloatingActionButton) view.findViewById(R.id.activity_pharmacy_btn);
         Activity_permacy_btn.setOnClickListener(this);
+
+
+
+        activity_status.setText("나쁨");
+        activity_statusinfo.setText(fileStore.ReadCalory("calory", false));
+
+
+        mDatabase = FirebaseDatabase.getInstance();
+        mReference = mDatabase.getReference("EncryptedLog");
+
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot namedata : snapshot.getChildren()) {
+                    encryption_listViewItems.add(namedata.getValue(EncryptedItem.class));
+                }
+                for (int i = 0; i < encryption_listViewItems.size(); i++) {
+                    EncryptedItem encryption_listViewItem = (EncryptedItem) encryption_listViewItems.get(i);
+                    fileStore.ReadEncryptionfile(encryption_listViewItem.getDate());
+                    int count =(encryption_listViewItem.getLog().size()<fileStore.getEncryptline().size())?encryption_listViewItem.getLog().size():fileStore.getEncryptline().size();
+                    int compareTime = 0;
+                    for(int j = 0; i<count; i++){
+                        if(encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j)))
+                            compareTime++;
+                    }
+                    pandemic_status.
+                    Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(compareTime/6) + "시간 " + String.valueOf((compareTime%6)*10) + "분", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
         //calendar : https://github.com/Mulham-Raee/Horizontal-Calendar

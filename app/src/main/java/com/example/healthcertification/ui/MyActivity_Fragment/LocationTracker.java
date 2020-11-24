@@ -58,7 +58,6 @@ public class LocationTracker{
     private SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
-    private List<EncryptedItem> encryption_listViewItems = new ArrayList<>();
 
 
     public LocationTracker(Context context) {
@@ -141,33 +140,6 @@ public class LocationTracker{
                 }
 
 
-                mDatabase = FirebaseDatabase.getInstance();
-                mReference = mDatabase.getReference("EncryptedLog");
-
-                mReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                        for (DataSnapshot namedata : snapshot.getChildren()) {
-                            encryption_listViewItems.add(namedata.getValue(EncryptedItem.class));
-                        }
-                        for (int i = 0; i < encryption_listViewItems.size(); i++) {
-                            EncryptedItem encryption_listViewItem = (EncryptedItem) encryption_listViewItems.get(i);
-                            fileStore.ReadEncryptionfile(encryption_listViewItem.getDate());
-                            int count =(encryption_listViewItem.getLog().size()<fileStore.getEncryptline().size())?encryption_listViewItem.getLog().size():fileStore.getEncryptline().size();
-                            int compareTime = 0;
-                            for(int j = 0; i<count; i++){
-                                if(encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j)))
-                                    compareTime++;
-                            }
-                            Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(compareTime/6) + "시간 " + String.valueOf((compareTime%6)*10) + "분", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
             }
         }
 
