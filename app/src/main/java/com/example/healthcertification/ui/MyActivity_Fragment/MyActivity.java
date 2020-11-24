@@ -28,7 +28,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.healthcertification.ListViewSetting.HC_ListViewItem;
+import com.example.healthcertification.ListViewSetting.Activity_ListViewAdapter;
 import com.example.healthcertification.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -92,7 +92,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
     private List<EncryptedItem> encryption_listViewItems = new ArrayList<>();
-
+    private List<CompareItem> compareItems = new ArrayList<>();
 
     private MyActivity_ViewModel myActivity_viewModel;
     private TextView Address;
@@ -109,8 +109,8 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
     private boolean isFabOpen = false;
     private TextView activity_status;
     private TextView activity_statusinfo;
-    private ListView pandemic_status;
-
+    private ListView pandemic_status, pandemiclistView;
+    private Activity_ListViewAdapter activity_listViewAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -130,6 +130,9 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
         Activity_hospital_btn.setOnClickListener(this);
         Activity_permacy_btn = (FloatingActionButton) view.findViewById(R.id.activity_pharmacy_btn);
         Activity_permacy_btn.setOnClickListener(this);
+        activity_listViewAdapter = new Activity_ListViewAdapter();
+        pandemiclistView = (ListView)view.findViewById(R.id.pandemic_info);
+        pandemiclistView.setAdapter(activity_listViewAdapter);
 
         mDatabase = FirebaseDatabase.getInstance();
         mReference = mDatabase.getReference("EncryptedLog");
@@ -137,7 +140,8 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
         mReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                activity_listViewAdapter.clear();
+                compareItems.clear();
                 for (DataSnapshot namedata : snapshot.getChildren()) {
                     encryption_listViewItems.add(namedata.getValue(EncryptedItem.class));
                 }
@@ -150,9 +154,21 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                         if(encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j)))
                             compareTime++;
                     }
-//                    pandemic_status.
-//                    Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(compareTime/6) + "시간 " + String.valueOf((compareTime%6)*10) + "분", Toast.LENGTH_SHORT).show();
+                    CompareItem compareItem = new CompareItem();
+                    String comparehour = String.valueOf(compareTime/6);
+                    String comparemin = String.valueOf((compareTime%6)*10);
+                    compareItem.setCompare(comparehour+"시간"+comparemin+"분");
+                    compareItem.setDate(encryption_listViewItem.getDate());
+                    compareItems.add(i,compareItem);
+  /*                  pandemic_status.
+                    Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(compareTime/6) + "시간 " + String.valueOf((compareTime%6)*10) + "분", Toast.LENGTH_SHORT).show();*/
+                } for (int i =0; i<compareItems.size();i++){
+                    CompareItem compareItem = (CompareItem)compareItems.get(i);
+                    activity_listViewAdapter.addItem(compareItem);
+
                 }
+                activity_listViewAdapter.notifyDataSetChanged();
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
