@@ -124,7 +124,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
         btn_close = AnimationUtils.loadAnimation(mContext, R.anim.fab_close);
         activity_status = (TextView)view.findViewById(R.id.activity_status);
         pandemic_status = (ListView) view.findViewById(R.id.medicine_listview);
-        activity_statusinfo = (TextView)view.findViewById(R.id.activity_statusinfo);
+        //activity_statusinfo = (TextView)view.findViewById(R.id.activity_statusinfo);
         Activity_main_btn = (FloatingActionButton) view.findViewById(R.id.activity_main_btn);
         Activity_main_btn.setOnClickListener(this);
         Activity_hospital_btn = (FloatingActionButton) view.findViewById(R.id.activity_hospital_btn);
@@ -136,7 +136,8 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
         pandemiclistView.setAdapter(activity_listViewAdapter);
 
 
-        calorystatus(fileStore.ReadCalory("calory", false));
+//        calorystatus(fileStore.ReadCalory("calory", false));
+        activity_status.setText(fileStore.ReadCalory("calory", false));
 
 
 
@@ -232,8 +233,9 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
             @Override
             public void onDateSelected(final Calendar date, int position) {
                 mMap.clear();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 locationlog(sdf.format(date.getTime()));
+                mDatabase = FirebaseDatabase.getInstance();
                 mReference = mDatabase.getReference("Calory");
 
                 mReference.addValueEventListener(new ValueEventListener() {
@@ -246,11 +248,13 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                         }
                         for (int i =0; i<calory_listViewItems.size(); i++){
                             CaloryItem calory_listViewItem = (CaloryItem)calory_listViewItems.get(i);
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                             String strDate1 = sdf.format(date.getTime());
                             String strDate2 = calory_listViewItem.getDate();
+                            if(strDate1.equals(CurrentDate()))
+                                activity_status.setText(fileStore.ReadCalory("calory", false));
                             if (strDate1.equals(strDate2)){
-                                calorystatus(calory_listViewItem.getCalory());
+                                //calorystatus(calory_listViewItem.getCalory());
+                                activity_status.setText(calory_listViewItem.getCalory());
                             }
                         }
                     }
@@ -267,26 +271,31 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                 mReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        int number = 0;
                         activity_listViewAdapter.clear();
                         compareItems.clear();
+                        encryption_listViewItems.clear();
                         for (DataSnapshot namedata : snapshot.getChildren()) {
                             encryption_listViewItems.add(namedata.getValue(EncryptedItem.class));
                         }
                         for (int i = 0; i < encryption_listViewItems.size(); i++) {
                             EncryptedItem encryption_listViewItem = (EncryptedItem) encryption_listViewItems.get(i);
-                            fileStore.ReadEncryptionfile(encryption_listViewItem.getDate());
-                            int count =(encryption_listViewItem.getLog().size()<fileStore.getEncryptline().size())?encryption_listViewItem.getLog().size():fileStore.getEncryptline().size();
-                            int compareTime = 0;
-                            for(int j = 0; j<count; j++){
-                                if(encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j)))
-                                    compareTime++;
+                            if(sdf.format(date.getTime()).equals(encryption_listViewItem.getDate())) {
+                                number++;
+                                fileStore.ReadEncryptionfile(encryption_listViewItem.getDate());
+                                int count = (encryption_listViewItem.getLog().size() < fileStore.getEncryptline().size()) ? encryption_listViewItem.getLog().size() : fileStore.getEncryptline().size();
+                                int compareTime = 0;
+                                for (int j = 0; j < count; j++) {
+                                    if (encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j)))
+                                        compareTime++;
+                                }
+                                CompareItem compareItem = new CompareItem();
+                                String comparehour = String.valueOf(compareTime / 6);
+                                String comparemin = String.valueOf((compareTime % 6) * 10);
+                                compareItem.setCompare(comparehour + "시간" + comparemin + "분");
+                                compareItem.setConfirmed(number);
+                                compareItems.add(compareItem);
                             }
-                            CompareItem compareItem = new CompareItem();
-                            String comparehour = String.valueOf(compareTime/6);
-                            String comparemin = String.valueOf((compareTime%6)*10);
-                            compareItem.setCompare(comparehour+"시간"+comparemin+"분");
-                            compareItem.setConfirmed(i+1);
-                            compareItems.add(i,compareItem);
   /*                  pandemic_status.
                     Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(compareTime/6) + "시간 " + String.valueOf((compareTime%6)*10) + "분", Toast.LENGTH_SHORT).show();*/
                         } for (int i =0; i<compareItems.size();i++){
