@@ -24,6 +24,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         ActionBar abar = getSupportActionBar();
+
+        getLocationPermission();
+
+        LocationTracker thread = new LocationTracker(this);
+        thread.start();
         abar.hide();
         getLocationPermission();
 

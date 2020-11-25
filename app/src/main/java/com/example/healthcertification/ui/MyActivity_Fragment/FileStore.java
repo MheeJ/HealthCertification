@@ -150,7 +150,7 @@ public class FileStore{
     }
 
     public String ReadCalory(String filename, boolean day){
-        String result = null;
+        String result = "0";
         try{
             InputStream is = new FileInputStream(foldername + "/" + filename + ".txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
