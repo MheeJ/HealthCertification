@@ -30,10 +30,6 @@ public class MainActivity extends AppCompatActivity {
         LocationTracker thread = new LocationTracker(this);
         thread.start();
         abar.hide();
-        getLocationPermission();
-
-        LocationTracker thread = new LocationTracker(this);
-        thread.start();
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each

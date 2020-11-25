@@ -165,7 +165,7 @@
         android:layout_marginBottom="15dp"
         android:layout_marginRight="20dp"
         android:backgroundTint="#ffffff"
-        android:src="@drawable/permacy_btn1"
+        android:src="@drawable/updateicon_1"
         android:visibility="invisible"
         android:layout_gravity="right"
         app:borderWidth="0dp"
