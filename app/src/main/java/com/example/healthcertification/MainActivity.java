@@ -24,6 +24,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         ActionBar abar = getSupportActionBar();
+
+        getLocationPermission();
+
+        LocationTracker thread = new LocationTracker(this);
+        thread.start();
         abar.hide();
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -35,10 +40,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-        getLocationPermission();
-
-        LocationTracker thread = new LocationTracker(this);
-        thread.start();
     }
 
 
