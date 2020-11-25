@@ -67,10 +67,6 @@ public class Home extends Fragment {
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.MONTH, 1);
 
-        Calendar caloryDate = Calendar.getInstance();
-        getCalory(caloryDate.getTime());
-        setCalory(Double.valueOf(fileStore.ReadCalory("calory", false)), standardCalory);
-
         horizontalCalendar = new HorizontalCalendar.Builder(root, R.id.calendarView)
                 .range(startDate, endDate)
                 .datesNumberOnScreen(5)
@@ -154,6 +150,34 @@ public class Home extends Fragment {
         });
     }
     private void getCalory(final Date date){
+        mReference = mDatabase.getReference("Calory");
+
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                calory_listViewItems = new ArrayList<>();
+                for (DataSnapshot namedata : snapshot.getChildren()){
+                    calory_listViewItems.add(namedata.getValue(CaloryItem.class));
+                }
+                for (int i =0; i<calory_listViewItems.size(); i++){
+                    CaloryItem calory_listViewItem = (CaloryItem)calory_listViewItems.get(i);
+                    SimpleDateFormat sdfcal = new SimpleDateFormat("yyyy-MM-dd");
+                    String strDate1 = sdfcal.format(date);
+                    String strDate2 = calory_listViewItem.getDate();
+                    if(strDate1.equals(fileStore.ReadCalory("calory", true))) {
+                        calory = Double.valueOf(fileStore.ReadCalory("calory", false));
+                    }else if (strDate1.equals(strDate2)){
+                        calory = Double.valueOf(calory_listViewItem.getCalory());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         mDatabase = FirebaseDatabase.getInstance();
         mReference = mDatabase.getReference("HealthCalculation");
         final SimpleDateFormat sdf = new SimpleDateFormat("yy.MM.dd");
@@ -173,6 +197,7 @@ public class Home extends Fragment {
                         double height = Double.valueOf(hc_listViewItem.getHeight());
                         double weight = Double.valueOf(hc_listViewItem.getWeight());
                         standardCalory = ((height - 100) * 0.9 * 35) - (24 * weight);
+                        setCalory(calory, standardCalory);
 //                                calory = Double.valueOf(fileStore.ReadCalory("calory", false));
                     }
                 }
@@ -183,37 +208,6 @@ public class Home extends Fragment {
 
             }
         });
-        mReference = mDatabase.getReference("Calory");
-
-        mReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                calory_listViewItems = new ArrayList<>();
-                for (DataSnapshot namedata : snapshot.getChildren()){
-                    calory_listViewItems.add(namedata.getValue(CaloryItem.class));
-                }
-                for (int i =0; i<calory_listViewItems.size(); i++){
-                    CaloryItem calory_listViewItem = (CaloryItem)calory_listViewItems.get(i);
-                    SimpleDateFormat sdfcal = new SimpleDateFormat("yyyy-MM-dd");
-                    String strDate1 = sdfcal.format(date);
-                    String strDate2 = calory_listViewItem.getDate();
-                    if(strDate1.equals(fileStore.ReadCalory("calory", true))) {
-                        setCalory(Double.valueOf(fileStore.ReadCalory("calory", false)), standardCalory);
-                        break;
-                    }else if (strDate1.equals(strDate2)){
-                        calory = Double.valueOf(calory_listViewItem.getCalory());
-                        setCalory(calory, standardCalory);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
     }
 
 
@@ -254,6 +248,8 @@ public class Home extends Fragment {
 
             }
         });
+
+        getCalory(Calendar.getInstance().getTime());
     }
 
 }

@@ -137,10 +137,10 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
 
 
 //        calorystatus(fileStore.ReadCalory("calory", false));
-        activity_status.setText(fileStore.ReadCalory("calory", false));
+        activity_status.setText(fileStore.ReadCalory("calory", false)+"kcal");
 
 
-
+        compareEncryptedLog(Calendar.getInstance().getTime());
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
         //calendar : https://github.com/Mulham-Raee/Horizontal-Calendar
         Calendar startDate = Calendar.getInstance();
@@ -251,10 +251,10 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                             String strDate1 = sdf.format(date.getTime());
                             String strDate2 = calory_listViewItem.getDate();
                             if(strDate1.equals(CurrentDate()))
-                                activity_status.setText(fileStore.ReadCalory("calory", false));
+                                activity_status.setText(fileStore.ReadCalory("calory", false)+"kcal");
                             if (strDate1.equals(strDate2)){
                                 //calorystatus(calory_listViewItem.getCalory());
-                                activity_status.setText(calory_listViewItem.getCalory());
+                                activity_status.setText(calory_listViewItem.getCalory()+"kcal");
                             }
                         }
                     }
@@ -265,52 +265,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                     }
                 });
 
-                mDatabase = FirebaseDatabase.getInstance();
-                mReference = mDatabase.getReference("EncryptedLog");
-
-                mReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        int number = 0;
-                        activity_listViewAdapter.clear();
-                        compareItems.clear();
-                        encryption_listViewItems.clear();
-                        for (DataSnapshot namedata : snapshot.getChildren()) {
-                            encryption_listViewItems.add(namedata.getValue(EncryptedItem.class));
-                        }
-                        for (int i = 0; i < encryption_listViewItems.size(); i++) {
-                            EncryptedItem encryption_listViewItem = (EncryptedItem) encryption_listViewItems.get(i);
-                            if(sdf.format(date.getTime()).equals(encryption_listViewItem.getDate())) {
-                                number++;
-                                fileStore.ReadEncryptionfile(encryption_listViewItem.getDate());
-                                int count = (encryption_listViewItem.getLog().size() < fileStore.getEncryptline().size()) ? encryption_listViewItem.getLog().size() : fileStore.getEncryptline().size();
-                                int compareTime = 0;
-                                for (int j = 0; j < count; j++) {
-                                    if (encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j)))
-                                        compareTime++;
-                                }
-                                CompareItem compareItem = new CompareItem();
-                                String comparehour = String.valueOf(compareTime / 6);
-                                String comparemin = String.valueOf((compareTime % 6) * 10);
-                                compareItem.setCompare(comparehour + "시간" + comparemin + "분");
-                                compareItem.setConfirmed(number);
-                                compareItems.add(compareItem);
-                            }
-  /*                  pandemic_status.
-                    Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(compareTime/6) + "시간 " + String.valueOf((compareTime%6)*10) + "분", Toast.LENGTH_SHORT).show();*/
-                        } for (int i =0; i<compareItems.size();i++){
-                            CompareItem compareItem = (CompareItem)compareItems.get(i);
-                            activity_listViewAdapter.addItem(compareItem);
-
-                        }
-                        activity_listViewAdapter.notifyDataSetChanged();
-
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                compareEncryptedLog(date.getTime());
 
 
             }
@@ -324,6 +279,56 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
             @Override
             public boolean onDateLongClicked(Calendar date, int position) {
                 return true;
+            }
+        });
+    }
+
+    private void compareEncryptedLog(final Date date){
+        mDatabase = FirebaseDatabase.getInstance();
+        mReference = mDatabase.getReference("EncryptedLog");
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int number = 0;
+                activity_listViewAdapter.clear();
+                compareItems.clear();
+                encryption_listViewItems.clear();
+                for (DataSnapshot namedata : snapshot.getChildren()) {
+                    encryption_listViewItems.add(namedata.getValue(EncryptedItem.class));
+                }
+                for (int i = 0; i < encryption_listViewItems.size(); i++) {
+                    EncryptedItem encryption_listViewItem = (EncryptedItem) encryption_listViewItems.get(i);
+                    if(sdf.format(date.getTime()).equals(encryption_listViewItem.getDate())) {
+                        number++;
+                        fileStore.ReadEncryptionfile(encryption_listViewItem.getDate());
+                        int count = (encryption_listViewItem.getLog().size() < fileStore.getEncryptline().size()) ? encryption_listViewItem.getLog().size() : fileStore.getEncryptline().size();
+                        int compareTime = 0;
+                        for (int j = 0; j < count; j++) {
+                            if (encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j)))
+                                compareTime++;
+                        }
+                        CompareItem compareItem = new CompareItem();
+                        String comparehour = String.valueOf(compareTime / 6);
+                        String comparemin = String.valueOf((compareTime % 6) * 10);
+                        compareItem.setCompare(comparehour + "시간" + comparemin + "분");
+                        compareItem.setConfirmed(number);
+                        compareItems.add(compareItem);
+                    }
+  /*                  pandemic_status.
+                    Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(compareTime/6) + "시간 " + String.valueOf((compareTime%6)*10) + "분", Toast.LENGTH_SHORT).show();*/
+                } for (int i =0; i<compareItems.size();i++){
+                    CompareItem compareItem = (CompareItem)compareItems.get(i);
+                    activity_listViewAdapter.addItem(compareItem);
+
+                }
+                activity_listViewAdapter.notifyDataSetChanged();
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
@@ -499,42 +504,6 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
         markerOptions.draggable(true);
         currentMarker = mMap.addMarker(markerOptions);
     }
-
-    private void calorystatus(final String calory){
-        mDatabase = FirebaseDatabase.getInstance();
-        mReference = mDatabase.getReference("HealthCalculation");
-        mReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                HC_ListViewItem hc_listViewItem = new HC_ListViewItem();
-                for (DataSnapshot namedata : snapshot.getChildren()) {
-                    hc_listViewItem = namedata.getValue(HC_ListViewItem.class);
-                }
-                double height = Double.valueOf(hc_listViewItem.getHeight());
-                double weight = Double.valueOf(hc_listViewItem.getWeight());
-                double standardCalory = ((height-100)*0.9*35) - (24*weight);
-                double nowCalory = Double.valueOf(calory);
-                double percent = (nowCalory/standardCalory)*100;
-                if((percent>=0)&&(percent<50)){
-                    activity_status.setText("나쁨");
-                    activity_statusinfo.setText("오늘 소모해야하는 칼로리는 많다!!");
-                }else if((percent>=50)&&(percent<100)){
-                    activity_status.setText("보통");
-                    activity_statusinfo.setText("오늘 소모해야하는 칼로리는 보통이다!!");
-                }else{
-                    activity_status.setText("좋음");
-                    activity_statusinfo.setText("많이 설쳤네 ㅎㅎ");
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
 
     public class HospitalAPI /*extends AsyncTask<String, Void, Document>*/ {
         private String TAG = "Parser";

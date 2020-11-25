@@ -70,7 +70,7 @@
 
                 <com.google.android.material.circularreveal.CircularRevealFrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="170dp"
+                    android:layout_height="110dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="1dp">
@@ -91,7 +91,7 @@
                             android:layout_marginTop="20dp"
                             android:text="52.3kcal"
                             android:textColor="@color/design_default_color_error"
-                            android:textSize="30dp"
+                            android:textSize="25dp"
                             android:id="@+id/activity_status"/>
 
                     </LinearLayout>

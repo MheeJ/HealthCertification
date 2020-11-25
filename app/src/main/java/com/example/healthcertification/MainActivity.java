@@ -25,6 +25,10 @@ public class MainActivity extends AppCompatActivity {
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         ActionBar abar = getSupportActionBar();
         abar.hide();
+        getLocationPermission();
+
+        LocationTracker thread = new LocationTracker(this);
+        thread.start();
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -35,10 +39,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-        getLocationPermission();
-
-        LocationTracker thread = new LocationTracker(this);
-        thread.start();
     }
 
 

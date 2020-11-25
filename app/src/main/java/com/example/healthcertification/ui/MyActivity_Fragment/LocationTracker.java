@@ -99,9 +99,9 @@ public class LocationTracker{
             if (locationList.size() > 0) {
                 location = locationList.get(locationList.size() - 1);
                 //location = locationList.get(0);
-                Toast.makeText(mContext, "위도:" + String.valueOf(location.getLatitude()) +
-                                " 경도: " + String.valueOf(location.getLongitude() + " 속도:" + String.valueOf(location.getSpeed())),
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, "위도:" + String.valueOf(location.getLatitude()) +
+//                                " 경도: " + String.valueOf(location.getLongitude() + " 속도:" + String.valueOf(location.getSpeed())),
+//                        Toast.LENGTH_SHORT).show();
                 fileStore.Writefile(String.valueOf(location.getLatitude()) + "\n" + String.valueOf(location.getLongitude()), CurrentDate(), true);
 
                 try {
