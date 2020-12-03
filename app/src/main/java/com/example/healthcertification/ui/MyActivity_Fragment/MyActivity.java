@@ -242,7 +242,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                 final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 locationlog(sdf.format(date.getTime()));
                 mDatabase = FirebaseDatabase.getInstance();
-                mReference = mDatabase.getReference("Calory");
+                mReference = mDatabase.getReference(user.getUid()).child("Calory");
 
                 mReference.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -297,6 +297,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int number = 0;
+                ArrayList<String> alCompareTime = new ArrayList<String>();
                 activity_listViewAdapter.clear();
                 compareItems.clear();
                 encryption_listViewItems.clear();
@@ -309,10 +310,16 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                         number++;
                         fileStore.ReadEncryptionfile(encryption_listViewItem.getDate());
                         int count = (encryption_listViewItem.getLog().size() < fileStore.getEncryptline().size()) ? encryption_listViewItem.getLog().size() : fileStore.getEncryptline().size();
-                        int compareTime = 0;
+                        int startTime = 0;
+                        int endTime = 0;
                         for (int j = 0; j < count; j++) {
-                            if (encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j)))
+                            if (encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j))){
+                                startTime = j;
+                            }
                                 compareTime++;
+                            else
+                                alCompareTime.add
+                                compareTime = 0;
                         }
                         CompareItem compareItem = new CompareItem();
                         String comparehour = String.valueOf(compareTime / 6);

@@ -28,6 +28,8 @@ import com.example.healthcertification.ListViewSetting.HC_ListViewItem;
 import com.example.healthcertification.MainActivity;
 import com.example.healthcertification.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,6 +54,8 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
     String getTime, goodweight1_Str ,goodweight2_Str, BmiStr;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
 
 
 
@@ -164,7 +168,7 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
 
     private void pushData(String getTime, String height, String weight, String bmiStr, String my_state){
         mDatabase = FirebaseDatabase.getInstance();
-        mReference = mDatabase.getReference("HealthCalculation").push();
+        mReference = mDatabase.getReference(user.getUid()).child("HealthCalculation").push();
 
                HC_ListViewItem hc_listViewItem = new HC_ListViewItem();
                hc_listViewItem.setKey(mReference.getKey());
@@ -179,7 +183,7 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
     private void onDataChange(){
 
         mDatabase = FirebaseDatabase.getInstance();
-        mReference = mDatabase.getReference("HealthCalculation");
+        mReference = mDatabase.getReference(user.getUid()).child("HealthCalculation");
         mReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -219,7 +223,7 @@ public class MyHealth_HealthCalculation extends Fragment implements View.OnClick
     private void onDeleteItem(int position){
         final HC_ListViewItem hc_listViewItem = hc_listViewItems.get(position);
         mDatabase = FirebaseDatabase.getInstance();
-        mReference = mDatabase.getReference("HealthCalculation");
+        mReference = mDatabase.getReference(user.getUid()).child("HealthCalculation");
 
         mReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

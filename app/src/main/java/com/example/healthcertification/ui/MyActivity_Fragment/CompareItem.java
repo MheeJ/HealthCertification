@@ -1,8 +1,10 @@
 package com.example.healthcertification.ui.MyActivity_Fragment;
 
+import java.util.ArrayList;
+
 public class CompareItem {
     int confirmed;
-    String  compare;
+    ArrayList<String>  compare;
 
     public int getConfirmed() {
         return confirmed;
@@ -12,11 +14,11 @@ public class CompareItem {
         confirmed = confirm;
     }
 
-    public String getCompare() {
+    public ArrayList<String> getCompare() {
         return compare;
     }
 
-    public void setCompare(String compare) {
+    public void setCompare(ArrayList<String> compare) {
         this.compare = compare;
     }
 }

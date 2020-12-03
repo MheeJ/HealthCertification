@@ -24,6 +24,8 @@ import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
 import com.example.healthcertification.ListViewSetting.M_ListViewItem;
 import com.example.healthcertification.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -71,6 +73,8 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
     String strDate, key;
     //List<Object> Array = new ArrayList<Object>();
     M_ListViewItem myHealth_medicine_dto;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -197,7 +201,7 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
 
     public void onDataChange(){
         mDatabase = FirebaseDatabase.getInstance();
-        mReference = mDatabase.getReference("Medicine").child("medicine_list").child(strDate);
+        mReference = mDatabase.getReference(user.getUid()).child("Medicine").child("medicine_list").child(strDate);
 
         mReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -231,7 +235,7 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
                 medicine_effect.setText("");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 strDate = sdf.format(date.getTime());
-                mReference = mDatabase.getReference("Medicine").child("medicine_list").child(strDate);
+                mReference = mDatabase.getReference(user.getUid()).child("Medicine").child("medicine_list").child(strDate);
                 onDataChange();
                 }
 
@@ -250,7 +254,7 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
     }
 
     public void addNotice(String name){
-        mReference = mDatabase.getReference("Medicine").child("medicine_list").child(strDate).push();
+        mReference = mDatabase.getReference(user.getUid()).child("Medicine").child("medicine_list").child(strDate).push();
 
         if (!name.isEmpty()) {                        // 입력된 text 문자열이 비어있지 않으면
             //notice_list.add(name);                          // items 리스트에 입력된 문자열 추가
@@ -265,7 +269,7 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
 
     public void onDeleteItem(int position){
         final M_ListViewItem myHealth_medicine_dto = myHealth_medicine_DTOS.get(position);
-        mReference = mDatabase.getReference("Medicine").child("medicine_list").child(strDate);
+        mReference = mDatabase.getReference(user.getUid()).child("Medicine").child("medicine_list").child(strDate);
         mReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

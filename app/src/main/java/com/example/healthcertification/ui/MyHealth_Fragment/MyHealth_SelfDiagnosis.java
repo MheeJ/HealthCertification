@@ -23,6 +23,8 @@ import com.example.healthcertification.ListViewSetting.SD_ListViewItem;
 import com.example.healthcertification.ListViewSetting.Test_ListVeiwAdapter;
 import com.example.healthcertification.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,6 +53,7 @@ public class MyHealth_SelfDiagnosis extends Fragment implements View.OnClickList
     private DatabaseReference myRef = firebaseDatabase.getReference("SelfDiagnosis");
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public MyHealth_SelfDiagnosis() {
         // Required empty public constructor
@@ -150,7 +153,7 @@ public class MyHealth_SelfDiagnosis extends Fragment implements View.OnClickList
     private void onDeleteItem(int position){
         final SD_ListViewItem sd_listViewItem = sd_listViewItems.get(position);
         mDatabase = FirebaseDatabase.getInstance();
-        mReference = mDatabase.getReference("SelfDiagnosis");
+        mReference = mDatabase.getReference(user.getUid()).child("SelfDiagnosis");
 
         mReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -174,7 +177,7 @@ public class MyHealth_SelfDiagnosis extends Fragment implements View.OnClickList
 
     private void onDataChange(){
         mDatabase = FirebaseDatabase.getInstance();
-        mReference = mDatabase.getReference("SelfDiagnosis");
+        mReference = mDatabase.getReference(user.getUid()).child("SelfDiagnosis");
 
         mReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -201,7 +204,7 @@ public class MyHealth_SelfDiagnosis extends Fragment implements View.OnClickList
 
     private void pushData(String getTime, String state){
         mDatabase = FirebaseDatabase.getInstance();
-        mReference = mDatabase.getReference("SelfDiagnosis").push();
+        mReference = mDatabase.getReference(user.getUid()).child("SelfDiagnosis").push();
 
         SD_ListViewItem sd_listViewItem = new SD_ListViewItem();
 
