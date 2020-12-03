@@ -48,6 +48,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -112,6 +114,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
     private TextView activity_statusinfo;
     private ListView pandemic_status, pandemiclistView;
     private Activity_ListViewAdapter activity_listViewAdapter;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -183,15 +186,18 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                 break;
             case R.id.activity_pharmacy_btn:
                 toggleFab();
-                mDatabase = FirebaseDatabase.getInstance();
-                mReference = mDatabase.getReference("EncryptedLog").push();
-                EncryptedItem encryptedItem = new EncryptedItem();
-                fileStore.ReadEncryptionfile(CurrentDate());
-                encryptedItem.setDate(CurrentDate());
-                encryptedItem.setLog(fileStore.getEncryptline());
-                mReference.setValue(encryptedItem);
-
-
+                for(int i = 0; i<14;i++) {
+                    EncryptedItem encryptedItem = new EncryptedItem();
+                    fileStore.ReadEncryptionfile(CurrentDate(i));
+                    encryptedItem.setLog(fileStore.getEncryptline());
+                    if(fileStore.getEncryptline().size() == 0) {
+                        mDatabase = FirebaseDatabase.getInstance();
+                        mReference = mDatabase.getReference("EncryptedLog").push();
+                        encryptedItem.setDate(CurrentDate(i));
+                        encryptedItem.setUid(user.getUid());
+                        mReference.setValue(encryptedItem);
+                    }
+                }
                 break;
         }
     }
@@ -250,10 +256,9 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                             CaloryItem calory_listViewItem = (CaloryItem)calory_listViewItems.get(i);
                             String strDate1 = sdf.format(date.getTime());
                             String strDate2 = calory_listViewItem.getDate();
-                            if(strDate1.equals(CurrentDate()))
+                            if(strDate1.equals(CurrentDate(0)))
                                 activity_status.setText(fileStore.ReadCalory("calory", false)+"kcal");
                             if (strDate1.equals(strDate2)){
-                                //calorystatus(calory_listViewItem.getCalory());
                                 activity_status.setText(calory_listViewItem.getCalory()+"kcal");
                             }
                         }
@@ -300,7 +305,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                 }
                 for (int i = 0; i < encryption_listViewItems.size(); i++) {
                     EncryptedItem encryption_listViewItem = (EncryptedItem) encryption_listViewItems.get(i);
-                    if(sdf.format(date.getTime()).equals(encryption_listViewItem.getDate())) {
+                    if((sdf.format(date.getTime()).equals(encryption_listViewItem.getDate()))&&user.getUid().equals(encryption_listViewItem.getUid())) {
                         number++;
                         fileStore.ReadEncryptionfile(encryption_listViewItem.getDate());
                         int count = (encryption_listViewItem.getLog().size() < fileStore.getEncryptline().size()) ? encryption_listViewItem.getLog().size() : fileStore.getEncryptline().size();
@@ -352,16 +357,20 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
         }
     }
 
-    private String CurrentDate() {
-        Date today = new Date();
+    private String CurrentDate(int day) {
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, -day);
+//        Date today = new Date();
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
-        return date.format(today);
+        return date.format(cal.getTime());
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        currentLatLng = fileStore.Recentlocation(CurrentDate());
+        currentLatLng = fileStore.Recentlocation(CurrentDate(0));
         clusterManager = new ClusterManager<HospitalInfo>(getContext(), mMap);
         clusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<HospitalInfo>() {
             @Override
