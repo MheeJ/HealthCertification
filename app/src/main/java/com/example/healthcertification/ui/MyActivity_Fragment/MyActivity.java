@@ -189,11 +189,11 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                 for(int i = 0; i<14;i++) {
                     EncryptedItem encryptedItem = new EncryptedItem();
                     fileStore.ReadEncryptionfile(CurrentDate(i));
-                    encryptedItem.setLog(fileStore.getEncryptline());
-                    if(fileStore.getEncryptline().size() == 0) {
+                    if(fileStore.getEncryptline().size() != 0) {
                         mDatabase = FirebaseDatabase.getInstance();
                         mReference = mDatabase.getReference("EncryptedLog").push();
                         encryptedItem.setDate(CurrentDate(i));
+                        encryptedItem.setLog(fileStore.getEncryptline());
                         encryptedItem.setUid(user.getUid());
                         mReference.setValue(encryptedItem);
                     }
@@ -305,7 +305,7 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                 }
                 for (int i = 0; i < encryption_listViewItems.size(); i++) {
                     EncryptedItem encryption_listViewItem = (EncryptedItem) encryption_listViewItems.get(i);
-                    if((sdf.format(date.getTime()).equals(encryption_listViewItem.getDate()))&&user.getUid().equals(encryption_listViewItem.getUid())) {
+                    if((sdf.format(date.getTime()).equals(encryption_listViewItem.getDate()))&&!user.getUid().equals(encryption_listViewItem.getUid())) {
                         number++;
                         fileStore.ReadEncryptionfile(encryption_listViewItem.getDate());
                         int count = (encryption_listViewItem.getLog().size() < fileStore.getEncryptline().size()) ? encryption_listViewItem.getLog().size() : fileStore.getEncryptline().size();
