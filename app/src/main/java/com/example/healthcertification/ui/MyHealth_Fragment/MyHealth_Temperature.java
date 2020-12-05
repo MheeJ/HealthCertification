@@ -30,6 +30,8 @@ import com.example.healthcertification.ListViewSetting.Temp_ListViewItem;
 import com.example.healthcertification.MainActivity;
 import com.example.healthcertification.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -64,6 +66,7 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
 
     ///////////beacon/////////
     private BLECommunication bleCommunication;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public MyHealth_Temperature() {
         // Required empty public constructor
@@ -162,7 +165,7 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
 
     private void pushdata(String Date, String Time,double Temp, String State){
         mDatabase = FirebaseDatabase.getInstance();
-        mReference = mDatabase.getReference("Temperature").push();
+        mReference = mDatabase.getReference(user.getUid()).child("Temperature").push();
 
         Temp_ListViewItem temp_listViewItem = new Temp_ListViewItem();
 
@@ -178,7 +181,7 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
     private void onDelteitem(int position){
         final Temp_ListViewItem temp_listViewItem = temp_listViewItems.get(position);
         mDatabase = FirebaseDatabase.getInstance();
-        mReference = mDatabase.getReference("Temperature");
+        mReference = mDatabase.getReference(user.getUid()).child("Temperature");
 
         mReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -201,7 +204,7 @@ public class MyHealth_Temperature extends Fragment implements View.OnClickListen
 
     private void onDataChange(){
         mDatabase = FirebaseDatabase.getInstance();
-        mReference = mDatabase.getReference("Temperature");
+        mReference = mDatabase.getReference(user.getUid()).child("Temperature");
 
         mReference.addValueEventListener(new ValueEventListener() {
             @Override

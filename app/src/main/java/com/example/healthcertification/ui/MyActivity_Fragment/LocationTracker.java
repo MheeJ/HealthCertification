@@ -28,6 +28,8 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -58,6 +60,7 @@ public class LocationTracker{
     private SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 
     public LocationTracker(Context context) {
@@ -111,7 +114,7 @@ public class LocationTracker{
                 }
                 if (!CurrentDate().equals(fileStore.ReadCalory("calory", true))) {
                     mDatabase = FirebaseDatabase.getInstance();
-                    mReference = mDatabase.getReference("Calory").push();
+                    mReference = mDatabase.getReference(user.getUid()).child("Calory").push();
                     CaloryItem caloryItem = new CaloryItem();
                     caloryItem.setDate(fileStore.ReadCalory("calory", true));
                     caloryItem.setCalory(fileStore.ReadCalory("calory", false));
