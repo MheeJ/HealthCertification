@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
 import com.example.healthcertification.CustomDialog.CustomDialog_Pandemic;
 import com.example.healthcertification.ListViewSetting.Activity_ListViewAdapter;
+import com.example.healthcertification.ListViewSetting.M_ListViewItem;
 import com.example.healthcertification.R;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -220,6 +221,28 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                 }
                 break;
         }
+    }
+
+    public void onDeleteItem(){
+        mDatabase = FirebaseDatabase.getInstance();
+        mReference = mDatabase.getReference("EncryptedLog");
+        mReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    EncryptedItem encryption_listViewItem = snapshot.getValue(EncryptedItem.class);
+                    if (encryption_listViewItem.getUid().equals(user.getUid())){
+                        mReference.child(snapshot.getKey().toString()).removeValue();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
     }
 
     public void setHospitalInfos(HospitalInfo hospitalInfo){
