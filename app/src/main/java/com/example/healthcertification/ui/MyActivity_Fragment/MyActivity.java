@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -28,6 +29,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
+import com.example.healthcertification.CustomDialog.CustomDialog_Pandemic;
 import com.example.healthcertification.ListViewSetting.Activity_ListViewAdapter;
 import com.example.healthcertification.ListViewSetting.HC_ListViewItem;
 import com.example.healthcertification.R;
@@ -164,6 +167,29 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
             mapView.onCreate(savedInstanceState);
         }
         mapView.getMapAsync(this);
+
+        pandemiclistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
+                //final int pos = position;
+                CustomDialog_Pandemic customDialog_pandemic = new CustomDialog_Pandemic(getContext());
+                customDialog_pandemic.Pandemic_Dialog_Listener(new CustomDialog_Listener() {
+                    @Override
+                    public void onPositiveClicked(String name) {
+                        String gettest = (String) parent.getItemAtPosition(position);
+                        Toast.makeText(getContext(),gettest,Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onSDClicked(String height, String weight) {
+
+                    }
+                });
+                customDialog_pandemic.show();
+            }
+        });
+
+
         return view;
     }
 
@@ -640,4 +666,6 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
 //        return al_hospitalInfo; //완료되면 arrayList를 리턴합니다.
         }
     }
+
+
 }

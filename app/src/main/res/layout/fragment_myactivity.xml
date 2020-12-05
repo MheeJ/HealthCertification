@@ -50,9 +50,11 @@
                 app:sizeMiddleText="20dp"
                 app:sizeBottomText="10dp">
             </devs.mulham.horizontalcalendar.HorizontalCalendarView>
-
         </LinearLayout>
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -60,90 +62,93 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-<!--                <ListView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="0dp"-->
-<!--                    android:layout_weight="2"-->
-<!--                    android:id="@+id/medicine_listview"/>-->
-
-
-
-                <com.google.android.material.circularreveal.CircularRevealFrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="110dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="1dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/activity_status" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
-
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:src="@drawable/activity_image"
+                            ></ImageView>
                         <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="활동량 상태"
+                            android:layout_gravity="center_vertical"
+                            android:textSize="20dp"
+                            android:textColor="#000000"
+                            ></TextView>
+                    </LinearLayout>
+                    <com.google.android.material.circularreveal.CircularRevealFrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="1dp">
+                        <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="20dp"
-                            android:text="52.3kcal"
-                            android:textColor="@color/design_default_color_error"
-                            android:textSize="25dp"
-                            android:id="@+id/activity_status"/>
-
-                    </LinearLayout>
-                </com.google.android.material.circularreveal.CircularRevealFrameLayout>
-                <com.google.android.material.circularreveal.CircularRevealFrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="60dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="1dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/activity_pandemic" />
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:layout_marginTop="20dp"-->
-<!--                            android:textColor="@color/colorPrimary"-->
-<!--                            android:text="52.3kcal"-->
-<!--                            android:textSize="30dp"-->
-<!--                            android:id="@+id/pandemic_date"/>-->
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:layout_marginTop="20dp"-->
-<!--                            android:textColor="@color/colorPrimary"-->
-<!--                            android:text="52.3kcal"-->
-<!--                            android:textSize="30dp"-->
-<!--                            android:id="@+id/pandemic_compare"/>-->
-
-                    </LinearLayout>
-                </com.google.android.material.circularreveal.CircularRevealFrameLayout>
-                <ListView
-                    android:id="@+id/pandemic_info"
+                            android:src="@drawable/selfdiagnosis_background" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:text="활동량"
+                                android:id="@+id/activity_status"
+                                android:layout_gravity="center"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="25dp"
+                                android:gravity="center"
+                                android:layout_weight="1" />
+                        </LinearLayout>
+                    </com.google.android.material.circularreveal.CircularRevealFrameLayout>
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:divider="#FFFFFF" />
-
-
-
-
-
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp">
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:src="@drawable/activity_foot2"
+                            ></ImageView>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="확진자 동선 일치율"
+                            android:layout_gravity="center_vertical"
+                            android:textSize="20dp"
+                            android:textColor="#000000"
+                            ></TextView>
+                    </LinearLayout>
+                    <ListView
+                        android:id="@+id/pandemic_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:divider="#FFFFFF" />
+                </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
+        </ScrollView>
     </LinearLayout>
 
     <LinearLayout
