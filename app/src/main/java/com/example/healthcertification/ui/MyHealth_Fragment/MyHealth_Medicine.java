@@ -150,15 +150,14 @@ public class MyHealth_Medicine extends Fragment implements View.OnClickListener,
                 toggleFab();
                 CustomDialog_Add dialog = new CustomDialog_Add(getContext());
                 dialog.setDialogListener(new CustomDialog_Listener() {
-                                             @Override
-                                             public void onPositiveClicked(String name) {
-                                                 addNotice(name);
-                                             }
+                    @Override
+                    public void onPositiveClicked(String name) {
+                        addNotice(name);
+                    }
 
-                                             @Override
-                                             public void onSDClicked(String height, String weight) {
-
-                                             }
+                    @Override
+                    public void onSDClicked(String height, String weight) {
+                    }
                                          });
                         dialog.show();
                 break;
