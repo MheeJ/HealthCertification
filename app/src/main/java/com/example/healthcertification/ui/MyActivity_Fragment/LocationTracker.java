@@ -60,7 +60,7 @@ public class LocationTracker{
     private SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 
     public LocationTracker(Context context) {

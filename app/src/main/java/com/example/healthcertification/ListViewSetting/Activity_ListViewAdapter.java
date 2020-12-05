@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class Activity_ListViewAdapter extends BaseAdapter {
     private ArrayList<CompareItem> compareItems = new ArrayList<>();
-    int pos;
+    private int pos;
     public Activity_ListViewAdapter(){
 
     }
@@ -41,7 +41,7 @@ public class Activity_ListViewAdapter extends BaseAdapter {
         CompareItem compareItem = compareItems.get(position);
 
         dateView.setText("확진자"+compareItem.getConfirmed());
-//        stateView.setText(compareItem.getCompare());
+        stateView.setText(compareItem.getCompare());
         return convertView;
     }
 

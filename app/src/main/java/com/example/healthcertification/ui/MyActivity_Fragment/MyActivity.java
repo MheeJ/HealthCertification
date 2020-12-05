@@ -1,8 +1,6 @@
 package com.example.healthcertification.ui.MyActivity_Fragment;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -23,26 +21,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.healthcertification.CustomDialog.CustomDialog_Listener;
 import com.example.healthcertification.CustomDialog.CustomDialog_Pandemic;
 import com.example.healthcertification.ListViewSetting.Activity_ListViewAdapter;
-import com.example.healthcertification.ListViewSetting.HC_ListViewItem;
 import com.example.healthcertification.R;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -117,7 +107,8 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
     private TextView activity_statusinfo;
     private ListView pandemic_status, pandemiclistView;
     private Activity_ListViewAdapter activity_listViewAdapter;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private ArrayList<String> alCompareTime;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -173,10 +164,13 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
             public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
                 //final int pos = position;
                 CustomDialog_Pandemic customDialog_pandemic = new CustomDialog_Pandemic(getContext());
+                detailcompareEncryptedLog(position);
+                customDialog_pandemic.setItem(alCompareTime);
                 customDialog_pandemic.Pandemic_Dialog_Listener(new CustomDialog_Listener() {
                     @Override
                     public void onPositiveClicked(String name) {
                         String gettest = (String) parent.getItemAtPosition(position);
+
                         Toast.makeText(getContext(),gettest,Toast.LENGTH_SHORT).show();
                     }
 
@@ -295,7 +289,6 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
 
                     }
                 });
-
                 compareEncryptedLog(date.getTime());
 
 
@@ -327,49 +320,27 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                 compareItems.clear();
                 encryption_listViewItems.clear();
                 for (DataSnapshot namedata : snapshot.getChildren()) {
-                    encryption_listViewItems.add(namedata.getValue(EncryptedItem.class));
+                    if((sdf.format(date.getTime()).equals(namedata.getValue(EncryptedItem.class).getDate()))&&!user.getUid().equals(namedata.getValue(EncryptedItem.class).getUid()))
+                        encryption_listViewItems.add(namedata.getValue(EncryptedItem.class));
                 }
                 for (int i = 0; i < encryption_listViewItems.size(); i++) {
                     EncryptedItem encryption_listViewItem = (EncryptedItem) encryption_listViewItems.get(i);
-                    if((sdf.format(date.getTime()).equals(encryption_listViewItem.getDate()))&&!user.getUid().equals(encryption_listViewItem.getUid())) {
+                    if(sdf.format(date.getTime()).equals(encryption_listViewItem.getDate())&&!user.getUid().equals(encryption_listViewItem.getUid())) {
                         number++;
                         fileStore.ReadEncryptionfile(encryption_listViewItem.getDate());
                         int count = (encryption_listViewItem.getLog().size() < fileStore.getEncryptline().size()) ? encryption_listViewItem.getLog().size() : fileStore.getEncryptline().size();
-                        ArrayList<Integer> comparetime = new ArrayList<>();
-                        ArrayList<String> alCompareTime = new ArrayList<String>();
-                        String startTime = null;
-                        String endTime = null;
+                        int compareTime = 0;
                         for (int j = 0; j < count; j++) {
-                            if (encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j))){
-                                comparetime.add(1);
-                                if(j!=0){
-                                    if(comparetime.get(j-1)==0)
-                                    startTime = String.valueOf(j / 6) + "시" + String.valueOf((j % 6) * 10) + "분";
-                                    if(j == (count-1)){
-                                        endTime = String.valueOf(j / 6) + "시" + String.valueOf((j % 6) * 10) + "분";
-                                        alCompareTime.add(startTime + "~" + endTime);
-                                    }
-                                }else if (j == 0)
-                                    startTime = String.valueOf(j / 6) + "시" + String.valueOf((j % 6) * 10) + "분";
-                            }else {
-                                comparetime.add(0);
-                                if(j!=0){
-                                    if((comparetime.get(j-1)==1)||(j == (count-1))) {
-                                        endTime = String.valueOf(j / 6) + "시" + String.valueOf((j % 6) * 10) + "분";
-                                        alCompareTime.add(startTime + "~" + endTime);
-                                    }
-                                }
-                            }
+                            if (encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j)))
+                                compareTime++;
                         }
                         CompareItem compareItem = new CompareItem();
-//                        String comparehour = String.valueOf(compareTime / 6);
-//                        String comparemin = String.valueOf((compareTime % 6) * 10);
-                        compareItem.setCompare(alCompareTime);
+                        String comparehour = String.valueOf(compareTime / 6);
+                        String comparemin = String.valueOf((compareTime % 6) * 10);
+                        compareItem.setCompare(comparehour + "시간" + comparemin + "분");
                         compareItem.setConfirmed(number);
                         compareItems.add(compareItem);
                     }
-  /*                  pandemic_status.
-                    Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(compareTime/6) + "시간 " + String.valueOf((compareTime%6)*10) + "분", Toast.LENGTH_SHORT).show();*/
                 } for (int i =0; i<compareItems.size();i++){
                     CompareItem compareItem = (CompareItem)compareItems.get(i);
                     activity_listViewAdapter.addItem(compareItem);
@@ -384,6 +355,94 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
             }
         });
     }
+
+    private void detailcompareEncryptedLog(int positon) {
+        fileStore.ReadEncryptionfile(encryption_listViewItems.get(positon).getDate());
+        int count = (encryption_listViewItems.get(positon).getLog().size() < fileStore.getEncryptline().size()) ? encryption_listViewItems.get(positon).getLog().size() : fileStore.getEncryptline().size();
+        ArrayList<Integer> comparetime = new ArrayList<>();
+        alCompareTime = new ArrayList<String>();
+        String startTime = null;
+        String endTime = null;
+        for (int j = 0; j < count; j++) {
+            if (encryption_listViewItems.get(positon).getLog().get(j).equals(fileStore.getEncryptline().get(j))) {
+                comparetime.add(1);
+                if (j != 0) {
+                    if (comparetime.get(j - 1) == 0)
+                        startTime = String.valueOf(j / 6) + "시" + String.valueOf((j % 6) * 10) + "분";
+                    if (j == (count - 1)) {
+                        endTime = String.valueOf((j+1) / 6) + "시" + String.valueOf(((j+1) % 6) * 10) + "분";
+                        alCompareTime.add(startTime + "~" + endTime);
+                    }
+                } else if (j == 0)
+                    startTime = "0시 0분";
+            } else {
+                comparetime.add(0);
+                if (j != 0) {
+                    if ((comparetime.get(j - 1) == 1)) {
+                            endTime = String.valueOf(j / 6) + "시" + String.valueOf((j % 6) * 10) + "분";
+                            alCompareTime.add(startTime + "~" + endTime);
+                            startTime = null;
+                            endTime = null;
+                    }
+                }
+            }
+        }
+    }
+//                for (int i = 0; i < encryption_listViewItems.size(); i++) {
+//                    EncryptedItem encryption_listViewItem = (EncryptedItem) encryption_listViewItems.get(i);
+//                    if((sdf.format(date.getTime()).equals(encryption_listViewItem.getDate()))&&!user.getUid().equals(encryption_listViewItem.getUid())) {
+//                        number++;
+//                        fileStore.ReadEncryptionfile(encryption_listViewItem.getDate());
+//                        int count = (encryption_listViewItem.getLog().size() < fileStore.getEncryptline().size()) ? encryption_listViewItem.getLog().size() : fileStore.getEncryptline().size();
+//                        ArrayList<Integer> comparetime = new ArrayList<>();
+//                        ArrayList<String> alCompareTime = new ArrayList<String>();
+//                        String startTime = null;
+//                        String endTime = null;
+//                        for (int j = 0; j < count; j++) {
+//                            if (encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j))){
+//                                comparetime.add(1);
+//                                if(j!=0){
+//                                    if(comparetime.get(j-1)==0)
+//                                        startTime = String.valueOf(j / 6) + "시" + String.valueOf((j % 6) * 10) + "분";
+//                                    if(j == (count-1)){
+//                                        endTime = String.valueOf(j / 6) + "시" + String.valueOf((j % 6) * 10) + "분";
+//                                        alCompareTime.add(startTime + "~" + endTime);
+//                                    }
+//                                }else if (j == 0)
+//                                    startTime = String.valueOf(j / 6) + "시" + String.valueOf((j % 6) * 10) + "분";
+//                            }else {
+//                                comparetime.add(0);
+//                                if(j!=0){
+//                                    if((comparetime.get(j-1)==1)||(j == (count-1))) {
+//                                        endTime = String.valueOf(j / 6) + "시" + String.valueOf((j % 6) * 10) + "분";
+//                                        alCompareTime.add(startTime + "~" + endTime);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        CompareItem compareItem = new CompareItem();
+////                        String comparehour = String.valueOf(compareTime / 6);
+////                        String comparemin = String.valueOf((compareTime % 6) * 10);
+//                        compareItem.setDetailCompare(alCompareTime);
+//                        compareItem.setConfirmed(number);
+//                        compareItems.add(compareItem);
+//                    }
+//  /*                  pandemic_status.
+//                    Toast.makeText(mContext, CurrentDate() + "\n" + "확진자와 겹친시간:" + String.valueOf(compareTime/6) + "시간 " + String.valueOf((compareTime%6)*10) + "분", Toast.LENGTH_SHORT).show();*/
+//                } for (int i =0; i<compareItems.size();i++){
+//                    CompareItem compareItem = (CompareItem)compareItems.get(i);
+//                    activity_listViewAdapter.addItem(compareItem);
+//
+//                }
+//                activity_listViewAdapter.notifyDataSetChanged();
+
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 
     private void toggleFab() {
         if (isFabOpen) {
