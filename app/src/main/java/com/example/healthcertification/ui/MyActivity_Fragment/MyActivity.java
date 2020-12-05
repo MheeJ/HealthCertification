@@ -297,7 +297,6 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int number = 0;
-                ArrayList<String> alCompareTime = new ArrayList<String>();
                 activity_listViewAdapter.clear();
                 compareItems.clear();
                 encryption_listViewItems.clear();
@@ -310,21 +309,36 @@ public class MyActivity extends Fragment implements View.OnClickListener, OnMapR
                         number++;
                         fileStore.ReadEncryptionfile(encryption_listViewItem.getDate());
                         int count = (encryption_listViewItem.getLog().size() < fileStore.getEncryptline().size()) ? encryption_listViewItem.getLog().size() : fileStore.getEncryptline().size();
-                        int startTime = 0;
-                        int endTime = 0;
+                        ArrayList<Integer> comparetime = new ArrayList<>();
+                        ArrayList<String> alCompareTime = new ArrayList<String>();
+                        String startTime = null;
+                        String endTime = null;
                         for (int j = 0; j < count; j++) {
                             if (encryption_listViewItem.getLog().get(j).equals(fileStore.getEncryptline().get(j))){
-                                startTime = j;
+                                comparetime.add(1);
+                                if(j!=0){
+                                    if(comparetime.get(j-1)==0)
+                                    startTime = String.valueOf(j / 6) + "시" + String.valueOf((j % 6) * 10) + "분";
+                                    if(j == (count-1)){
+                                        endTime = String.valueOf(j / 6) + "시" + String.valueOf((j % 6) * 10) + "분";
+                                        alCompareTime.add(startTime + "~" + endTime);
+                                    }
+                                }else if (j == 0)
+                                    startTime = String.valueOf(j / 6) + "시" + String.valueOf((j % 6) * 10) + "분";
+                            }else {
+                                comparetime.add(0);
+                                if(j!=0){
+                                    if((comparetime.get(j-1)==1)||(j == (count-1))) {
+                                        endTime = String.valueOf(j / 6) + "시" + String.valueOf((j % 6) * 10) + "분";
+                                        alCompareTime.add(startTime + "~" + endTime);
+                                    }
+                                }
                             }
-                                compareTime++;
-                            else
-                                alCompareTime.add
-                                compareTime = 0;
                         }
                         CompareItem compareItem = new CompareItem();
-                        String comparehour = String.valueOf(compareTime / 6);
-                        String comparemin = String.valueOf((compareTime % 6) * 10);
-                        compareItem.setCompare(comparehour + "시간" + comparemin + "분");
+//                        String comparehour = String.valueOf(compareTime / 6);
+//                        String comparemin = String.valueOf((compareTime % 6) * 10);
+                        compareItem.setCompare(alCompareTime);
                         compareItem.setConfirmed(number);
                         compareItems.add(compareItem);
                     }
